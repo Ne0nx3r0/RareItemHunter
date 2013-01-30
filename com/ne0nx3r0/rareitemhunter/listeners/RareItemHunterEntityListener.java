@@ -2,6 +2,11 @@ package com.ne0nx3r0.rareitemhunter.listeners;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.Boss;
+import com.ne0nx3r0.utils.FireworkVisualEffect;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -41,7 +46,6 @@ public class RareItemHunterEntityListener implements Listener
                     eAttacker = ((Arrow) eAttacker).getShooter();
                 }            
                 
-                //TODO: Add boss skills here before taking damage/ec.
 
                 int iRemainingHP = boss.takeDamage(e.getDamage());
 
@@ -51,6 +55,8 @@ public class RareItemHunterEntityListener implements Listener
 
                     leBoss.setHealth(leBoss.getMaxHealth());
                     
+                    boss.activateRandomSkill(e,eAttacker);
+                    
                     if(eAttacker instanceof Player)
                     {
                         Player pAttacker = (Player) eAttacker;
@@ -58,9 +64,27 @@ public class RareItemHunterEntityListener implements Listener
                         pAttacker.sendMessage(boss.getName()+" HP: "+iRemainingHP+"/"+boss.getMaxHP());
                     }
                 }
-                else//Dead
+                else //Dead
                 {
-                    //TODO: Add visual effects
+                    leBoss.setHealth(1);
+                    
+                    try
+                    {
+                        new FireworkVisualEffect().playFirework(
+                            leBoss.getWorld(), leBoss.getLocation(),
+                            FireworkEffect
+                                .builder()
+                                .with(FireworkEffect.Type.CREEPER)
+                                .withColor(Color.RED)
+                                .build()
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        plugin.getLogger().log(Level.SEVERE, null, ex);
+                    }
+                    
+                    //TODO: Add give rare essence
                 }
             }
             

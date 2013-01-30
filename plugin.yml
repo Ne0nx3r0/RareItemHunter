@@ -1,5 +1,8 @@
 name: RareItemHunter
-main: com.gmail.ne0nx3r0.rareitemhunter.RareItemHunter
+main: com.ne0nx3r0.rareitemhunter.RareItemHunter
 version: '0.1'
 database: false
 description: Rare Item Hunter
+commands:
+    ri:
+      description: RareItems commands
