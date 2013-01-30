@@ -2,8 +2,10 @@ package com.ne0nx3r0.rareitemhunter.listeners;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.Boss;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,21 +33,34 @@ public class RareItemHunterEntityListener implements Listener
             
             if(boss != null)
             {
+                //TODO: Snowballs or eggs do extra damage to certain vulnerable bosses. each boss has a weakness
+                Entity eAttacker = e.getDamager();
+                
+                if((eAttacker instanceof Arrow))
+                {
+                    eAttacker = ((Arrow) eAttacker).getShooter();
+                }            
+                
                 //TODO: Add boss skills here before taking damage/ec.
 
                 int iRemainingHP = boss.takeDamage(e.getDamage());
 
                 if(iRemainingHP > 0)
                 {
+                    e.setDamage(1);
+
+                    leBoss.setHealth(leBoss.getMaxHealth());
                     
+                    if(eAttacker instanceof Player)
+                    {
+                        Player pAttacker = (Player) eAttacker;
+                        
+                        pAttacker.sendMessage(boss.getName()+" HP: "+iRemainingHP+"/"+boss.getMaxHP());
+                    }
                 }
                 else//Dead
                 {
                     //TODO: Add visual effects
-
-                    e.setDamage(1);
-
-                    leBoss.setHealth(leBoss.getMaxHealth());
                 }
             }
             
@@ -56,10 +71,10 @@ public class RareItemHunterEntityListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent e)
     {
-        //TODO: verify events to cancel, snow men melting, etc.
+        //TODO: verify events to cancel, snow men melting, being in lava, etc.
         //http://jd.bukkit.org/apidocs/org/bukkit/event/entity/EntityDamageEvent.DamageCause.html
     }
-/*
+
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityCombust(EntityCombustEvent e)
     {
@@ -68,7 +83,7 @@ public class RareItemHunterEntityListener implements Listener
         {
             e.setCancelled(true);
         }
-    }*/
+    }
 
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityTame(EntityTameEvent e)
