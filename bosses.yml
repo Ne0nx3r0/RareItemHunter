@@ -1,6 +1,9 @@
-exampleBoss1:
-  hp: 600
+WifeWhoWontLetMeCode:
+  type: skeleton
+  hp: 10000
   attackPower: 10
   skills:
-    - 
-    - 
+    - 50% chance burst level 5
+    - 50% chance greater burst level 5 
+    - 50% chance shoot arrow level 5 
+  essencesDropped: 2

@@ -6,3 +6,6 @@ description: Rare Item Hunter
 commands:
     ri:
       description: RareItems commands
+permissions:
+    rareitemhunter.notifications.boss:
+      description: Player is notified when a boss spawns

@@ -24,7 +24,7 @@ public class Burst extends BossSkill
     {       
         if(e.getEntity() instanceof LivingEntity)
         {        
-            LivingEntity le = (LivingEntity) e.getEntity();
+            LivingEntity le = (LivingEntity) eAttacker;
 
             try
             {
@@ -42,7 +42,7 @@ public class Burst extends BossSkill
                 Logger.getLogger(Boss.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            Vector unitVector = le.getLocation().toVector().subtract(e.getDamager().getLocation().toVector()).normalize();
+            Vector unitVector = eAttacker.getLocation().toVector().subtract(le.getLocation().toVector()).normalize();
 
             unitVector.setY(0.55/level);
 

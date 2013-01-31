@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -12,18 +13,22 @@ public class Boss
     private String name;
     private int entityId;
     private int hp;
-    private int damage;
+    private int attackPower;
     private Map<BossSkill,Integer> skills;
     private Map<BossSkill,Integer> skillChances;
     private int maxHP;
-    
-    public Boss(String name, int hp, int damage)
+    private EntityType entityType;
+
+    Boss(String name, EntityType entityType, int hp, int attackPower, int essencesDropped)
     {
         this.name = name;
         this.hp = hp;
         this.maxHP = hp;
-        this.damage = damage;
+        this.attackPower = attackPower;
+        this.entityType = entityType;
+        
         this.skills = new HashMap<BossSkill,Integer>();
+        this.skillChances = new HashMap<BossSkill,Integer>();
     }
     
     public void addSkill(BossSkill bs,int level,int chance)
@@ -71,5 +76,10 @@ public class Boss
                 }
             }
         }
+    }
+
+    EntityType getEntityType()
+    {
+        return this.entityType;
     }
 }

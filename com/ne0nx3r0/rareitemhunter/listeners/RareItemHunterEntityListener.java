@@ -4,7 +4,6 @@ import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.Boss;
 import com.ne0nx3r0.utils.FireworkVisualEffect;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Arrow;

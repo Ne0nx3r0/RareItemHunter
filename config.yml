@@ -1,0 +1,18 @@
+# Time between chances to generate a monster in minutes
+timeBetweenChancesToGenerateBoss: 60
+
+# Maximum chance a boss will be generate on each attempt
+# The chance is based on the number of players online and the max player count
+# For example, a value of 50 on a server with 100 max players means:
+# 10 players online : 5% chance
+# 50 players online : 25% chance
+# 100 players online (full) : 50% chance
+
+#default is:
+# 25% full = 5% chance
+# 50% full = 10% chance
+# 100% full = 20% chance
+maxChanceToGenerateBoss: 20
+
+# How many minutes before a boss that is not found will disappear
+bossExpiration: 15
