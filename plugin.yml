@@ -9,3 +9,5 @@ commands:
 permissions:
     rareitemhunter.notifications.boss:
       description: Player is notified when a boss spawns
+    rareitemhunter.admin:
+      description: Player has permissions to manage the plugin, is notified of admin issues

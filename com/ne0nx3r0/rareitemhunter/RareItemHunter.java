@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class RareItemHunter extends JavaPlugin
 {
     public BossManager bossManager;
+    public RecipeManager recipeManager;
     
     @Override
     public void onEnable()
@@ -34,15 +35,17 @@ public class RareItemHunter extends JavaPlugin
         getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
         
 // Random boss generation
-        int iTimer = this.getConfig().getInt("timeBetweenChancesToGenerateBoss",60) * 60 * 20;
+        int iTimer = 20 * this.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
+        int iMaxChance = this.getConfig().getInt("maxChanceToGenerateBossEgg",20);
+        int iExpiration = 20 * this.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
         
         this.getServer().getScheduler().scheduleSyncRepeatingTask(
                 this,
-                new RandomlyGenerateBossTask(this,this.getConfig().getInt("maxChanceToGenerateBoss")), 
+                new RandomlyGenerateBossTask(this,iMaxChance,iTimer,iExpiration), 
                 iTimer, 
                 iTimer);
         
-        
+        this.recipeManager = new RecipeManager(this);
     }
     
 // Public helper methods
@@ -66,5 +69,4 @@ public class RareItemHunter extends JavaPlugin
             e.printStackTrace();
         }
     }
-
 }

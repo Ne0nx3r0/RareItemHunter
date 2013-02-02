@@ -5,7 +5,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BossSkill
 {    
-    private String name;
+    String name;
     
     public BossSkill(String name)
     {

@@ -1,7 +1,5 @@
 package com.ne0nx3r0.rareitemhunter.bosses;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -10,33 +8,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Boss
 {
-    private String name;
-    private int entityId;
     private int hp;
-    private int attackPower;
-    private Map<BossSkill,Integer> skills;
-    private Map<BossSkill,Integer> skillChances;
-    private int maxHP;
-    private EntityType entityType;
-
-    Boss(String name, EntityType entityType, int hp, int attackPower, int essencesDropped)
+    private BossTemplate template;
+    private int entityId;
+    
+    Boss(BossTemplate bossTemplate)
     {
-        this.name = name;
-        this.hp = hp;
-        this.maxHP = hp;
-        this.attackPower = attackPower;
-        this.entityType = entityType;
-        
-        this.skills = new HashMap<BossSkill,Integer>();
-        this.skillChances = new HashMap<BossSkill,Integer>();
+        this.template = bossTemplate;
+        this.hp = bossTemplate.maxHP;
     }
     
-    public void addSkill(BossSkill bs,int level,int chance)
-    {
-        this.skills.put(bs,level);
-        this.skillChances.put(bs, chance);
-    }
-
     public int takeDamage(int damage)
     {
         return this.hp = this.hp - damage; 
@@ -44,12 +25,12 @@ public class Boss
 
     public String getName()
     {
-        return this.name;
+        return this.template.name;
     }
 
     public int getMaxHP()
     {
-        return this.maxHP;
+        return this.template.maxHP;
     }
 
     void setEntity(Entity ent)
@@ -61,15 +42,15 @@ public class Boss
     {
         Random random = new Random();
         
-        for(BossSkill bossSkill : this.skillChances.keySet())
+        for(BossSkillInstance bsi : this.template.skills)
         {
-            if(random.nextInt(100) < this.skillChances.get(bossSkill))
+            if(random.nextInt(100) < bsi.chance)
             {
-                if(bossSkill.activateSkill(this, e, eAttacker, this.skills.get(bossSkill)))
-                {                    
+                if(bsi.bossSkill.activateSkill(this, e, eAttacker, hp))
+                {
                     if(eAttacker instanceof Player)
                     {
-                        ((Player) eAttacker).sendMessage(this.name+" used "+bossSkill.getName()+"!");
+                        ((Player) eAttacker).sendMessage(this.template.name+" used "+bsi.bossSkill.name+"!");
                     }
                     
                     break;
@@ -80,6 +61,6 @@ public class Boss
 
     EntityType getEntityType()
     {
-        return this.entityType;
+        return this.template.entityType;
     }
 }
