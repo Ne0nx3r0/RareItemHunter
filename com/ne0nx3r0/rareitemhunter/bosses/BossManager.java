@@ -330,8 +330,14 @@ public class BossManager
             if(lEgg.getWorld().equals(lWorld))
             {
                 dCurrent = l.distanceSquared(lEgg);
-
-                if(dClosest > 0 && dCurrent < dClosest)
+                
+                if(dClosest == -1)
+                {
+                    dClosest = dCurrent;
+                    
+                    lClosest = lEgg;
+                }
+                else if(dCurrent < dClosest)
                 {
                     dClosest = dCurrent;
                     

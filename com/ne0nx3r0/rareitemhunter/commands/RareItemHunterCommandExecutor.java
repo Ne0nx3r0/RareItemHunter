@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class RareItemHunterCommandExecutor implements CommandExecutor
@@ -25,8 +26,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         
             if(cs.hasPermission("rareitemhunter.admin"))
             {
-                cs.sendMessage("- /ri spawn");
-                cs.sendMessage("- /ri givecompass");
+                cs.sendMessage("- /ri spawn - Boss commands");
+                cs.sendMessage("- /ri compass - give yourself or others a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
             }
         }
         else if(args[0].equalsIgnoreCase("spawn") 
@@ -34,7 +35,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             return this._spawn(cs,args);
         }
-        else if(args[0].equalsIgnoreCase("spawn") 
+        else if(args[0].equalsIgnoreCase("compass") 
         && this.hasCommandPermission(cs,"rareitemhunter.admin","compass command"))
         {
             return this._compass(cs,args);
@@ -60,7 +61,6 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(cs instanceof Player)
         { 
-        
             return false;
         }
                    
@@ -227,6 +227,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             if(!plugin.bossManager.isValidBossName(sBossName))
             {
                 cs.sendMessage(ChatColor.RED+"Invalid boss name");
+                
+                return true;
             }
             
             if(sPointName.equalsIgnoreCase("here"))
@@ -306,8 +308,15 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
 
     private boolean _compass(CommandSender cs, String[] args)
     {        
-        if(args.length < 2 && this.sentFromConsole(cs))
+        if(args.length < 2)
         {
+            if(this.sentFromConsole(cs))
+            {
+                cs.sendMessage("You can use /ri compass <player>");
+                
+                return true;
+            }
+            
             Player player = (Player) cs;
             
             player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getCompass());
@@ -332,6 +341,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             
             cs.sendMessage("Giving "+player.getName()+" a "+sCompassName+"!");
             player.sendMessage("You just got a "+sCompassName+"!");
+        }
+        else
+        {
+            cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
         }
         
         return true;
