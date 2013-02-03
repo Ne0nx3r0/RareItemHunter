@@ -47,7 +47,7 @@ public class RandomlyGenerateBossTask implements Runnable
                     //if(player.hasPermission("rareitemhunter.admin"))
                     //{
                         player.sendMessage(ChatColor.DARK_GREEN+"-------------- RareItemHunter ----------------");
-                        player.sendMessage("A legendary monster egg has been detected!");
+                        player.sendMessage("A legendary monster egg has been created!");
                     //}
                 }
                 
@@ -56,9 +56,16 @@ public class RandomlyGenerateBossTask implements Runnable
                     public void run()
                     {
                         plugin.bossManager.removeBossEgg(lSpawnedEgg);
-                        
-                        plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN+"-------------- RareItemHunter ----------------");
-                        plugin.getServer().broadcastMessage("A legendary egg has faded away...");
+
+                        for(Player player : plugin.getServer().getOnlinePlayers())
+                        {
+                            if(player.getCompassTarget().equals(lSpawnedEgg))
+                            {
+                                plugin.getServer().broadcastMessage(ChatColor.DARK_GRAY+"The egg you were tracking has faded away...");
+
+                                player.setCompassTarget(player.getWorld().getSpawnLocation());
+                            }
+                        }
                     }
                 },expiration);
             }

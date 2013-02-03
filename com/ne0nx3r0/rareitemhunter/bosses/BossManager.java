@@ -262,7 +262,7 @@ public class BossManager
 
     public void addSpawnPoint(String name, Location location, int radius)
     {
-        this.spawnPoints.put(name, new SpawnPoint(location,radius));
+        this.spawnPoints.put(name, new SpawnPoint(name,location,radius));
     }
 
     public boolean isSpawnPoint(String name)
@@ -275,9 +275,9 @@ public class BossManager
         this.spawnPoints.remove(name);
     }
 
-    public Iterable<String> getSpawnPoints()
+    public Iterable<SpawnPoint> getSpawnPoints()
     {
-        return this.spawnPoints.keySet();
+        return this.spawnPoints.values();
     }
 
     public boolean isValidLocation(String sPointName)
