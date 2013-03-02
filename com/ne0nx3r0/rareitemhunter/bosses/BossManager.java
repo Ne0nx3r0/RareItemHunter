@@ -3,12 +3,19 @@ package com.ne0nx3r0.rareitemhunter.bosses;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.skills.*;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import net.minecraft.server.v1_4_R1.EntityLiving;
+import net.minecraft.server.v1_4_R1.EntitySkeleton;
+import net.minecraft.server.v1_4_R1.Item;
+import net.minecraft.server.v1_4_R1.PathfinderGoal;
+import net.minecraft.server.v1_4_R1.PathfinderGoalSelector;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,8 +23,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftSkeleton;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class BossManager
 {
@@ -46,6 +58,8 @@ public class BossManager
         availableBossSkills.add(new ShootArrow());
         availableBossSkills.add(new ShootFireball());
         availableBossSkills.add(new FakeWeb());
+        availableBossSkills.add(new Blink());
+        availableBossSkills.add(new JumpAttack());
         
         bossTemplates = new HashMap<String,BossTemplate>();
 
@@ -119,33 +133,39 @@ public class BossManager
     {
         String sBossName = bossEggs.get(eggLocation);
         
-        Boss boss = new Boss(this.bossTemplates.get(sBossName));
-        
         eggLocation.getBlock().setType(Material.AIR);
+        
         eggLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
-        
-        Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-        
-        boss.setEntity(ent);
-        
-        activeBosses.put(ent.getEntityId(), boss);
+
+        Boss boss = this.spawnBoss(sBossName, eggLocation);
         
         bossEggs.remove(eggLocation);
-        
-        System.out.println("hatched");
         
         return boss;
     }
 
-    public void spawnBoss(String sBossName, Location eggLocation)
+    public Boss spawnBoss(String sBossName, Location eggLocation)
     {
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-        
+
         boss.setEntity(ent);
         
+        if(boss.getEntityType().equals(EntityType.SKELETON))
+        {
+            this.changeIntoNormal((Skeleton) ent, true);
+        }
+        if(boss.getEntityType().equals(EntityType.WITHER_SKULL))
+        {
+            this.changeIntoWither((Skeleton) ent);
+        }
+        
+        ((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999999,5));
+        
         activeBosses.put(ent.getEntityId(), boss);
+        
+        return boss;
     }
 
     public boolean hasSpawnPoints()
@@ -347,5 +367,51 @@ public class BossManager
         }
         
         return lClosest;
+    }
+    
+// Misc helper methods
+     public void changeIntoNormal(Skeleton skeleton, boolean giveRandomEnchantments)
+     {
+        EntitySkeleton ent = ((CraftSkeleton)skeleton).getHandle();
+        try
+        {
+            ent.setSkeletonType(0);
+            Method be = EntitySkeleton.class.getDeclaredMethod("bE");
+            be.setAccessible(true);
+            be.invoke(ent);
+            if (giveRandomEnchantments)
+            {
+                Method bf = EntityLiving.class.getDeclaredMethod("bF");
+                bf.setAccessible(true);
+                bf.invoke(ent);
+            }
+            Field selector = EntityLiving.class.getDeclaredField("goalSelector");
+            selector.setAccessible(true);
+            Field d = EntitySkeleton.class.getDeclaredField("d");
+            d.setAccessible(true);
+            PathfinderGoalSelector goals = (PathfinderGoalSelector) selector.get(ent);
+            goals.a(4, (PathfinderGoal) d.get(ent));
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }    
+    
+     public void changeIntoWither(Skeleton skeleton){
+        EntitySkeleton ent = ((CraftSkeleton)skeleton).getHandle();
+        try {
+            ent.setSkeletonType(1);
+            Field selector = EntityLiving.class.getDeclaredField("goalSelector");
+            selector.setAccessible(true);
+            Field e = EntitySkeleton.class.getDeclaredField("e");
+            e.setAccessible(true);
+            PathfinderGoalSelector goals = (PathfinderGoalSelector) selector.get(ent);
+            goals.a(4, (PathfinderGoal) e.get(ent));
+            ent.setEquipment(0, new net.minecraft.server.v1_4_R1.ItemStack(Item.STONE_SWORD));
+        }
+        catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }

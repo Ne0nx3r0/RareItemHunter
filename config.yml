@@ -16,3 +16,6 @@ maxChanceToGenerateBossEgg: 20
 
 # How many minutes before a boss that is not found will disappear
 bossEggExpiration: 15
+
+# Disable crafting of rare items during the day
+moonlightCrafting: true

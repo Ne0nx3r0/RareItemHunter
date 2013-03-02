@@ -63,4 +63,9 @@ public class Boss
     {
         return this.template.entityType;
     }
+
+    public int getAttackPower()
+    {
+        return this.template.attackPower;
+    }
 }

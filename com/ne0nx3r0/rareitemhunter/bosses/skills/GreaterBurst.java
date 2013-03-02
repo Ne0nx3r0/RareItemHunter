@@ -28,7 +28,7 @@ public class GreaterBurst extends BossSkill
         if(!nearbyEntities.isEmpty())
         {
             boolean showFx = false;
-            Vector vPlayer = e.getEntity().getLocation().toVector();
+            Vector vPlayer = e.getEntity().getVelocity();
             
             for(Entity ent : nearbyEntities)
             {
@@ -45,7 +45,7 @@ public class GreaterBurst extends BossSkill
             }
             
             if(showFx)
-            {
+            {/* was causing lag
                 try
                 {
                     new FireworkVisualEffect().playFirework(
@@ -60,7 +60,7 @@ public class GreaterBurst extends BossSkill
                 catch (Exception ex)
                 {
                     Logger.getLogger(GreaterBurst.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
             }
             else
             {

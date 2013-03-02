@@ -1,20 +1,30 @@
-WifeWhoWontLetMeCode:
+wife:
   type: skeleton
-  hp: 10000
+  hp: 1000
   attackPower: 10
   skills:
     - 50% chance burst level 5
     - 50% chance greater burst level 5 
     - 50% chance shoot arrow level 5 
   essencesDropped: 2
+  equipment:
+    helmet: DIAMOND_HELMET PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    chest: DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    leggings: DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    boots: DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1
 testy:
   type: skeleton
-  hp: 10000
+  hp: 1000
   attackPower: 10
   skills:
-    - 50% chance burst level 5
-    - 50% chance greater burst level 5 
-    - 50% chance shoot arrow level 5 
-    - 50% chance shoot fireball level 5 
-    - 50% chance fake web level 5 
+    - 10% chance burst level 5
+    - 10% chance shoot arrow level 5 
+    - 10% chance shoot fireball level 5 
+    - 10% chance fake web level 5 
+    - 10% chance blink level 5 
   essencesDropped: 2
+  equipment:
+    helmet: DIAMOND_HELMET PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    chest: DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    leggings: DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:1,THORNS:1
+    boots: DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1

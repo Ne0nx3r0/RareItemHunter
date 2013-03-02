@@ -21,7 +21,7 @@ public class RareItemHunterPlayerListener implements Listener
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onInteract(PlayerInteractEvent e)
-    {
+    {        
         if(e.hasBlock())
         { 
             if(e.getClickedBlock().getType() == Material.DRAGON_EGG)

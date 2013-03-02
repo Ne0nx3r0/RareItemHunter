@@ -25,7 +25,7 @@ public class Burst extends BossSkill
         if(e.getEntity() instanceof LivingEntity)
         {        
             LivingEntity le = (LivingEntity) eAttacker;
-
+/*
             try
             {
                 new FireworkVisualEffect().playFirework(
@@ -41,7 +41,7 @@ public class Burst extends BossSkill
             {
                 Logger.getLogger(Boss.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+*/
             Vector unitVector = eAttacker.getLocation().toVector().subtract(le.getLocation().toVector()).normalize();
 
             unitVector.setY(0.55/level);

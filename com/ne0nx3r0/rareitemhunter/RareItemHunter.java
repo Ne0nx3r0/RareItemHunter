@@ -15,6 +15,8 @@ public class RareItemHunter extends JavaPlugin
     public BossManager bossManager;
     public RecipeManager recipeManager;
     
+    public boolean NIGHT_CRAFTING_ONLY = true;
+    
     @Override
     public void onEnable()
     {
@@ -26,6 +28,9 @@ public class RareItemHunter extends JavaPlugin
         {
             copy(getResource("config.yml"), configFile);
         }
+        
+        this.NIGHT_CRAFTING_ONLY = getConfig().getBoolean("moonlightCrafting",true);
+        //TODO: enforce moonlight crafting 
         
         this.bossManager = new BossManager(this);
         

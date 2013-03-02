@@ -31,6 +31,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
                 cs.sendMessage("- /ri spawn - Boss commands");
                 cs.sendMessage("- /ri compass - give yourself or others a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
             }
+            
+            return true;
         }
         else if(args[0].equalsIgnoreCase("spawn") 
         && this.hasCommandPermission(cs,"rareitemhunter.admin","spawn commands"))
@@ -279,11 +281,15 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             if(!plugin.bossManager.isValidLocation(sPointName) && !sPointName.equalsIgnoreCase("here"))
             {
                 cs.sendMessage(ChatColor.RED+"Invalid spawn point name!");
+                
+                return true;
             }
             
             if(!plugin.bossManager.isValidBossName(sBossName))
             {
                 cs.sendMessage(ChatColor.RED+"Invalid boss name");
+                
+                return true;
             }
             
             if(sPointName.equalsIgnoreCase("here"))

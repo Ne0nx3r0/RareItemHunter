@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,64 +31,79 @@ public class RareItemHunterEntityListener implements Listener
     @EventHandler(priority=EventPriority.NORMAL)
     public void Damage(EntityDamageByEntityEvent e)
     {
-        if(e.getEntity() instanceof LivingEntity)
+        //TODO: Snowballs or eggs do extra damage to certain vulnerable bosses. each boss has a weakness
+        Entity eAttacker = e.getDamager();
+
+        if((eAttacker instanceof Arrow))
         {
-            LivingEntity leBoss = (LivingEntity) e.getEntity();
-            Boss boss = plugin.bossManager.getBoss(leBoss);
+            eAttacker = ((Arrow) eAttacker).getShooter();
+        }       
+        if((eAttacker instanceof Fireball))
+        {
+            eAttacker = ((Fireball) eAttacker).getShooter();
+        }      
+
+        Boss bossAttacker = plugin.bossManager.getBoss(eAttacker);
+        Boss bossAttacked = plugin.bossManager.getBoss(e.getEntity());
+
+        //boss on boss violence... A sad thing.
+        if(bossAttacker != null && bossAttacked != null)
+        {
+            e.setCancelled(true);
             
-            if(boss != null)
+            return;
+        }
+        
+        if(bossAttacker != null)
+        {
+            e.setDamage(bossAttacker.getAttackPower());
+            
+            return;
+        }
+
+        if(bossAttacked != null)
+        {     
+            LivingEntity leBossAttacked = (LivingEntity) e.getEntity();
+
+            int iRemainingHP = bossAttacked.takeDamage(e.getDamage());
+
+            if(iRemainingHP > 0)
             {
-                //TODO: Snowballs or eggs do extra damage to certain vulnerable bosses. each boss has a weakness
-                Entity eAttacker = e.getDamager();
-                
-                if((eAttacker instanceof Arrow))
-                {
-                    eAttacker = ((Arrow) eAttacker).getShooter();
-                }            
-                
+                e.setDamage(1);
 
-                int iRemainingHP = boss.takeDamage(e.getDamage());
+                leBossAttacked.setHealth(leBossAttacked.getMaxHealth());
 
-                if(iRemainingHP > 0)
-                {
-                    e.setDamage(1);
+                bossAttacked.activateRandomSkill(e,eAttacker);
 
-                    leBoss.setHealth(leBoss.getMaxHealth());
-                    
-                    boss.activateRandomSkill(e,eAttacker);
-                    
-                    if(eAttacker instanceof Player)
-                    {
-                        Player pAttacker = (Player) eAttacker;
-                        
-                        pAttacker.sendMessage(boss.getName()+" HP: "+iRemainingHP+"/"+boss.getMaxHP());
-                    }
-                }
-                else //Dead
+                if(eAttacker instanceof Player)
                 {
-                    leBoss.setHealth(1);
-                    
-                    try
-                    {
-                        new FireworkVisualEffect().playFirework(
-                            leBoss.getWorld(), leBoss.getLocation(),
-                            FireworkEffect
-                                .builder()
-                                .with(FireworkEffect.Type.CREEPER)
-                                .withColor(Color.RED)
-                                .build()
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        plugin.getLogger().log(Level.SEVERE, null, ex);
-                    }
-                    
-                    //TODO: Add give rare essence
+                    Player pAttacker = (Player) eAttacker;
+
+                    pAttacker.sendMessage(bossAttacked.getName()+" HP: "+iRemainingHP+"/"+bossAttacked.getMaxHP());
                 }
             }
-            
+            else //Dead
+            {
+                leBossAttacked.setHealth(1);
 
+                try
+                {
+                    new FireworkVisualEffect().playFirework(
+                        leBossAttacked.getWorld(), leBossAttacked.getLocation(),
+                        FireworkEffect
+                            .builder()
+                            .with(FireworkEffect.Type.CREEPER)
+                            .withColor(Color.RED)
+                            .build()
+                    );
+                }
+                catch (Exception ex)
+                {
+                    plugin.getLogger().log(Level.SEVERE, null, ex);
+                }
+
+                //TODO: Add give rare essence
+            }
         }
     }
     
