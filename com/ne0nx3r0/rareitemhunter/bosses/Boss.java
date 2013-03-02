@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Boss
 {
     private int hp;
-    private BossTemplate template;
+    BossTemplate template;
     private int entityId;
     
     Boss(BossTemplate bossTemplate)

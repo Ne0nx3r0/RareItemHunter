@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 import net.minecraft.server.v1_4_R1.EntityLiving;
 import net.minecraft.server.v1_4_R1.EntitySkeleton;
 import net.minecraft.server.v1_4_R1.Item;
@@ -24,10 +25,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_4_R1.entity.CraftSkeleton;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -80,15 +85,78 @@ public class BossManager
 
             EntityType entityType = EntityType.fromName(sType);
 
-            int hp = bossesYml.getInt(sBossName+"."+"hp");
+            int hp = bossesYml.getInt(sBossName+".hp");
 
-            int attackPower = bossesYml.getInt(sBossName+"."+"attackPower");
+            int attackPower = bossesYml.getInt(sBossName+".attackPower");
 
-            int essencesDropped = bossesYml.getInt(sBossName+"."+"essencesDropped");
+            int essencesDropped = bossesYml.getInt(sBossName+".essencesDropped");
 
-            List<String> skillStrings = (List<String>) bossesYml.getList(sBossName+"."+"skills");
+            List<String> skillStrings = (List<String>) bossesYml.getList(sBossName+".skills");
 
-            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped);
+            List<ItemStack> equipment = new ArrayList<ItemStack>();
+            
+            if(bossesYml.isSet(sBossName+".equipment"))
+            {
+                List<String> bossEquipmentStrings = (List<String>) bossesYml.getList(sBossName+".equipment");
+                
+                for(String sItem : bossEquipmentStrings)
+                {
+                    String[] equipValues = sItem.split(" ");
+                    
+                    Material equipMaterial = Material.matchMaterial(equipValues[0]);
+                    
+                    if(equipMaterial != null)
+                    {
+                        ItemStack is = new ItemStack(equipMaterial);
+                        
+                        if(equipValues.length > 1)
+                        {
+                            for(String sEnchantment : equipValues[1].split(","))
+                            {
+                                String[] enchantmentPair = sEnchantment.split(":");
+                                
+                                Enchantment en = Enchantment.getByName(enchantmentPair[0]);
+                                int level = 0;
+                                
+                                try
+                                {
+                                    level = Integer.parseInt(enchantmentPair[1]);
+                                }
+                                catch(Exception e)
+                                {
+                                    plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[1]+"' is not a valid enchantment level on boss '"+sBossName+"'. Skipping.");
+                                    
+                                    continue;
+                                }
+                                
+                                if(en == null)
+                                {
+                                    plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[0]+"' is not a valid enchantment name on boss '"+sBossName+"'. Skipping.");
+                                    
+                                    continue;
+                                }
+                                
+                                is.addEnchantment(en, level);
+                            }
+                        }
+                        
+                        if(equipment.size() < 4)
+                        {
+                            equipment.add(is);
+                        }
+                        else
+                        {
+                            plugin.getLogger().log(Level.WARNING,sBossName+" has too many equipments, skipping '"+sItem+"'");
+                        }
+                    }
+                    else
+                    {
+                        plugin.getLogger().log(Level.WARNING,"'"+equipValues[0]+"' is not a valid material on boss '"+sBossName+"'. Skipping.");
+                    }
+                }
+            }
+            
+            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment);
 
             for(String skillString : skillStrings)
             {                    
@@ -161,7 +229,21 @@ public class BossManager
             this.changeIntoWither((Skeleton) ent);
         }
         
-        ((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999999,5));
+        LivingEntity lent = (LivingEntity) ent;
+        
+        lent.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999999,5));
+
+        if(boss.template.equipment != null)
+        {        
+            EntityEquipment lequips = lent.getEquipment();
+            
+            lequips.setArmorContents(boss.template.equipment.toArray(new ItemStack[4]));
+            
+            lequips.setBootsDropChance(0f);
+            lequips.setLeggingsDropChance(0f);
+            lequips.setChestplateDropChance(0f);
+            lequips.setHelmetDropChance(0f);
+        }
         
         activeBosses.put(ent.getEntityId(), boss);
         
