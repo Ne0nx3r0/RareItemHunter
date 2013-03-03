@@ -266,6 +266,10 @@ public class RecipeManager
                             ingredientsStorage[iMatrixCounter] = 
                                     new ItemStack(Material.matchMaterial(sPrefix),1,Short.parseShort(sSuffix));
                         }
+                        else if(sIngredient.equalsIgnoreCase("RARE_ESSENCE"))
+                        {
+                            ingredientsStorage[iMatrixCounter] = this.getEssenceItem();
+                        }
                         else if(!sIngredient.equalsIgnoreCase("AIR"))
                         {
                             ingredientsStorage[iMatrixCounter] = new ItemStack(Material.matchMaterial(sIngredient));
