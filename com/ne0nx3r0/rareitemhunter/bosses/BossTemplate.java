@@ -14,9 +14,10 @@ public class BossTemplate
     EntityType entityType;
     int essencesDropped;
     List<ItemStack> equipment;
+    ItemStack weapon;
     List<BossEvent> events;
     
-    public BossTemplate(String name,EntityType entityType,int maxHP,int attackPower,int essencesDropped,List<ItemStack> equipment)
+    public BossTemplate(String name,EntityType entityType,int maxHP,int attackPower,int essencesDropped,List<ItemStack> equipment,ItemStack weapon)
     {
         this.name = name;
         this.attackPower = attackPower;
@@ -27,6 +28,11 @@ public class BossTemplate
         if(equipment != null && !equipment.isEmpty())
         {
             this.equipment = equipment;
+        }
+        
+        if(weapon != null)
+        {
+            this.weapon = weapon;
         }
     }
     

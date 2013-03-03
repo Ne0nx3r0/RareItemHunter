@@ -17,3 +17,22 @@ maxChanceToGenerateBossEgg: 20
 
 # How many minutes before a boss that is not found will disappear
 bossEggExpiration: 15
+
+# food, xp, or money (money requires Vault)
+costType: food
+
+# Increment all costs by 1 per X levels
+# For example a value of 2 means: 
+# - level 1: +0
+# - level 2: +1
+# - level 3: +1
+# - level 4: +2
+# - level 5: +2
+# - level 6: +3
+#
+# 0 = no increment
+costLevelIncrement: 2
+
+# Global multiplier for costs
+# For example 2 means 200% cost for all properties
+costMultiplier: 1

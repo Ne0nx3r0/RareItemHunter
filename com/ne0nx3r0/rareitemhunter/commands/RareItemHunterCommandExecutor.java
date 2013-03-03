@@ -1,7 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.commands;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
-import com.ne0nx3r0.rareitemhunter.bosses.SpawnPoint;
+import com.ne0nx3r0.rareitemhunter.bosses.BossEggSpawnPoint;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -198,7 +198,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         cs.sendMessage(ChatColor.DARK_GREEN+"------  Boss Spawn Points  ------");
         
-        for(SpawnPoint point : plugin.bossManager.getSpawnPoints())
+        for(BossEggSpawnPoint point : plugin.bossManager.getSpawnPoints())
         {
             Location l = point.getLocation();
             

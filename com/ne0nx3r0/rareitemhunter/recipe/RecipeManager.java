@@ -289,9 +289,18 @@ public class RecipeManager
                 {
                     if(!sIngredient.contains(":"))
                     {
-                        componentRecipe.setIngredient(
-                                sIngredients.get(sIngredient),
-                                Material.matchMaterial(sIngredient));
+                        if(sIngredient.equalsIgnoreCase("rare_essence"))
+                        {
+                            componentRecipe.setIngredient(
+                                    sIngredients.get(sIngredient),
+                                    Material.MAGMA_CREAM);
+                        }
+                        else
+                        {
+                            componentRecipe.setIngredient(
+                                    sIngredients.get(sIngredient),
+                                    Material.matchMaterial(sIngredient));
+                        }
                     }
                     else
                     {

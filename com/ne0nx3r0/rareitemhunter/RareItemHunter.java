@@ -49,8 +49,7 @@ public class RareItemHunter extends JavaPlugin
         {
             copy(getResource("config.yml"), configFile);
         }
-        
-        
+
         if(getConfig().getString("costType").equalsIgnoreCase("food"))
         {
             COST_TYPE = ItemPropertyCostTypes.FOOD;
@@ -91,9 +90,9 @@ public class RareItemHunter extends JavaPlugin
         getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
         
 // Random boss generation
-        int iTimer = 20 * this.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
+        int iTimer = 60 * 20 * this.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
         int iMaxChance = this.getConfig().getInt("maxChanceToGenerateBossEgg",20);
-        int iExpiration = 20 * this.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
+        int iExpiration = 60 * 20 * this.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
         
         if(iTimer > 0)
         {

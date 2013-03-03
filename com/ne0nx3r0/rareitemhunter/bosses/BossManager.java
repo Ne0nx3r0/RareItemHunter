@@ -41,7 +41,7 @@ public class BossManager
     
     private Map<String,BossTemplate> bossTemplates;
     
-    private Map<String,SpawnPoint> spawnPoints;
+    private Map<String,BossEggSpawnPoint> spawnPoints;
     private Map<Location,String> bossEggs;
     private Map<Integer,Boss> activeBosses;
     
@@ -53,7 +53,7 @@ public class BossManager
         
         activeBosses = new HashMap<Integer,Boss>();
         
-        spawnPoints = new HashMap<String,SpawnPoint>();
+        spawnPoints = new HashMap<String,BossEggSpawnPoint>();
         
         List<BossSkill> availableBossSkills = new ArrayList<BossSkill>();
         
@@ -95,11 +95,36 @@ public class BossManager
             int essencesDropped = bossesYml.getInt(sBossName+".essencesDropped");
 
             List<ItemStack> equipment = new ArrayList<ItemStack>();
- 
+      
+            ItemStack weapon = null; 
 // Add equipment if it has any
             
             if(bossesYml.isSet(sBossName+".equipment"))
             {
+                //Kludgey :/    
+                List<Material> mWeaponTypes = new ArrayList<Material>();
+                    mWeaponTypes.add(Material.DIAMOND_SWORD);
+                    mWeaponTypes.add(Material.WOOD_SWORD);
+                    mWeaponTypes.add(Material.IRON_SWORD);
+                    mWeaponTypes.add(Material.GOLD_SWORD);
+                    mWeaponTypes.add(Material.DIAMOND_SPADE);
+                    mWeaponTypes.add(Material.WOOD_SPADE);
+                    mWeaponTypes.add(Material.IRON_SPADE);
+                    mWeaponTypes.add(Material.GOLD_SPADE);
+                    mWeaponTypes.add(Material.DIAMOND_HOE);
+                    mWeaponTypes.add(Material.WOOD_HOE);
+                    mWeaponTypes.add(Material.IRON_HOE);
+                    mWeaponTypes.add(Material.GOLD_SWORD);
+                    mWeaponTypes.add(Material.DIAMOND_PICKAXE);
+                    mWeaponTypes.add(Material.WOOD_PICKAXE);
+                    mWeaponTypes.add(Material.IRON_PICKAXE);
+                    mWeaponTypes.add(Material.GOLD_PICKAXE);
+                    mWeaponTypes.add(Material.DIAMOND_AXE);
+                    mWeaponTypes.add(Material.WOOD_AXE);
+                    mWeaponTypes.add(Material.IRON_AXE);
+                    mWeaponTypes.add(Material.GOLD_AXE);
+                    mWeaponTypes.add(Material.DIAMOND);
+
                 List<String> bossEquipmentStrings = (List<String>) bossesYml.getList(sBossName+".equipment");
                 
                 for(String sItem : bossEquipmentStrings)
@@ -143,7 +168,11 @@ public class BossManager
                             }
                         }
                         
-                        if(equipment.size() < 4)
+                        if(mWeaponTypes.contains(is.getType()))
+                        {
+                            weapon = is;
+                        }
+                        else if(equipment.size() < 4)
                         {
                             equipment.add(is);
                         }
@@ -160,7 +189,7 @@ public class BossManager
             }
 
 // Create the template
-            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment);
+            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment,weapon);
             
 // Add any skills
             if(bossesYml.isSet(sBossName+".skills"))
@@ -298,16 +327,23 @@ public class BossManager
         
         lent.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999999,5));
 
+        EntityEquipment lequips = lent.getEquipment();
+            
         if(boss.template.equipment != null)
-        {        
-            EntityEquipment lequips = lent.getEquipment();
-            
+        {                    
             lequips.setArmorContents(boss.template.equipment.toArray(new ItemStack[4]));
-            
+
             lequips.setBootsDropChance(0f);
             lequips.setLeggingsDropChance(0f);
             lequips.setChestplateDropChance(0f);
             lequips.setHelmetDropChance(0f);
+        }
+            
+        if(boss.template.weapon != null)
+        {
+            lequips.setItemInHand(boss.template.weapon);
+
+            lequips.setItemInHandDropChance(0f);
         }
         
         activeBosses.put(ent.getEntityId(), boss);
@@ -334,7 +370,7 @@ public class BossManager
     {
         Random random = new Random();
         
-        SpawnPoint spawnPoint = this.spawnPoints.get(sSpawnPointName);
+        BossEggSpawnPoint spawnPoint = this.spawnPoints.get(sSpawnPointName);
         
         for(int i=0;i<10;i++)
         {
@@ -429,7 +465,7 @@ public class BossManager
 
     public void addSpawnPoint(String name, Location location, int radius)
     {
-        this.spawnPoints.put(name, new SpawnPoint(name,location,radius));
+        this.spawnPoints.put(name, new BossEggSpawnPoint(name,location,radius));
     }
 
     public boolean isSpawnPoint(String name)
@@ -442,7 +478,7 @@ public class BossManager
         this.spawnPoints.remove(name);
     }
 
-    public Iterable<SpawnPoint> getSpawnPoints()
+    public Iterable<BossEggSpawnPoint> getSpawnPoints()
     {
         return this.spawnPoints.values();
     }
