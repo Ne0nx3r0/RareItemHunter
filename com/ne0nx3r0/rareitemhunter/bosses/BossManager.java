@@ -30,7 +30,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -65,6 +64,10 @@ public class BossManager
         availableBossSkills.add(new FakeWeb());
         availableBossSkills.add(new Blink());
         availableBossSkills.add(new JumpAttack());
+        availableBossSkills.add(new SpawnZombiePig());
+        availableBossSkills.add(new SpawnSkeleton());
+        availableBossSkills.add(new SpawnZombie());
+        availableBossSkills.add(new SpawnCreeper());
         
         bossTemplates = new HashMap<String,BossTemplate>();
 
@@ -91,9 +94,9 @@ public class BossManager
 
             int essencesDropped = bossesYml.getInt(sBossName+".essencesDropped");
 
-            List<String> skillStrings = (List<String>) bossesYml.getList(sBossName+".skills");
-
             List<ItemStack> equipment = new ArrayList<ItemStack>();
+ 
+// Add equipment if it has any
             
             if(bossesYml.isSet(sBossName+".equipment"))
             {
@@ -155,24 +158,88 @@ public class BossManager
                     }
                 }
             }
-            
+
+// Create the template
             BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment);
-
-            for(String skillString : skillStrings)
-            {                    
-                String skillName = skillString.substring(skillString.indexOf("chance ")+7,skillString.indexOf(" level")).toLowerCase();
-                int chance = Integer.parseInt(skillString.substring(0,skillString.indexOf("%")));
-                int level = Integer.parseInt(skillString.substring(skillString.lastIndexOf(" ")+1));
-
-                for(BossSkill bossSkill : availableBossSkills)
-                {
-                    if(bossSkill.getName().equalsIgnoreCase(skillName))
-                    {
-                        bossTemplate.addSkill(bossSkill, level, chance);
-                    }
-                }
-            }     
             
+// Add any skills
+            if(bossesYml.isSet(sBossName+".skills"))
+            {
+                List<String> skillStrings = (List<String>) bossesYml.getList(sBossName+".skills");
+
+                for(String skillString : skillStrings)
+                {           
+                    String[] skillValues = skillString.split(" ");
+
+                    String skillName = skillValues[2].replace("_", " ");
+                    int chance = Integer.parseInt(skillValues[0].substring(0,skillString.indexOf("%")));
+                    int level = Integer.parseInt(skillValues[4]);
+
+                    for(BossSkill bossSkill : availableBossSkills)
+                    {
+                        if(bossSkill.getName().equalsIgnoreCase(skillName))
+                        {
+                            bossTemplate.addSkill(bossSkill, level, chance);
+                        }
+                    }
+                }  
+            }
+            
+// Add any events
+            if(bossesYml.isSet(sBossName+".events"))
+            {
+                List<String> eventStrings = (List<String>) bossesYml.getList(sBossName+".events");
+
+                for(String eventString : eventStrings)
+                {           
+                    String[] eventValues = eventString.split(" ");
+
+                    String sEventType = eventValues[0];
+
+                    BossEventType eventType = null;
+                    
+                    for(BossEventType bet : BossEventType.values())
+                    {
+                        if(bet.name().equalsIgnoreCase(sEventType))
+                        {
+                            eventType = BossEventType.valueOf(sEventType);
+                        }
+                    }
+
+                    if(eventType == null)
+                    {
+                        plugin.getLogger().log(Level.WARNING,"'"+sEventType+"' is not a valid event type on boss '"+sBossName+"'. Skipping.");
+
+                        continue;
+                    }
+
+                    int iEventValue = -1;
+
+                    try
+                    {
+                        iEventValue = Integer.parseInt(eventValues[1]);
+                    }
+                    catch(Exception e)
+                    {
+                        plugin.getLogger().log(Level.WARNING,"'"+eventValues[1]+"' is not a valid event value on boss '"+sBossName+"'. Skipping.");
+
+                        continue;
+                    }                
+
+                    String skillName = eventValues[2].replace("_", " ");
+                    int level = Integer.parseInt(eventValues[4]);
+
+                    for(BossSkill bossSkill : availableBossSkills)
+                    {
+                        if(bossSkill.getName().equalsIgnoreCase(skillName))
+                        {
+                            bossTemplate.addEvent(new BossEvent(eventType,iEventValue,bossSkill,level));
+                        }
+                    }
+                }  
+            }
+            
+// Save the template
             this.bossTemplates.put(bossTemplate.name,bossTemplate);
         }
     }
@@ -217,8 +284,6 @@ public class BossManager
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-
-        boss.setEntity(ent);
         
         if(boss.getEntityType().equals(EntityType.SKELETON))
         {

@@ -1,4 +1,4 @@
-package com.ne0nx3r0.rareitemhunter.bosses;
+package com.ne0nx3r0 .rareitemhunter.bosses;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import java.util.Random;
@@ -71,9 +71,9 @@ public class RandomlyGenerateBossTask implements Runnable
             }
             else
             {
-                plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN+"-------------- RareItemHunter ----------------");
-                plugin.getServer().broadcastMessage(ChatColor.RED+"Tried to spawn a boss, but no boss spawn points are defined!");//, "rareitemhunter.admin");
-                plugin.getServer().broadcastMessage("Use /ri spawn add to add some points");//, "rareitemhunter.admin");
+                plugin.getServer().broadcast(ChatColor.DARK_GREEN+"-------------- RareItemHunter ----------------", "rareitemhunter.admin");
+                plugin.getServer().broadcast(ChatColor.RED+"Tried to spawn a boss, but no boss spawn points are defined!", "rareitemhunter.admin");
+                plugin.getServer().broadcast("Use /ri spawn add to add some points", "rareitemhunter.admin");
             }
             
         }

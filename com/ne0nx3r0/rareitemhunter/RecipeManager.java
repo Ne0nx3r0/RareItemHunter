@@ -46,4 +46,24 @@ public class RecipeManager
     {
         return this.compass;
     }
+    
+    public ItemStack getEssenceItem()
+    {
+        ItemStack essence = new ItemStack(Material.MAGMA_CREAM);
+        
+        ItemMeta itemMeta = essence.getItemMeta();
+        
+        itemMeta.setDisplayName(ChatColor.DARK_GREEN+"Rare Essence");
+        
+        List<String> lore = new ArrayList<String>();
+        
+        lore.add(ChatColor.DARK_GRAY+"This is the rare essence of a legendary boss.");
+        lore.add(ChatColor.DARK_GRAY+"It can be used to craft Rare Items.");
+        
+        itemMeta.setLore(lore);
+        
+        essence.setItemMeta(itemMeta);
+        
+        return essence;
+    }
 }

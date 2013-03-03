@@ -14,6 +14,7 @@ public class BossTemplate
     EntityType entityType;
     int essencesDropped;
     List<ItemStack> equipment;
+    List<BossEvent> events;
     
     public BossTemplate(String name,EntityType entityType,int maxHP,int attackPower,int essencesDropped,List<ItemStack> equipment)
     {
@@ -23,8 +24,6 @@ public class BossTemplate
         this.entityType = entityType;
         this.essencesDropped = essencesDropped;
         
-        this.skills = new ArrayList<BossSkillInstance>();
-        
         if(equipment != null && !equipment.isEmpty())
         {
             this.equipment = equipment;
@@ -33,6 +32,21 @@ public class BossTemplate
     
     public void addSkill(BossSkill bs,int level,int chance)
     {
+        if(this.skills == null)
+        {
+            this.skills = new ArrayList<BossSkillInstance>();
+        }
+        
         this.skills.add(new BossSkillInstance(bs,level,chance));
+    }
+
+    void addEvent(BossEvent bossEvent)
+    {
+        if(this.events == null)
+        {
+            this.events = new ArrayList<BossEvent>();
+        }
+        
+        this.events.add(bossEvent);
     }
 }

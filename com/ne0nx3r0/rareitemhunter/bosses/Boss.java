@@ -10,7 +10,6 @@ public class Boss
 {
     private int hp;
     BossTemplate template;
-    private int entityId;
     
     Boss(BossTemplate bossTemplate)
     {
@@ -33,27 +32,52 @@ public class Boss
         return this.template.maxHP;
     }
 
-    void setEntity(Entity ent)
+    public boolean activateEvent(EntityDamageByEntityEvent e, Entity eAttacker)
     {
-        this.entityId = ent.getEntityId();
+        if(this.template.events != null)
+        {
+            for(BossEvent be : this.template.events)
+            {       
+                //Only one event type so far
+                if(//be.type.equals(BossEventType.hpLessThan)
+                /*&&*/ this.hp + e.getDamage() > be.triggerValue
+                && this.hp < be.triggerValue)
+                {
+                    if(be.skill.activateSkill(this, e, eAttacker, be.level))
+                    {
+                        if(eAttacker instanceof Player)
+                        {
+                            ((Player) eAttacker).sendMessage(this.template.name+" used "+be.skill.name+"!");
+                        }
+                    
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
-
+    
     public void activateRandomSkill(EntityDamageByEntityEvent e, Entity eAttacker)
     {
-        Random random = new Random();
-        
-        for(BossSkillInstance bsi : this.template.skills)
+        if(this.template.skills != null)
         {
-            if(random.nextInt(100) < bsi.chance)
+            Random random = new Random();
+
+            for(BossSkillInstance bsi : this.template.skills)
             {
-                if(bsi.bossSkill.activateSkill(this, e, eAttacker, hp))
+                if(random.nextInt(100) < bsi.chance)
                 {
-                    if(eAttacker instanceof Player)
+                    if(bsi.bossSkill.activateSkill(this, e, eAttacker, hp))
                     {
-                        ((Player) eAttacker).sendMessage(this.template.name+" used "+bsi.bossSkill.name+"!");
+                        if(eAttacker instanceof Player)
+                        {
+                            ((Player) eAttacker).sendMessage(this.template.name+" used "+bsi.bossSkill.name+"!");
+                        }
+
+                        break;
                     }
-                    
-                    break;
                 }
             }
         }
@@ -67,5 +91,10 @@ public class Boss
     public int getAttackPower()
     {
         return this.template.attackPower;
+    }
+
+    public int getEssenceDropCount()
+    {
+        return this.template.essencesDropped;
     }
 }
