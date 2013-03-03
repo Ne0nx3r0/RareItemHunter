@@ -159,4 +159,6 @@ public class RareItemHunterEntityListener implements Listener
             e.setCancelled(true);
         }
     }
+    
+    
 }
