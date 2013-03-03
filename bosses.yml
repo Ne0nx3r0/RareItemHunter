@@ -7,12 +7,13 @@ wife:
     - 50% chance greater_burst level 5 
     - 50% chance shoot_arrow level 5 
   essencesDropped: 2
-  equipment:
+  armor:
     - DIAMOND_HELMET
     - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
     - DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:1,THORNS:1
     - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2
-    - DIAMOND_SWORD FIRE_ASPECT:2
+  weapon:
+    - DIAMOND_SOWRD FIRE_ASPECT:2
     
 testy:
   type: skeleton
@@ -28,8 +29,9 @@ testy:
     - hpLessThan 100 spawn_zombie_pig level 5
     - hpLessThan 500 spawn_creeper level 2 
   essencesDropped: 2
-  equipment:
+  armor:
     - DIAMOND_HELMET
     - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
     - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2  
-    - DIAMOND
+  weapon:
+    - DIAMOND_SOWRD FIRE_ASPECT:2

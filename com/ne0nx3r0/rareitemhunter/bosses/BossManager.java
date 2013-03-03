@@ -128,7 +128,7 @@ public class BossManager
                 List<String> bossEquipmentStrings = (List<String>) bossesYml.getList(sBossName+".equipment");
                 
                 for(String sItem : bossEquipmentStrings)
-                {
+                {weapon separate from equipment, setup a method to get the itemstack
                     String[] equipValues = sItem.split(" ");
                     
                     Material equipMaterial = Material.matchMaterial(equipValues[0]);
