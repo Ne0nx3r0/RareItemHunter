@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class RareItemHunterCommandExecutor implements CommandExecutor
@@ -30,6 +29,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             {
                 cs.sendMessage("- /ri spawn - Boss commands");
                 cs.sendMessage("- /ri compass - give yourself or others a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
+                cs.sendMessage("- /ri reload - Reloads config files");
             }
             
             return true;
@@ -43,6 +43,11 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         && this.hasCommandPermission(cs,"rareitemhunter.admin","compass command"))
         {
             return this._compass(cs,args);
+        }
+        else if(args[0].equalsIgnoreCase("reload") 
+        && this.hasCommandPermission(cs,"rareitemhunter.admin","reload command"))
+        {
+            return this._reload(cs,args);
         }
         
         return false;
@@ -356,6 +361,17 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
         }
+        
+        return true;
+    }
+
+    private boolean _reload(CommandSender cs, String[] args)
+    {
+        cs.sendMessage(ChatColor.GREEN+"Reloading RareItemHunter...");
+        
+        plugin.reload();
+        
+        cs.sendMessage(ChatColor.GREEN+"RareItemHunter Reloaded!");
         
         return true;
     }

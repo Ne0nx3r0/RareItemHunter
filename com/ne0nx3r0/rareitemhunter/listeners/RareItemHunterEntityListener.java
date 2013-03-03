@@ -113,7 +113,7 @@ public class RareItemHunterEntityListener implements Listener
                 {
                     Player pAttacker = (Player) eAttacker;
                     
-                    plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN+pAttacker.getName()+" has defeated a legendary boss!");
+                    plugin.getServer().broadcastMessage(pAttacker.getName()+ChatColor.DARK_GREEN+" has defeated legendary boss "+ChatColor.WHITE+bossAttacked.getName()+ChatColor.GREEN+"!");
                 }
                 else
                 {

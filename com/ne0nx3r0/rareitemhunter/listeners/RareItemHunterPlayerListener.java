@@ -96,7 +96,7 @@ public class RareItemHunterPlayerListener implements Listener
         
         if(bossAttacker != null)
         {
-            e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by a legendary boss!");
+            e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by legendary boss "+ChatColor.WHITE+bossAttacker.getName()+ChatColor.DARK_RED+"!");
         }
     }
     

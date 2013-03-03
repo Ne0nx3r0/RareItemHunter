@@ -29,7 +29,9 @@ public class RandomlyGenerateBossTask implements Runnable
         int iRoll = random.nextInt(plugin.getServer().getMaxPlayers());
         int iDifficulty = plugin.getServer().getOnlinePlayers().length * (maxChance / 100);
 
-        if(iRoll < iDifficulty || 1==1)
+        System.out.println("DEBUG: RareItemHunter - "+iRoll+" < "+iDifficulty);
+        
+        if(iRoll < iDifficulty)
         {
             if(plugin.bossManager.hasSpawnPoints())
             {

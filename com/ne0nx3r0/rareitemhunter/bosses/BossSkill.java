@@ -21,4 +21,9 @@ public class BossSkill
     {
         return this.name;
     }
+
+    public String getYmlName()
+    {
+        return this.name.replace(" ","");
+    }
 }

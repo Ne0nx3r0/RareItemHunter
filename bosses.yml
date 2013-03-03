@@ -3,35 +3,34 @@ wife:
   hp: 505
   attackPower: 10
   skills:
-    - 50% chance burst level 5
-    - 50% chance greater_burst level 5 
-    - 50% chance shoot_arrow level 5 
+    - 50% chance Burst level 5
+    - 50% chance GreaterBurst level 5 
+    - 50% chance ShootArrow level 5 
   essencesDropped: 2
   armor:
     - DIAMOND_HELMET
     - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
     - DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:1,THORNS:1
     - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2
-  weapon:
-    - DIAMOND_SOWRD FIRE_ASPECT:2
+  weapon: DIAMOND_SWORD FIRE_ASPECT:2,KNOCKBACK:2
     
 testy:
   type: skeleton
   hp: 505
   attackPower: 10
   skills:
-    - 10% chance burst level 5
-    - 10% chance shoot_arrow level 5 
-    - 10% chance shoot_fireball level 5 
-    - 10% chance fake_web level 5 
-    - 10% chance blink level 5 
+    - 10% chance Burst level 5
+    - 10% chance ShootArrow level 5 
+    - 10% chance ShootFireball level 5 
+    - 10% chance FakeWeb level 5 
+    - 10% chance Blink level 5 
   events:
-    - hpLessThan 100 spawn_zombie_pig level 5
-    - hpLessThan 500 spawn_creeper level 2 
+    - hpLessThan 100 SpawnZombiePig level 5
+    - hpLessThan 500 SpawnCreeper level 2 
+# todo more english-like structure for events, or passive skills that are used without being attacked
   essencesDropped: 2
   armor:
     - DIAMOND_HELMET
     - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
     - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2  
-  weapon:
-    - DIAMOND_SOWRD FIRE_ASPECT:2
+  weapon: DIAMOND_SWORD FIRE_ASPECT:2,KNOCKBACK:2

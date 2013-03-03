@@ -16,7 +16,7 @@ timeBetweenChancesToGenerateBossEgg: 60
 maxChanceToGenerateBossEgg: 20
 
 # How many minutes before a boss that is not found will disappear
-bossEggExpiration: 15
+bossEggExpiration: 30
 
 # food, xp, or money (money requires Vault)
 costType: food
@@ -36,3 +36,6 @@ costLevelIncrement: 2
 # Global multiplier for costs
 # For example 2 means 200% cost for all properties
 costMultiplier: 1
+
+# distance a boss will aggro on a player from
+bossAttackRange: 40

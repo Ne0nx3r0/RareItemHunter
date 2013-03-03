@@ -68,6 +68,9 @@ public class BossManager
         availableBossSkills.add(new SpawnSkeleton());
         availableBossSkills.add(new SpawnZombie());
         availableBossSkills.add(new SpawnCreeper());
+        availableBossSkills.add(new SpawnSpider());
+        availableBossSkills.add(new SpawnCaveSpider());
+        availableBossSkills.add(new Pull());
         
         bossTemplates = new HashMap<String,BossTemplate>();
 
@@ -87,6 +90,15 @@ public class BossManager
             String sType = bossesYml.getString(sBossName+"."+"type");
 
             EntityType entityType = EntityType.fromName(sType);
+            
+            if(entityType == null)
+            {
+                plugin.getLogger().log(Level.WARNING,sBossName+" has an invalid entity type '"+bossesYml.getString(sBossName+"."+"type")+"', skipping this boss.");
+                
+                plugin.getLogger().log(Level.WARNING,"Hint: PigZombie vs pig_zombie");
+                
+                continue;
+            }
 
             int hp = bossesYml.getInt(sBossName+".hp");
 
@@ -94,98 +106,38 @@ public class BossManager
 
             int essencesDropped = bossesYml.getInt(sBossName+".essencesDropped");
 
-            List<ItemStack> equipment = new ArrayList<ItemStack>();
-      
-            ItemStack weapon = null; 
 // Add equipment if it has any
+            List<ItemStack> equipment = new ArrayList<ItemStack>();
             
-            if(bossesYml.isSet(sBossName+".equipment"))
+            if(bossesYml.isSet(sBossName+".armor"))
             {
-                //Kludgey :/    
-                List<Material> mWeaponTypes = new ArrayList<Material>();
-                    mWeaponTypes.add(Material.DIAMOND_SWORD);
-                    mWeaponTypes.add(Material.WOOD_SWORD);
-                    mWeaponTypes.add(Material.IRON_SWORD);
-                    mWeaponTypes.add(Material.GOLD_SWORD);
-                    mWeaponTypes.add(Material.DIAMOND_SPADE);
-                    mWeaponTypes.add(Material.WOOD_SPADE);
-                    mWeaponTypes.add(Material.IRON_SPADE);
-                    mWeaponTypes.add(Material.GOLD_SPADE);
-                    mWeaponTypes.add(Material.DIAMOND_HOE);
-                    mWeaponTypes.add(Material.WOOD_HOE);
-                    mWeaponTypes.add(Material.IRON_HOE);
-                    mWeaponTypes.add(Material.GOLD_SWORD);
-                    mWeaponTypes.add(Material.DIAMOND_PICKAXE);
-                    mWeaponTypes.add(Material.WOOD_PICKAXE);
-                    mWeaponTypes.add(Material.IRON_PICKAXE);
-                    mWeaponTypes.add(Material.GOLD_PICKAXE);
-                    mWeaponTypes.add(Material.DIAMOND_AXE);
-                    mWeaponTypes.add(Material.WOOD_AXE);
-                    mWeaponTypes.add(Material.IRON_AXE);
-                    mWeaponTypes.add(Material.GOLD_AXE);
-                    mWeaponTypes.add(Material.DIAMOND);
-
-                List<String> bossEquipmentStrings = (List<String>) bossesYml.getList(sBossName+".equipment");
+                List<String> bossEquipmentStrings = (List<String>) bossesYml.getList(sBossName+".armor");
                 
                 for(String sItem : bossEquipmentStrings)
-                {weapon separate from equipment, setup a method to get the itemstack
-                    String[] equipValues = sItem.split(" ");
-                    
-                    Material equipMaterial = Material.matchMaterial(equipValues[0]);
-                    
-                    if(equipMaterial != null)
+                {
+                    if(equipment.size() < 4)
                     {
-                        ItemStack is = new ItemStack(equipMaterial);
+                        ItemStack is = this.getItemStackFromEquipmentString(sBossName,sItem);
                         
-                        if(equipValues.length > 1)
-                        {
-                            for(String sEnchantment : equipValues[1].split(","))
-                            {
-                                String[] enchantmentPair = sEnchantment.split(":");
-                                
-                                Enchantment en = Enchantment.getByName(enchantmentPair[0]);
-                                int level = 0;
-                                
-                                try
-                                {
-                                    level = Integer.parseInt(enchantmentPair[1]);
-                                }
-                                catch(Exception e)
-                                {
-                                    plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[1]+"' is not a valid enchantment level on boss '"+sBossName+"'. Skipping.");
-                                    
-                                    continue;
-                                }
-                                
-                                if(en == null)
-                                {
-                                    plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[0]+"' is not a valid enchantment name on boss '"+sBossName+"'. Skipping.");
-                                    
-                                    continue;
-                                }
-                                
-                                is.addEnchantment(en, level);
-                            }
-                        }
-                        
-                        if(mWeaponTypes.contains(is.getType()))
-                        {
-                            weapon = is;
-                        }
-                        else if(equipment.size() < 4)
+                        if(is != null)
                         {
                             equipment.add(is);
-                        }
-                        else
-                        {
-                            plugin.getLogger().log(Level.WARNING,sBossName+" has too many equipments, skipping '"+sItem+"'");
                         }
                     }
                     else
                     {
-                        plugin.getLogger().log(Level.WARNING,"'"+equipValues[0]+"' is not a valid material on boss '"+sBossName+"'. Skipping.");
+                        plugin.getLogger().log(Level.WARNING,sBossName+" has too many armor items, skipping '"+sItem+"'");
                     }
                 }
+            }
+            
+// Add weapon if boss has one
+            ItemStack weapon = null; 
+            
+            if(bossesYml.isSet(sBossName+".weapon"))
+            {
+                // Method will return null if invalid, and handle notification of error
+                weapon = this.getItemStackFromEquipmentString(sBossName,bossesYml.getString(sBossName+".weapon"));
             }
 
 // Create the template
@@ -200,13 +152,13 @@ public class BossManager
                 {           
                     String[] skillValues = skillString.split(" ");
 
-                    String skillName = skillValues[2].replace("_", " ");
+                    String skillName = skillValues[2];
                     int chance = Integer.parseInt(skillValues[0].substring(0,skillString.indexOf("%")));
                     int level = Integer.parseInt(skillValues[4]);
 
                     for(BossSkill bossSkill : availableBossSkills)
                     {
-                        if(bossSkill.getName().equalsIgnoreCase(skillName))
+                        if(bossSkill.getYmlName().equalsIgnoreCase(skillName))
                         {
                             bossTemplate.addSkill(bossSkill, level, chance);
                         }
@@ -313,7 +265,7 @@ public class BossManager
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-        
+
         if(boss.getEntityType().equals(EntityType.SKELETON))
         {
             this.changeIntoNormal((Skeleton) ent, true);
@@ -596,5 +548,56 @@ public class BossManager
         catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    private ItemStack getItemStackFromEquipmentString(String sBossName,String sItem)
+    {
+        String[] equipValues = sItem.split(" ");
+                    
+        Material equipMaterial = Material.matchMaterial(equipValues[0]);
+
+        if(equipMaterial != null)
+        {
+            ItemStack is = new ItemStack(equipMaterial);
+
+            if(equipValues.length > 1)
+            {
+                for(String sEnchantment : equipValues[1].split(","))
+                {
+                    String[] enchantmentPair = sEnchantment.split(":");
+
+                    Enchantment en = Enchantment.getByName(enchantmentPair[0]);
+                    int level = 0;
+
+                    try
+                    {
+                        level = Integer.parseInt(enchantmentPair[1]);
+                    }
+                    catch(Exception e)
+                    {
+                        plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[1]+"' is not a valid enchantment level on boss '"+sBossName+"'. Skipping.");
+
+                        return null;
+                    }
+
+                    if(en == null)
+                    {
+                        plugin.getLogger().log(Level.WARNING,"'"+enchantmentPair[0]+"' is not a valid enchantment name on boss '"+sBossName+"'. Skipping.");
+
+                        return null;
+                    }
+
+                    is.addEnchantment(en, level);
+                }
+            }
+
+            return is;
+        }
+        else
+        {
+            plugin.getLogger().log(Level.WARNING,"'"+equipValues[0]+"' is not a valid material on boss '"+sBossName+"'. Skipping.");
+        }
+        
+        return null;
     }
 }

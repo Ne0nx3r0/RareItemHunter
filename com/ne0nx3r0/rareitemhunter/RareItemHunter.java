@@ -41,6 +41,31 @@ public class RareItemHunter extends JavaPlugin
     {
         RareItemHunter.self = this;
         
+        loadConfig(false);
+        
+        loadManagers();
+        
+        getServer().getPluginManager().registerEvents(new RareItemHunterEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new RareItemHunterPlayerListener(this), this);
+        
+        getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
+        
+        scheduleRandomBoss();
+    }
+    
+    public void reload()
+    {
+        getServer().getScheduler().cancelTasks(this);
+        
+        loadConfig(true);
+        
+        loadManagers();
+        
+        scheduleRandomBoss();
+    }
+    
+    private void loadConfig(boolean reloadConfig)
+    {
         getDataFolder().mkdirs();
         
         File configFile = new File(getDataFolder(),"config.yml");
@@ -48,6 +73,11 @@ public class RareItemHunter extends JavaPlugin
         if(!configFile.exists())
         {
             copy(getResource("config.yml"), configFile);
+        }
+        
+        if(reloadConfig)
+        {
+            this.reloadConfig();
         }
 
         if(getConfig().getString("costType").equalsIgnoreCase("food"))
@@ -77,19 +107,19 @@ public class RareItemHunter extends JavaPlugin
         COST_MULTIPLIER = getConfig().getInt("costMultiplier");
         
         COST_LEVEL_INCREMENT = getConfig().getInt("costLevelIncrement");
-        
+    }
+
+    private void loadManagers()
+    {
         this.propertyManager = new PropertyManager(this);
         
         this.bossManager = new BossManager(this);
 
         this.recipeManager = new RecipeManager(this);
-        
-        getServer().getPluginManager().registerEvents(new RareItemHunterEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new RareItemHunterPlayerListener(this), this);
-        
-        getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
-        
-// Random boss generation
+    }
+
+    private void scheduleRandomBoss()
+    {
         int iTimer = 60 * 20 * this.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
         int iMaxChance = this.getConfig().getInt("maxChanceToGenerateBossEgg",20);
         int iExpiration = 60 * 20 * this.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
