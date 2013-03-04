@@ -45,6 +45,8 @@ public class BossManager
     private Map<Location,String> bossEggs;
     private Map<Integer,Boss> activeBosses;
     
+    //TODO: Periodically clean up bosses that were removed by /killall, etc.
+    
     public BossManager(RareItemHunter plugin)
     {
         this.plugin = plugin;
@@ -71,6 +73,9 @@ public class BossManager
         availableBossSkills.add(new SpawnSpider());
         availableBossSkills.add(new SpawnCaveSpider());
         availableBossSkills.add(new Pull());
+        availableBossSkills.add(new SpawnSilverfish());
+        availableBossSkills.add(new PoisonDart());
+        availableBossSkills.add(new Disorient());
         
         bossTemplates = new HashMap<String,BossTemplate>();
 
@@ -222,6 +227,21 @@ public class BossManager
             
 // Save the template
             this.bossTemplates.put(bossTemplate.name,bossTemplate);
+        }
+        
+// Schedule random boss spawns
+
+        int iTimer = 60 * 20 * plugin.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
+        int iMaxChance = plugin.getConfig().getInt("maxChanceToGenerateBossEgg",20);
+        int iExpiration = 60 * 20 * plugin.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
+        
+        if(iTimer > 0)
+        {
+            plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                new RandomlyGenerateBossTask(plugin,iMaxChance,iTimer,iExpiration), 
+                iTimer, 
+                iTimer);
         }
     }
     

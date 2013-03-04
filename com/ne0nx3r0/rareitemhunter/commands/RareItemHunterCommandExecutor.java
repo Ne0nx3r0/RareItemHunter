@@ -29,6 +29,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             {
                 cs.sendMessage("- /ri spawn - Boss commands");
                 cs.sendMessage("- /ri compass - give yourself or others a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
+                cs.sendMessage("- /ri essence - give yourself or others a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName());
                 cs.sendMessage("- /ri reload - Reloads config files");
             }
             
@@ -43,6 +44,11 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         && this.hasCommandPermission(cs,"rareitemhunter.admin","compass command"))
         {
             return this._compass(cs,args);
+        }
+        else if(args[0].equalsIgnoreCase("essence") 
+        && this.hasCommandPermission(cs,"rareitemhunter.admin","essence command"))
+        {
+            return this._essence(cs,args);
         }
         else if(args[0].equalsIgnoreCase("reload") 
         && this.hasCommandPermission(cs,"rareitemhunter.admin","reload command"))
@@ -372,6 +378,50 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         plugin.reload();
         
         cs.sendMessage(ChatColor.GREEN+"RareItemHunter Reloaded!");
+        
+        return true;
+    }
+
+    private boolean _essence(CommandSender cs, String[] args)
+    {     
+        if(args.length < 2)
+        {
+            if(this.sentFromConsole(cs))
+            {
+                cs.sendMessage("You can use /ri essence <player>");
+                
+                return true;
+            }
+            
+            Player player = (Player) cs;
+            
+            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getCompass());
+            
+            player.sendMessage("Giving you a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName()+"!");
+        }
+        else if(args[1].equalsIgnoreCase("?"))
+        {
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri essence <player>  ------");
+            cs.sendMessage("Gives you or a specified player a essence");
+            cs.sendMessage("");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri essence");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri essence <player>");
+        }
+        else if(plugin.getServer().getPlayer(args[1]) != null)
+        {
+            Player player = plugin.getServer().getPlayer(args[1]);
+
+            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getCompass());
+            
+            String sEssenceName = plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName();
+            
+            cs.sendMessage("Giving "+player.getName()+" a "+sEssenceName+"!");
+            player.sendMessage("You just got a "+sEssenceName+"!");
+        }
+        else
+        {
+            cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
+        }
         
         return true;
     }

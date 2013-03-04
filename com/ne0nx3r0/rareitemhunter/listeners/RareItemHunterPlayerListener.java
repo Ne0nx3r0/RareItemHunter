@@ -79,24 +79,27 @@ public class RareItemHunterPlayerListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e)
     {     
-        EntityDamageByEntityEvent edbe  = (EntityDamageByEntityEvent) e.getEntity().getLastDamageCause();
-        
-        Entity eAttacker = edbe.getDamager();
-        
-        if((eAttacker instanceof Arrow))
+        if(e.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)
         {
-            eAttacker = ((Arrow) eAttacker).getShooter();
-        }       
-        if((eAttacker instanceof Fireball))
-        {
-            eAttacker = ((Fireball) eAttacker).getShooter();
-        }     
-        
-        Boss bossAttacker = plugin.bossManager.getBoss(eAttacker);
-        
-        if(bossAttacker != null)
-        {
-            e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by legendary boss "+ChatColor.WHITE+bossAttacker.getName()+ChatColor.DARK_RED+"!");
+            EntityDamageByEntityEvent edbe  = (EntityDamageByEntityEvent) e.getEntity().getLastDamageCause();
+
+            Entity eAttacker = edbe.getDamager();
+
+            if((eAttacker instanceof Arrow))
+            {
+                eAttacker = ((Arrow) eAttacker).getShooter();
+            }       
+            if((eAttacker instanceof Fireball))
+            {
+                eAttacker = ((Fireball) eAttacker).getShooter();
+            }     
+
+            Boss bossAttacker = plugin.bossManager.getBoss(eAttacker);
+
+            if(bossAttacker != null)
+            {
+                e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by legendary boss "+ChatColor.WHITE+bossAttacker.getName()+ChatColor.DARK_RED+"!");
+            }
         }
     }
     

@@ -34,3 +34,14 @@ testy:
     - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
     - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2  
   weapon: DIAMOND_SWORD FIRE_ASPECT:2,KNOCKBACK:2
+  
+PoisonFish:
+  type: silverfish
+  hp: 600
+  attackPower: 12
+  skills:
+    - 30% chance Disorient level 5
+    - 30% chance PoisonDart level 5
+  events:
+    - hpLessThan 100 SpawnSilverfish level 5
+  essencesDropped: 1

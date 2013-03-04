@@ -49,8 +49,6 @@ public class RareItemHunter extends JavaPlugin
         getServer().getPluginManager().registerEvents(new RareItemHunterPlayerListener(this), this);
         
         getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
-        
-        scheduleRandomBoss();
     }
     
     public void reload()
@@ -60,8 +58,6 @@ public class RareItemHunter extends JavaPlugin
         loadConfig(true);
         
         loadManagers();
-        
-        scheduleRandomBoss();
     }
     
     private void loadConfig(boolean reloadConfig)
@@ -118,22 +114,6 @@ public class RareItemHunter extends JavaPlugin
         this.recipeManager = new RecipeManager(this);
     }
 
-    private void scheduleRandomBoss()
-    {
-        int iTimer = 60 * 20 * this.getConfig().getInt("timeBetweenChancesToGenerateBossEgg",60 * 60 * 20);
-        int iMaxChance = this.getConfig().getInt("maxChanceToGenerateBossEgg",20);
-        int iExpiration = 60 * 20 * this.getConfig().getInt("bossEggExpiration",15 * 60 * 20);
-        
-        if(iTimer > 0)
-        {
-            this.getServer().getScheduler().scheduleSyncRepeatingTask(
-                    this,
-                    new RandomlyGenerateBossTask(this,iMaxChance,iTimer,iExpiration), 
-                    iTimer, 
-                    iTimer);
-        }
-    }
-    
 // Public helper methods
     
     public void copy(InputStream in, File file)
