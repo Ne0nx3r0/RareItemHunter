@@ -10,6 +10,7 @@ public class Boss
 {
     private int hp;
     BossTemplate template;
+    Entity entity;
     
     Boss(BossTemplate bossTemplate)
     {
@@ -96,5 +97,15 @@ public class Boss
     public int getEssenceDropCount()
     {
         return this.template.essencesDropped;
+    }
+
+    Entity getEntity()
+    {
+        return this.entity;
+    }
+
+    void setEntity(Entity entity)
+    {
+        this.entity = entity;
     }
 }

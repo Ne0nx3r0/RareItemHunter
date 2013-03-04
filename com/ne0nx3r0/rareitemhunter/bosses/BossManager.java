@@ -43,7 +43,7 @@ public class BossManager
     
     private Map<String,BossEggSpawnPoint> spawnPoints;
     private Map<Location,String> bossEggs;
-    private Map<Integer,Boss> activeBosses;
+    Map<Integer,Boss> activeBosses;
     
     //TODO: Periodically clean up bosses that were removed by /killall, etc.
     
@@ -243,6 +243,9 @@ public class BossManager
                 iTimer, 
                 iTimer);
         }
+        
+// Schedule garbage collection for activeBosses
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*60, 20*60);
     }
     
     public boolean isBoss(Entity entity)
@@ -285,6 +288,8 @@ public class BossManager
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
+        
+        boss.setEntity(ent);
 
         if(boss.getEntityType().equals(EntityType.SKELETON))
         {
