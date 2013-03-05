@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Boss
 {
     private int hp;
+    private int kills = 0;
     BossTemplate template;
     Entity entity;
     
@@ -107,5 +108,10 @@ public class Boss
     void setEntity(Entity entity)
     {
         this.entity = entity;
+    }
+
+    public int getKills()
+    {
+        return this.kills;
     }
 }

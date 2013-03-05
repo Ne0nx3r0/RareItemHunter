@@ -1,12 +1,13 @@
 package com.ne0nx3r0.rareitemhunter;
 
-import com.ne0nx3r0.rareitemhunter.recipe.RecipeManager;
 import com.ne0nx3r0.rareitemhunter.bosses.BossManager;
-import com.ne0nx3r0.rareitemhunter.bosses.RandomlyGenerateBossTask;
 import com.ne0nx3r0.rareitemhunter.commands.RareItemHunterCommandExecutor;
 import com.ne0nx3r0.rareitemhunter.listeners.*;
 import com.ne0nx3r0.rareitemhunter.property.ItemPropertyCostTypes;
 import com.ne0nx3r0.rareitemhunter.property.PropertyManager;
+import com.ne0nx3r0.rareitemhunter.recipe.RecipeManager;
+import de.kumpelblase2.remoteentities.EntityManager;
+import de.kumpelblase2.remoteentities.RemoteEntities;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -19,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RareItemHunter extends JavaPlugin
 {
+    public EntityManager entityManager;
     public BossManager bossManager;
     public RecipeManager recipeManager;
     
@@ -107,6 +109,8 @@ public class RareItemHunter extends JavaPlugin
 
     private void loadManagers()
     {
+        this.entityManager = RemoteEntities.createManager(this);
+        
         this.propertyManager = new PropertyManager(this);
         
         this.bossManager = new BossManager(this);

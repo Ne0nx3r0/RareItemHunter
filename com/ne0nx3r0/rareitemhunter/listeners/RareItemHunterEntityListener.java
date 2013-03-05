@@ -91,8 +91,6 @@ public class RareItemHunterEntityListener implements Listener
             }
             else //Dead
             {
-                leBossAttacked.setHealth(1);
-
                 try
                 {
                     new FireworkVisualEffect().playFirework(
@@ -130,6 +128,10 @@ public class RareItemHunterEntityListener implements Listener
                     
                     droppedItem.setVelocity(new Vector(random.nextInt(2),random.nextInt(2),random.nextInt(2)));
                 }
+                
+                e.setCancelled(true);
+                
+                plugin.bossManager.destroyBoss(bossAttacked);
             }
         }
     }

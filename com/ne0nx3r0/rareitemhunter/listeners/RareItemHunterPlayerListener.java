@@ -2,8 +2,12 @@ package com.ne0nx3r0.rareitemhunter.listeners;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.Boss;
+import com.ne0nx3r0.utils.FireworkVisualEffect;
 import java.util.List;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -96,6 +100,36 @@ public class RareItemHunterPlayerListener implements Listener
             if(bossAttacker != null)
             {
                 e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by legendary boss "+ChatColor.WHITE+bossAttacker.getName()+ChatColor.DARK_RED+"!");
+                
+                int bossKills = bossAttacker.getKills();
+                
+                if(bossKills >= plugin.getConfig().getInt("bossExpireKills",10))
+                {
+                    for(Player p : eAttacker.getWorld().getPlayers())
+                    {
+                        p.sendMessage(ChatColor.GREEN+"Legendary boss "+bossAttacker.getName()
+                                +" has had its fill of players and has left this world.");
+                    }
+
+                    try
+                    {
+                        new FireworkVisualEffect().playFirework(
+                            eAttacker.getWorld(), eAttacker.getLocation(),
+                            FireworkEffect
+                                .builder()
+                                .with(FireworkEffect.Type.BURST)
+                                .withColor(Color.GREEN)
+                                .build()
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        plugin.getLogger().log(Level.SEVERE, null, ex);
+                    }
+                    
+                    plugin.bossManager.destroyBoss(bossAttacker);
+                }
+                
             }
         }
     }

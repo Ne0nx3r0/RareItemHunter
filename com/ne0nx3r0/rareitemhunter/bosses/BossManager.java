@@ -290,7 +290,7 @@ public class BossManager
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-        
+
         boss.setEntity(ent);
 
         if(boss.getEntityType().equals(EntityType.SKELETON))
@@ -627,5 +627,12 @@ public class BossManager
         }
         
         return null;
+    }
+
+    public void destroyBoss(Boss boss)
+    {
+        this.activeBosses.remove(boss.entity.getEntityId());
+        
+        boss.entity.remove();
     }
 }
