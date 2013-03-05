@@ -1,39 +1,19 @@
-wife:
-  type: skeleton
-  hp: 505
-  attackPower: 10
+Fisherman:
+  type: zombie
+  hp: 1200
+  attackPower: 20
   skills:
-    - 50% chance Burst level 5
-    - 50% chance GreaterBurst level 5 
-    - 50% chance ShootArrow level 5 
-  essencesDropped: 2
-  armor:
-    - DIAMOND_HELMET
-    - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
-    - DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:1,THORNS:1
-    - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2
-  weapon: DIAMOND_SWORD FIRE_ASPECT:2,KNOCKBACK:2
-    
-testy:
-  type: skeleton
-  hp: 505
-  attackPower: 10
-  skills:
-    - 10% chance Burst level 5
-    - 10% chance ShootArrow level 5 
-    - 10% chance ShootFireball level 5 
-    - 10% chance FakeWeb level 5 
-    - 10% chance Blink level 5 
+    - 40% chance Pull level 5 
+    - 40% chance JumpAttack level 5 
+  essencesDropped: 1
   events:
-    - hpLessThan 100 SpawnZombiePig level 5
-    - hpLessThan 500 SpawnCreeper level 2 
-# todo more english-like structure for events, or passive skills that are used without being attacked
-  essencesDropped: 2
+    - hpLessThan 200 SpawnSilverfish level 6
+    - hpLessThan 100 SpawnSilverfish level 6
   armor:
-    - DIAMOND_HELMET
-    - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:1
-    - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:1,THORNS:1,THORNS:2  
-  weapon: DIAMOND_SWORD FIRE_ASPECT:2,KNOCKBACK:2
+    - LEATHER_HELMET PROTECTION_ENVIRONMENTAL:3,THORNS:2
+    - LEATHER_BOOTS PROTECTION_ENVIRONMENTAL:3
+    - LEATHER_BOOTS PROTECTION_ENVIRONMENTAL:2,THORNS:1
+  weapon: FISHING_ROD
   
 PoisonFish:
   type: silverfish

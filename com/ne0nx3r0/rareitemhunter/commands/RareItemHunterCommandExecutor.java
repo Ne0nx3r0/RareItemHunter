@@ -395,7 +395,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             
             Player player = (Player) cs;
             
-            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getCompass());
+            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getEssenceItem());
             
             player.sendMessage("Giving you a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName()+"!");
         }
@@ -411,11 +411,12 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             Player player = plugin.getServer().getPlayer(args[1]);
 
-            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getCompass());
+            player.getWorld().dropItemNaturally(player.getLocation(), plugin.recipeManager.getEssenceItem());
             
             String sEssenceName = plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName();
             
             cs.sendMessage("Giving "+player.getName()+" a "+sEssenceName+"!");
+            
             player.sendMessage("You just got a "+sEssenceName+"!");
         }
         else

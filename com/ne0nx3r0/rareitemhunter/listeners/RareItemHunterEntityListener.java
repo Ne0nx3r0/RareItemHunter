@@ -137,8 +137,15 @@ public class RareItemHunterEntityListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent e)
     {
-        //TODO: verify events to cancel, snow men melting, being in lava, etc.
-        //http://jd.bukkit.org/apidocs/org/bukkit/event/entity/EntityDamageEvent.DamageCause.html
+        if (e.getEntity() != null && plugin.bossManager.isBoss(e.getEntity()))
+        {
+            if(e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK 
+            && e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE 
+            && e.getCause() != EntityDamageEvent.DamageCause.MAGIC)
+            {
+                e.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled = true)

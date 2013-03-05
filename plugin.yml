@@ -7,7 +7,11 @@ commands:
     ri:
       description: RareItems commands
 permissions:
-    rareitemhunter.notifications.boss:
-      description: Player is notified when a boss spawns
+    rareitemhunter.*:
+      description: Gives access to all RareItemHunter permissions
+      children:
+        rareitemhunter.admin: true
+      default: op
     rareitemhunter.admin:
       description: Player has permissions to manage the plugin, is notified of admin issues
+      default: op

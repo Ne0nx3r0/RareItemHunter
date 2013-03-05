@@ -63,7 +63,7 @@ public class BossManager
         availableBossSkills.add(new GreaterBurst());
         availableBossSkills.add(new ShootArrow());
         availableBossSkills.add(new ShootFireball());
-        availableBossSkills.add(new FakeWeb());
+        //availableBossSkills.add(new FakeWeb());
         availableBossSkills.add(new Blink());
         availableBossSkills.add(new JumpAttack());
         availableBossSkills.add(new SpawnZombiePig());
@@ -76,6 +76,8 @@ public class BossManager
         availableBossSkills.add(new SpawnSilverfish());
         availableBossSkills.add(new PoisonDart());
         availableBossSkills.add(new Disorient());
+        availableBossSkills.add(new LightningStorm());
+        availableBossSkills.add(new LightningBolt());
         
         bossTemplates = new HashMap<String,BossTemplate>();
 
@@ -244,8 +246,8 @@ public class BossManager
                 iTimer);
         }
         
-// Schedule garbage collection for activeBosses
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*60, 20*60);
+// Schedule targetting / garbage collection for activeBosses
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*2, 20*2);
     }
     
     public boolean isBoss(Entity entity)
@@ -295,6 +297,7 @@ public class BossManager
         {
             this.changeIntoNormal((Skeleton) ent, true);
         }
+        
         if(boss.getEntityType().equals(EntityType.WITHER_SKULL))
         {
             this.changeIntoWither((Skeleton) ent);
@@ -307,7 +310,7 @@ public class BossManager
         EntityEquipment lequips = lent.getEquipment();
             
         if(boss.template.equipment != null)
-        {                    
+        {
             lequips.setArmorContents(boss.template.equipment.toArray(new ItemStack[4]));
 
             lequips.setBootsDropChance(0f);

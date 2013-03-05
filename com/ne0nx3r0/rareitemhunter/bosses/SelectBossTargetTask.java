@@ -1,7 +1,10 @@
 package com.ne0nx3r0.rareitemhunter.bosses;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
+import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class SelectBossTargetTask implements Runnable 
 {
@@ -30,7 +33,6 @@ public class SelectBossTargetTask implements Runnable
                 {
                     bossManager.activeBosses.remove(eBoss.getEntityId());
                 }
-                /* does not work, at all
                 else if(eBoss instanceof Creature)
                 {
                    Creature cBoss = (Creature) eBoss;
@@ -61,7 +63,7 @@ public class SelectBossTargetTask implements Runnable
                             cBoss.setTarget(pClosest);
                         }
                    }
-                }*/
+                }
             }
         }
     }
