@@ -37,7 +37,7 @@ public class SelectBossTargetTask implements Runnable
                 {
                    Creature cBoss = (Creature) eBoss;
 
-                   if(!(cBoss.getTarget() instanceof Player))
+                   if(!(cBoss.getTarget() instanceof Player) && 1 == 2)
                    {
                         Location l = eBoss.getLocation();
                         double maxDistance = Math.pow(SIGHT_DISTANCE, 2);
@@ -60,7 +60,7 @@ public class SelectBossTargetTask implements Runnable
 
                         if(pClosest != null)
                         {
-                            cBoss.setTarget(pClosest);
+                            //cBoss.setTarget(pClosest);
                         }
                    }
                 }

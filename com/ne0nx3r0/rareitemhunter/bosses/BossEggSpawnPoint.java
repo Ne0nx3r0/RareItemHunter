@@ -24,4 +24,9 @@ public class BossEggSpawnPoint
     {
         return this.name;
     }
+
+    public int getRadius()
+    {
+        return this.radius;
+    }
 }

@@ -2,9 +2,10 @@ package com.ne0nx3r0.rareitemhunter.bosses;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.bosses.skills.*;
+import de.kumpelblase2.remoteentities.api.RemoteEntity;
+import de.kumpelblase2.remoteentities.api.RemoteEntityType;
+import de.kumpelblase2.remoteentities.api.thinking.goals.DesireAttackOnCollide;
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,11 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
-import net.minecraft.server.v1_4_R1.EntityLiving;
-import net.minecraft.server.v1_4_R1.EntitySkeleton;
-import net.minecraft.server.v1_4_R1.Item;
-import net.minecraft.server.v1_4_R1.PathfinderGoal;
-import net.minecraft.server.v1_4_R1.PathfinderGoalSelector;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,12 +20,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_4_R1.entity.CraftSkeleton;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -39,11 +34,13 @@ public class BossManager
 {
     private final RareItemHunter plugin;
     
-    private Map<String,BossTemplate> bossTemplates;
+    Map<String,BossTemplate> bossTemplates;
     
-    private Map<String,BossEggSpawnPoint> spawnPoints;
-    private Map<Location,String> bossEggs;
+    Map<String,BossEggSpawnPoint> spawnPoints;
+    Map<Location,String> bossEggs;
     Map<Integer,Boss> activeBosses;
+    
+    private saveFileManager saveManager;
     
     //TODO: Periodically clean up bosses that were removed by /killall, etc.
     
@@ -63,7 +60,7 @@ public class BossManager
         availableBossSkills.add(new GreaterBurst());
         availableBossSkills.add(new ShootArrow());
         availableBossSkills.add(new ShootFireball());
-        //availableBossSkills.add(new FakeWeb());
+        //availableBossSkills.add(new FakeWeb());-> Seems to be sort of... crashing the server. Orefuscator conflict, possibly...
         availableBossSkills.add(new Blink());
         availableBossSkills.add(new JumpAttack());
         availableBossSkills.add(new SpawnZombiePig());
@@ -230,6 +227,8 @@ public class BossManager
 // Save the template
             this.bossTemplates.put(bossTemplate.name,bossTemplate);
         }
+       
+        this.saveManager = new saveFileManager(plugin,this);
         
 // Schedule random boss spawns
 
@@ -247,7 +246,7 @@ public class BossManager
         }
         
 // Schedule targetting / garbage collection for activeBosses
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*2, 20*2);
+        //plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*2, 20*2);
     }
     
     public boolean isBoss(Entity entity)
@@ -289,18 +288,29 @@ public class BossManager
     {
         Boss boss = new Boss(this.bossTemplates.get(sBossName));
         
-        Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
-
-        boss.setEntity(ent);
-
-        if(boss.getEntityType().equals(EntityType.SKELETON))
+        Entity ent = null;
+        
+        if(plugin.entityManager != null && 1 == 2)
         {
-            this.changeIntoNormal((Skeleton) ent, true);
+            RemoteEntity rEntity = plugin.entityManager.createEntity(RemoteEntityType.valueOf(boss.template.entityType.getName()), eggLocation, false);
+            
+            ent = rEntity.getBukkitEntity();
+            
+            //rEntity.getMind().addActionDesire(new DesireFindAttackingTarget(rEntity, 30, false, true, true),1);
+            //rEntity.getMind().addActionDesire(new DesireFindNearestTarget(rEntity, EntityHuman.class, 30, false, true, 100),1);
+            rEntity.getMind().addActionDesire(new DesireAttackOnCollide(rEntity, Player.class, true, 10f), 1);
+        }
+        else
+        {
+            ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
         }
         
-        if(boss.getEntityType().equals(EntityType.WITHER_SKULL))
+        boss.setEntity(ent);
+
+        if(1 == 1)
         {
-            this.changeIntoWither((Skeleton) ent);
+            activeBosses.put(ent.getEntityId(), boss);
+            return boss;
         }
         
         LivingEntity lent = (LivingEntity) ent;
@@ -327,6 +337,8 @@ public class BossManager
         }
         
         activeBosses.put(ent.getEntityId(), boss);
+        
+        this.saveManager.save();
         
         return boss;
     }
@@ -415,6 +427,8 @@ public class BossManager
             block.setType(Material.DRAGON_EGG);
 
             this.bossEggs.put(block.getLocation(), bossTemplate.name);
+
+            this.saveManager.save();
             
             return true;
         }
@@ -446,6 +460,8 @@ public class BossManager
     public void addSpawnPoint(String name, Location location, int radius)
     {
         this.spawnPoints.put(name, new BossEggSpawnPoint(name,location,radius));
+        
+        this.saveManager.save();
     }
 
     public boolean isSpawnPoint(String name)
@@ -456,6 +472,8 @@ public class BossManager
     public void delSpawnPoint(String name)
     {
         this.spawnPoints.remove(name);
+        
+        this.saveManager.save();
     }
 
     public Iterable<BossEggSpawnPoint> getSpawnPoints()
@@ -495,6 +513,8 @@ public class BossManager
             }
 
             this.bossEggs.remove(lSpawnedEgg);
+            
+            this.saveManager.save();
         }
     }
 
@@ -533,51 +553,6 @@ public class BossManager
     }
     
 // Misc helper methods
-     public void changeIntoNormal(Skeleton skeleton, boolean giveRandomEnchantments)
-     {
-        EntitySkeleton ent = ((CraftSkeleton)skeleton).getHandle();
-        try
-        {
-            ent.setSkeletonType(0);
-            Method be = EntitySkeleton.class.getDeclaredMethod("bE");
-            be.setAccessible(true);
-            be.invoke(ent);
-            if (giveRandomEnchantments)
-            {
-                Method bf = EntityLiving.class.getDeclaredMethod("bF");
-                bf.setAccessible(true);
-                bf.invoke(ent);
-            }
-            Field selector = EntityLiving.class.getDeclaredField("goalSelector");
-            selector.setAccessible(true);
-            Field d = EntitySkeleton.class.getDeclaredField("d");
-            d.setAccessible(true);
-            PathfinderGoalSelector goals = (PathfinderGoalSelector) selector.get(ent);
-            goals.a(4, (PathfinderGoal) d.get(ent));
-        }
-        catch (Throwable e)
-        {
-            e.printStackTrace();
-        }
-    }    
-    
-     public void changeIntoWither(Skeleton skeleton){
-        EntitySkeleton ent = ((CraftSkeleton)skeleton).getHandle();
-        try {
-            ent.setSkeletonType(1);
-            Field selector = EntityLiving.class.getDeclaredField("goalSelector");
-            selector.setAccessible(true);
-            Field e = EntitySkeleton.class.getDeclaredField("e");
-            e.setAccessible(true);
-            PathfinderGoalSelector goals = (PathfinderGoalSelector) selector.get(ent);
-            goals.a(4, (PathfinderGoal) e.get(ent));
-            ent.setEquipment(0, new net.minecraft.server.v1_4_R1.ItemStack(Item.STONE_SWORD));
-        }
-        catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
     private ItemStack getItemStackFromEquipmentString(String sBossName,String sItem)
     {
         String[] equipValues = sItem.split(" ");

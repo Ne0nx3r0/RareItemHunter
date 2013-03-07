@@ -213,7 +213,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             Location l = point.getLocation();
             
-            cs.sendMessage(point.getName()+" ("+l.getBlockX()+","+l.getBlockY()+","+l.getBlockZ()+")");
+            cs.sendMessage(point.getName()+" (z:"+l.getBlockX()+",y:"+l.getBlockY()+",z:"+l.getBlockZ()+",radius:"+point.getRadius()+")");
         }
         
         return true;

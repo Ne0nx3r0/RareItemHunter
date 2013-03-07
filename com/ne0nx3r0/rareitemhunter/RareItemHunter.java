@@ -109,7 +109,10 @@ public class RareItemHunter extends JavaPlugin
 
     private void loadManagers()
     {
-        this.entityManager = RemoteEntities.createManager(this);
+        if(getServer().getPluginManager().isPluginEnabled("RemoteEntities"))
+        {
+            this.entityManager = RemoteEntities.createManager(this);
+        }
         
         this.propertyManager = new PropertyManager(this);
         
