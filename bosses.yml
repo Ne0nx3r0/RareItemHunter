@@ -17,21 +17,11 @@ Fisherman:
   
 PoisonFish:
   type: silverfish
-  hp: 600
-  attackPower: 12
+  hp: 1800
+  attackPower: 16
   skills:
     - 30% chance Disorient level 5
     - 30% chance PoisonDart level 5
   events:
     - hpLessThan 100 SpawnSilverfish level 5
-  essencesDropped: 1  
-  
-EvilChicken:
-  type: chicken
-  hp: 1200
-  attackPower: 20
-  skills:
-    - 40% chance Pull level 10
-    - 40% chance JumpAttack level 10
-    - 50% chance Burst level 10
   essencesDropped: 1

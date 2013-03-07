@@ -306,12 +306,6 @@ public class BossManager
         }
         
         boss.setEntity(ent);
-
-        if(1 == 1)
-        {
-            activeBosses.put(ent.getEntityId(), boss);
-            return boss;
-        }
         
         LivingEntity lent = (LivingEntity) ent;
         

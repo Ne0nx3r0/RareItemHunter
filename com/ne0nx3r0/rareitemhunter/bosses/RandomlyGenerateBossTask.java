@@ -27,9 +27,9 @@ public class RandomlyGenerateBossTask implements Runnable
         Random random = new Random();
         
         int iRoll = random.nextInt(plugin.getServer().getMaxPlayers());
-        int iDifficulty = plugin.getServer().getOnlinePlayers().length * (maxChance / 100);
+        int iDifficulty = (int) (((float) plugin.getServer().getOnlinePlayers().length) * (((float) maxChance) / 100f));
 
-        System.out.println("DEBUG: RareItemHunter - "+iRoll+" < "+iDifficulty);
+        plugin.getServer().broadcastMessage("DEBUG: RareItemHunter - "+iRoll+" < "+iDifficulty);
         
         if(iRoll < iDifficulty)
         {
@@ -49,7 +49,7 @@ public class RandomlyGenerateBossTask implements Runnable
                     //if(player.hasPermission("rareitemhunter.admin"))
                     //{
                         player.sendMessage(ChatColor.DARK_GREEN+"-------------- RareItemHunter ----------------");
-                        player.sendMessage("A legendary monster egg has been created!");
+                        player.sendMessage("A legendary monster egg has appeared!");
                     //}
                 }
                 
