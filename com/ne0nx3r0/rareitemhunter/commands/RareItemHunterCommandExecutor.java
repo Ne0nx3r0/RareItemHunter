@@ -25,33 +25,59 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {        
             cs.sendMessage(ChatColor.DARK_GREEN+"------  RareItemHunter  ------");
         
-            if(cs.hasPermission("rareitemhunter.admin"))
-            {
-                cs.sendMessage("- /ri spawn - Boss commands");
-                cs.sendMessage("- /ri compass - give yourself or others a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
-                cs.sendMessage("- /ri essence - give yourself or others a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName());
-                cs.sendMessage("- /ri reload - Reloads config files");
-            }
+            cs.sendMessage("Here are the commands you have access to:");
+            cs.sendMessage("");
             
+            if(cs.hasPermission("rareitemhunter.admin.spawnpoint"))
+            {
+                cs.sendMessage("- /ri spawnpoint - Manage spawn points");
+            }
+            if(cs.hasPermission("rareitemhunter.admin.egg"))
+            {
+                cs.sendMessage("- /ri egg - Egg commands");
+            }
+            if(cs.hasPermission("rareitemhunter.admin.boss"))
+            {
+                cs.sendMessage("- /ri boss - Boss commands");
+            }
+            if(cs.hasPermission("rareitemhunter.admin.compass"))
+            {
+                cs.sendMessage("- /ri compass - Give you or another a "+plugin.recipeManager.getCompass().getItemMeta().getDisplayName());
+            }  
+            if(cs.hasPermission("rareitemhunter.admin.essence"))
+            {
+                cs.sendMessage("- /ri essence - Give you or another a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName());
+            }
+                
             return true;
         }
-        else if(args[0].equalsIgnoreCase("spawn") 
-        && this.hasCommandPermission(cs,"rareitemhunter.admin","spawn commands"))
+        else if((args[0].equalsIgnoreCase("spawnpoint") || args[0].equalsIgnoreCase("sp")) 
+        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn point commands"))
         {
-            return this._spawn(cs,args);
+            return this._spawnPoint(cs,args);
         }
-        else if(args[0].equalsIgnoreCase("compass") 
-        && this.hasCommandPermission(cs,"rareitemhunter.admin","compass command"))
+        else if((args[0].equalsIgnoreCase("boss") || args[0].equalsIgnoreCase("b"))
+        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn boss commands"))
+        {
+            return this._spawnBoss(cs,args);
+        }
+        else if((args[0].equalsIgnoreCase("egg") || args[0].equalsIgnoreCase("e")) 
+        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn egg commands"))
+        {
+            return this._spawnEgg(cs,args);
+        }
+        else if((args[0].equalsIgnoreCase("compass") || args[0].equalsIgnoreCase("c"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.compass","compass command"))
         {
             return this._compass(cs,args);
         }
-        else if(args[0].equalsIgnoreCase("essence") 
-        && this.hasCommandPermission(cs,"rareitemhunter.admin","essence command"))
+        else if((args[0].equalsIgnoreCase("essence") || args[0].equalsIgnoreCase("e"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.essence","essence command"))
         {
             return this._essence(cs,args);
         }
         else if(args[0].equalsIgnoreCase("reload") 
-        && this.hasCommandPermission(cs,"rareitemhunter.admin","reload command"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.reload","reload command"))
         {
             return this._reload(cs,args);
         }
@@ -89,16 +115,14 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         return ChatColor.DARK_GREEN + "-----  " + ChatColor.WHITE + sHeader + ChatColor.DARK_GREEN + " -----";
     }
     
-    private boolean _spawn(CommandSender cs, String[] args)
+    private boolean _spawnPoint(CommandSender cs, String[] args)
     {
         if(args.length == 1)
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawn  ------");
-            cs.sendMessage("/ri spawn add  - add a spawn point");
-            cs.sendMessage("/ri spawn del  - delete a spawn point");
-            cs.sendMessage("/ri spawn list - List spawn points");
-            cs.sendMessage("/ri spawn boss - Spawn a boss");
-            cs.sendMessage("/ri spawn egg  - Spawn a boss egg");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint  ------");
+            cs.sendMessage("/ri spawnpoint add  - add a spawn point");
+            cs.sendMessage("/ri spawnpoint del  - delete a spawn point");
+            cs.sendMessage("/ri spawnpoint list - List spawn points");
         }
         else if(args[1].equalsIgnoreCase("add"))
         {
@@ -112,18 +136,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             return _spawn_list(cs, args);
         }
-        else if(args[1].equalsIgnoreCase("boss"))
-        {
-            return _spawn_boss(cs, args);
-        }
-        else if(args[1].equalsIgnoreCase("egg"))
-        {
-            return _spawn_egg(cs, args);
-        }
         
         return false;
     }
-    
+
     private boolean _spawn_add(CommandSender cs, String[] args)
     {       
         if(sentFromConsole(cs))
@@ -133,10 +149,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         
         if(args.length < 4 || args[2].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawn add <name> <radius> ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint add <name> <radius> ------");
             cs.sendMessage("Creates a spawn point monsters can spawn from. Radius determines how far from the spawn point a legendary boss egg can appear.");
             cs.sendMessage("");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn add somePoint 50");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawnpoint add somePoint 50");
             
             return true;
         }
@@ -179,10 +195,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(args.length < 3 || args[2].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawn del <name>  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint del <name>  ------");
             cs.sendMessage("Deletes a spawn point by name.");
             cs.sendMessage("");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn del somePoint");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawnpoint del somePoint");
             
             return true;
         }
@@ -218,76 +234,24 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         
         return true;
     }    
-
-    private boolean _spawn_boss(CommandSender cs, String[] args)
+    
+    private boolean _spawnEgg(CommandSender cs, String[] args)
     {
-        if(args.length < 4 || args[2].equalsIgnoreCase("?"))
-        {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawn boss <bossName> <pointName> | here  ------");
-            cs.sendMessage("Spawns a boss at a spawn point, or at your current location.");
-            cs.sendMessage("");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn boss boss1 somePoint");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn boss boss1 here");
-            
-            return true;
-        }
-        else
-        {
-            String sBossName = args[2];      
-            String sPointName = args[3];
 
-            if(!plugin.bossManager.isValidLocation(sPointName) && !sPointName.equalsIgnoreCase("here"))
-            {
-                cs.sendMessage(ChatColor.RED+"Invalid spawn point name!");
-            }
-            
-            if(!plugin.bossManager.isValidBossName(sBossName))
-            {
-                cs.sendMessage(ChatColor.RED+"Invalid boss name");
-                
-                return true;
-            }
-            
-            if(sPointName.equalsIgnoreCase("here"))
-            {
-                if(cs instanceof Player)
-                {
-                    plugin.bossManager.spawnBoss(sBossName,((Player) cs).getLocation());
-                            
-                    cs.sendMessage("Spawned a "+sBossName+" at your location!");
-                }
-                else
-                {
-                    cs.sendMessage("You cannot use 'here' from the console.");
-                }
-            }
-            else
-            {
-                plugin.bossManager.spawnBoss(sBossName, sPointName);
-                    
-                cs.sendMessage("Spawned a "+sBossName+" at "+sPointName);
-            }
-                
-            return true;
-        }
-    }
-
-    private boolean _spawn_egg(CommandSender cs, String[] args)
-    {
-        if(args.length < 4 || args[2].equalsIgnoreCase("?"))
+        if(args.length < 3 || args[1].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawn egg <bossName> <pointName> | here  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri egg <bossName> <pointName> | here  ------");
             cs.sendMessage("Spawns a boss egg at a spawn point, or at your current location.");
             cs.sendMessage("");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn egg boss1 somePoint");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawn egg boss1 here");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri egg boss1 somePoint");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri egg boss1 here");
             
             return true;
         }
         else
         {
-            String sBossName = args[2];      
-            String sPointName = args[3];
+            String sBossName = args[1];      
+            String sPointName = args[2];
 
             if(!plugin.bossManager.isValidLocation(sPointName) && !sPointName.equalsIgnoreCase("here"))
             {
@@ -321,6 +285,60 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
                 plugin.bossManager.spawnBossEgg(sBossName, sPointName);
                     
                 cs.sendMessage("Spawned a "+sBossName+" egg at "+sPointName);
+            }
+                
+            return true;
+        }
+    }
+
+    private boolean _spawnBoss(CommandSender cs, String[] args)
+    {
+
+        if(args.length < 3 || args[1].equalsIgnoreCase("?"))
+        {
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri boss <bossName> <pointName> | here  ------");
+            cs.sendMessage("Spawns a boss at a spawn point, or at your current location.");
+            cs.sendMessage("");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri boss boss1 somePoint");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri boss boss1 here");
+            
+            return true;
+        }
+        else
+        {
+            String sBossName = args[1];      
+            String sPointName = args[2];
+
+            if(!plugin.bossManager.isValidLocation(sPointName) && !sPointName.equalsIgnoreCase("here"))
+            {
+                cs.sendMessage(ChatColor.RED+"Invalid spawn point name!");
+            }
+            
+            if(!plugin.bossManager.isValidBossName(sBossName))
+            {
+                cs.sendMessage(ChatColor.RED+"Invalid boss name");
+                
+                return true;
+            }
+            
+            if(sPointName.equalsIgnoreCase("here"))
+            {
+                if(cs instanceof Player)
+                {
+                    plugin.bossManager.spawnBoss(sBossName,((Player) cs).getLocation());
+                            
+                    cs.sendMessage("Spawned a "+sBossName+" at your location!");
+                }
+                else
+                {
+                    cs.sendMessage("You cannot use 'here' from the console.");
+                }
+            }
+            else
+            {
+                plugin.bossManager.spawnBoss(sBossName, sPointName);
+                    
+                cs.sendMessage("Spawned a "+sBossName+" at "+sPointName);
             }
                 
             return true;

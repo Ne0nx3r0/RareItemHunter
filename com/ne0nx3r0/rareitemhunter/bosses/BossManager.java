@@ -75,7 +75,7 @@ public class BossManager
         availableBossSkills.add(new Disorient());
         availableBossSkills.add(new LightningStorm());
         availableBossSkills.add(new LightningBolt());
-        
+
         bossTemplates = new HashMap<String,BossTemplate>();
 
         File bossesFile = new File(plugin.getDataFolder(),"bosses.yml");
@@ -280,6 +280,8 @@ public class BossManager
         Boss boss = this.spawnBoss(sBossName, eggLocation);
         
         bossEggs.remove(eggLocation);
+        
+        this.saveManager.save();
         
         return boss;
     }

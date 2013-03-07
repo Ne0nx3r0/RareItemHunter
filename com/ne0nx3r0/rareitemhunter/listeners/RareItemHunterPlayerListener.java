@@ -52,25 +52,49 @@ public class RareItemHunterPlayerListener implements Listener
 
                 if(plugin.bossManager.isBossEgg(lClicked))
                 {
-                    Boss boss = plugin.bossManager.hatchBoss(lClicked);
-                    
+                    if(e.getPlayer().hasPermission("rareitemhunter.hunter.hatch"))
+                    {
+                        Boss boss = plugin.bossManager.hatchBoss(lClicked);
+                        
+                        for(Player p : lClicked.getWorld().getPlayers())
+                        {
+                            p.sendMessage(ChatColor.GREEN+"Legendary boss "+boss.getName()+" has awakened!");
+                        }
+                        
+                        lClicked.getWorld().strikeLightningEffect(lClicked);
+                    }
+                    else
+                    {
+                        e.getPlayer().sendMessage(ChatColor.RED+"You do not have permission to awaken legendary bosses!");
+                    }
+
                     e.setCancelled(true);
                 }
             }
-            else if(e.hasItem() && e.getItem().equals(plugin.recipeManager.getCompass()))
+            else if(e.hasItem()
+            && e.getItem().equals(plugin.recipeManager.getCompass()))
             {
-                Location lBossEgg = plugin.bossManager.getNearestBossEggLocation(e.getPlayer().getLocation());
-                
-                if(lBossEgg != null)
+                if(!e.getPlayer().hasPermission("rareitemhunter.hunter.compass"))
                 {
-                    e.getPlayer().setCompassTarget(lBossEgg);
-                    
-                    e.getPlayer().sendMessage(ChatColor.DARK_GREEN+"The compass glows, then points sharply");
+                    e.getPlayer().sendMessage(ChatColor.RED+"You do not have permission to use a legendary compass!");
                 }
                 else
                 {
-                    e.getPlayer().sendMessage(ChatColor.DARK_GRAY+"The compass glows for a moment, then fades...");
+                    Location lBossEgg = plugin.bossManager.getNearestBossEggLocation(e.getPlayer().getLocation());
+
+                    if(lBossEgg != null)
+                    {
+                        e.getPlayer().setCompassTarget(lBossEgg);
+
+                        e.getPlayer().sendMessage(ChatColor.DARK_GREEN+"The compass glows, then points sharply");
+                    }
+                    else
+                    {
+                        e.getPlayer().sendMessage(ChatColor.DARK_GRAY+"The compass glows for a moment, then fades...");
+                    }
                 }
+                
+                e.setCancelled(true);
             }
         }
         
@@ -142,7 +166,16 @@ public class RareItemHunterPlayerListener implements Listener
         
         if(isResult != null)
         {
-            e.getInventory().setResult(isResult);
+            if(!e.getView().getPlayer().hasPermission("rareitemhunter.hunter.craft"))
+            {
+                ((Player) e.getView().getPlayer()).sendMessage(ChatColor.RED+"You do not have permission to craft rare items!");
+                
+                e.getInventory().setResult(new ItemStack(Material.AIR));
+            }
+            else
+            {
+                e.getInventory().setResult(isResult);
+            }
         }
     }
     

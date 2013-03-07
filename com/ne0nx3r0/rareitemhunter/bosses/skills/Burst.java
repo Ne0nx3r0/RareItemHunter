@@ -2,11 +2,6 @@ package com.ne0nx3r0.rareitemhunter.bosses.skills;
 
 import com.ne0nx3r0.rareitemhunter.bosses.Boss;
 import com.ne0nx3r0.rareitemhunter.bosses.BossSkill;
-import com.ne0nx3r0.utils.FireworkVisualEffect;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
