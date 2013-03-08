@@ -75,9 +75,12 @@ public class RareItemHunterEntityListener implements Listener
             {
                 leBossAttacked.setHealth(leBossAttacked.getMaxHealth());
 
-                if(!bossAttacked.activateEvent(e,eAttacker))
+                if(eAttacker instanceof LivingEntity)
                 {
-                    bossAttacked.activateRandomSkill(e,eAttacker);
+                    if(!bossAttacked.activateEvent(e,eAttacker))
+                    {
+                        bossAttacked.activateRandomSkill(e,eAttacker);
+                    }
                 }
 
                 if(eAttacker instanceof Player)

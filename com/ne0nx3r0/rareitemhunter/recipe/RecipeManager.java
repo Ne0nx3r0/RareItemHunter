@@ -52,6 +52,8 @@ public class RecipeManager
         
         compass.getData().setData((byte) -41);
         
+        compass.setItemMeta(itemMeta);
+        
         ShapelessRecipe compassRecipe = new ShapelessRecipe(compass);
         
         compassRecipe.addIngredient(Material.COMPASS);
@@ -352,10 +354,10 @@ public class RecipeManager
         lore.add(ChatColor.DARK_GRAY+"to craft Rare Items.");
         
         itemMeta.setLore(lore);
+
+        essence.getData().setData((byte) -41);
         
         essence.setItemMeta(itemMeta);
-        
-        essence.getData().setData((byte) -41);
         
         return essence;
     }
@@ -521,11 +523,6 @@ public class RecipeManager
 
     public boolean isCompassItem(ItemStack is)
     {
-        if(is.getType() == Material.COMPASS
-        && is.getData().getData() == (byte) -41)
-        {
-            return true;
-        }        
-        return false;
+        return is.equals(this.compass);
     }
 }
