@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class saveFileManager
@@ -47,15 +48,32 @@ public class saveFileManager
         if(saveYml.isSet("eggs"))
         {
             for(Map<String,Object> tempEgg : (List<Map<String,Object>>) saveYml.get("eggs"))
-            {                
-                bm.bossEggs.put(new Location(
-                        Bukkit.getWorld(tempEgg.get("world").toString()),
-                        Integer.parseInt(tempEgg.get("x").toString()),
-                        Integer.parseInt(tempEgg.get("y").toString()),
-                        Integer.parseInt(tempEgg.get("z").toString())
-                    ),
-                    tempEgg.get("boss").toString()
+            {      
+                Location lEgg = new Location(
+                    Bukkit.getWorld(tempEgg.get("world").toString()),
+                    Integer.parseInt(tempEgg.get("x").toString()),
+                    Integer.parseInt(tempEgg.get("y").toString()),
+                    Integer.parseInt(tempEgg.get("z").toString())
                 );
+                
+                //Verify there's still an egg there
+                if(!lEgg.getBlock().getType().equals(Material.DRAGON_EGG))
+                {
+                    if(lEgg.add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
+                    {
+                        lEgg.add(0, -1, 0).getBlock().setType(Material.AIR);
+                    }
+                    
+                    plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
+                            new Object[]{lEgg.getBlockX(), lEgg.getBlockY(), lEgg.getBlockZ()});
+                    
+                    continue;
+                }
+                else
+                {
+                    bm.bossEggs.put(lEgg,tempEgg.get("boss").toString()
+                    );
+                }
             }
         }
     }
@@ -100,15 +118,31 @@ public class saveFileManager
 
             for(Location lEgg : bm.bossEggs.keySet())
             {
-                Map<String,Object> tempEgg = new HashMap<String,Object>();
+                //Verify there's still an egg there
+                if(!lEgg.getBlock().getType().equals(Material.DRAGON_EGG))
+                {
+                    if(lEgg.add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
+                    {
+                        lEgg.add(0, -1, 0).getBlock().setType(Material.AIR);
+                    }
+                    
+                    plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
+                            new Object[]{lEgg.getBlockX(), lEgg.getBlockY(), lEgg.getBlockZ()});
+                    
+                    bm.bossEggs.remove(lEgg);
+                }
+                else
+                {
+                    Map<String,Object> tempEgg = new HashMap<String,Object>();
 
-                tempEgg.put("boss", bm.bossEggs.get(lEgg));
-                tempEgg.put("world", lEgg.getWorld().getName());
-                tempEgg.put("x", lEgg.getBlockX());
-                tempEgg.put("y", lEgg.getBlockY());
-                tempEgg.put("z", lEgg.getBlockZ());
+                    tempEgg.put("boss", bm.bossEggs.get(lEgg));
+                    tempEgg.put("world", lEgg.getWorld().getName());
+                    tempEgg.put("x", lEgg.getBlockX());
+                    tempEgg.put("y", lEgg.getBlockY());
+                    tempEgg.put("z", lEgg.getBlockZ());
 
-                eggsMap.add(tempEgg);
+                    eggsMap.add(tempEgg);
+                }
             }
 
             YamlConfiguration saveYml = new YamlConfiguration();
