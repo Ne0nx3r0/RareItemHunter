@@ -61,7 +61,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             return this._spawnBoss(cs,args);
         }
-        else if((args[0].equalsIgnoreCase("egg") || args[0].equalsIgnoreCase("e")) 
+        else if(args[0].equalsIgnoreCase("egg")
         && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn egg commands"))
         {
             return this._spawnEgg(cs,args);
@@ -71,7 +71,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             return this._compass(cs,args);
         }
-        else if((args[0].equalsIgnoreCase("essence") || args[0].equalsIgnoreCase("e"))
+        else if(args[0].equalsIgnoreCase("essence")
         && this.hasCommandPermission(cs,"rareitemhunter.admin.essence","essence command"))
         {
             return this._essence(cs,args);
@@ -105,7 +105,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             return false;
         }
                    
-        cs.sendMessage(ChatColor.RED+"This command cannot run from the console.");
+        cs.sendMessage(ChatColor.RED+"This command cannot be run from the console in this way.");
         
         return true;
     }
@@ -119,7 +119,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(args.length == 1)
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint|sp  ------");
             cs.sendMessage("/ri spawnpoint add  - add a spawn point");
             cs.sendMessage("/ri spawnpoint del  - delete a spawn point");
             cs.sendMessage("/ri spawnpoint list - List spawn points");
@@ -149,7 +149,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         
         if(args.length < 4 || args[2].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint add <name> <radius> ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint|sp add <name> <radius> ------");
             cs.sendMessage("Creates a spawn point monsters can spawn from. Radius determines how far from the spawn point a legendary boss egg can appear.");
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawnpoint add somePoint 50");
@@ -195,7 +195,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(args.length < 3 || args[2].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint del <name>  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri spawnpoint|sp del <name>  ------");
             cs.sendMessage("Deletes a spawn point by name.");
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri spawnpoint del somePoint");
@@ -296,11 +296,11 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
 
         if(args.length < 3 || args[1].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri boss <bossName> <pointName> | here  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri boss|b <bossName> <pointName> | here  ------");
             cs.sendMessage("Spawns a boss at a spawn point, or at your current location.");
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri boss boss1 somePoint");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri boss boss1 here");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri b boss1 here");
             
             return true;
         }
@@ -351,7 +351,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             if(this.sentFromConsole(cs))
             {
-                cs.sendMessage("You can use /ri compass <player>");
+                cs.sendMessage("You can use /ri compass|c <player>");
                 
                 return true;
             }
@@ -364,7 +364,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         }
         else if(args[1].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri compass <player>  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------ /ri compass|c <player> ------");
             cs.sendMessage("Gives you or a specified player a compass");
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri compass");
