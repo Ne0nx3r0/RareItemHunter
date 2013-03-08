@@ -73,7 +73,7 @@ public class RareItemHunterPlayerListener implements Listener
                 }
             }
             else if(e.hasItem()
-            && e.getItem().equals(plugin.recipeManager.getCompass()))
+            && plugin.recipeManager.isCompassItem(e.getItem()))
             {
                 if(!e.getPlayer().hasPermission("rareitemhunter.hunter.compass"))
                 {

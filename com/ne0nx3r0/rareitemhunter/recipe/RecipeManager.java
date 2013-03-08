@@ -25,7 +25,7 @@ import org.bukkit.potion.Potion;
 public class RecipeManager
 {
     private final RareItemHunter plugin;
-    
+
     private ItemStack compass;
 
     private HashMap<ItemStack,ItemStack[]> componentRecipes;
@@ -50,7 +50,7 @@ public class RecipeManager
         
         itemMeta.setLore(lore);
         
-        compass.setItemMeta(itemMeta);
+        compass.getData().setData((byte) -41);
         
         ShapelessRecipe compassRecipe = new ShapelessRecipe(compass);
         
@@ -355,6 +355,8 @@ public class RecipeManager
         
         essence.setItemMeta(itemMeta);
         
+        essence.getData().setData((byte) -41);
+        
         return essence;
     }
     
@@ -515,5 +517,15 @@ public class RecipeManager
         }
         
         return null;
+    }
+
+    public boolean isCompassItem(ItemStack is)
+    {
+        if(is.getType() == Material.COMPASS
+        && is.getData().getData() == (byte) -41)
+        {
+            return true;
+        }        
+        return false;
     }
 }

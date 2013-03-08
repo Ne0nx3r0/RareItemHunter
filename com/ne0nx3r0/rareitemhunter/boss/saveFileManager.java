@@ -124,10 +124,10 @@ public class saveFileManager
                     {
                         lEgg.add(0, -1, 0).getBlock().setType(Material.AIR);
                     }
-                    
+
                     plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
                             new Object[]{lEgg.getBlockX(), lEgg.getBlockY(), lEgg.getBlockZ()});
-                    
+
                     bm.bossEggs.remove(lEgg);
                 }
                 else
