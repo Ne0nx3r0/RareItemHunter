@@ -16,7 +16,7 @@ permissions:
  # Hunter
   rareitemhunter.hunter.*:
     description: Access to hunting permissions
-    default: true
+    default: false
     children:
       rareitemhunter.hunter.compass: true
       rareitemhunter.hunter.hatch: true
