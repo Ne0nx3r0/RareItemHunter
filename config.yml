@@ -36,14 +36,6 @@ costLevelIncrement: 2
 # Global multiplier for costs
 # For example 2 means 200% cost for all properties
 costMultiplier: 1
-
-# distance a boss will aggro on a player from
-bossAttackRange: 40
-
-# Number of seconds before a boss will disappear 
-# 1200 = 20 minutes
-#not implemented yet
-bossExpireSeconds: 1200
   
 # Number of player kills before a boss will disappear
 bossExpireKills: 20
