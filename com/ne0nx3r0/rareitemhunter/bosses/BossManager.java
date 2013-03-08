@@ -130,8 +130,7 @@ public class BossManager
                     }
                     else
                     {
-                        plugin.getLogger().log(Level.WARNING, "{0} has too many armor items, skipping ''{1}''",
-                                new Object[]{sBossName, sItem});
+                        plugin.getLogger().log(Level.WARNING,sBossName+" has too many armor items, skipping '"+sItem+"'");
                     }
                 }
             }
@@ -194,9 +193,7 @@ public class BossManager
 
                     if(eventType == null)
                     {
-                        plugin.getLogger().log(Level.WARNING, 
-                            "''{0}'' is not a valid event type on boss ''{1}''. Skipping.", 
-                            new Object[]{sEventType, sBossName});
+                        plugin.getLogger().log(Level.WARNING,"'"+sEventType+"' is not a valid event type on boss '"+sBossName+"'. Skipping.");
 
                         continue;
                     }
@@ -209,9 +206,7 @@ public class BossManager
                     }
                     catch(Exception e)
                     {
-                        plugin.getLogger().log(Level.WARNING, 
-                            "''{0}'' is not a valid event value on boss ''{1}''. Skipping.", 
-                            new Object[]{eventValues[1], sBossName});
+                        plugin.getLogger().log(Level.WARNING,"'"+eventValues[1]+"' is not a valid event value on boss '"+sBossName+"'. Skipping.");
 
                         continue;
                     }                
@@ -249,6 +244,9 @@ public class BossManager
                 iTimer, 
                 iTimer);
         }
+        
+// Schedule targetting / garbage collection for activeBosses
+        //plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectBossTargetTask(plugin,this), 20*2, 20*2);
     }
     
     public boolean isBoss(Entity entity)

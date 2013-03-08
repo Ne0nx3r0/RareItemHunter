@@ -59,7 +59,7 @@ public class RareItemHunterPlayerListener implements Listener
                         
                         for(Player p : lClicked.getWorld().getPlayers())
                         {
-                            p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+boss.getName()+ChatColor.DARK_GREEN+" has awakened!");
+                            p.sendMessage(ChatColor.GREEN+"Legendary boss "+boss.getName()+" has awakened!");
                         }
                         
                         lClicked.getWorld().strikeLightningEffect(lClicked);
@@ -126,7 +126,7 @@ public class RareItemHunterPlayerListener implements Listener
             {
                 e.setDeathMessage(e.getEntity().getName()+ChatColor.DARK_RED+" was defeated by legendary boss "+ChatColor.WHITE+bossAttacker.getName()+ChatColor.DARK_RED+"!");
                 
-                int bossKills = bossAttacker.addKill();
+                int bossKills = bossAttacker.getKills();
                 
                 if(bossKills >= plugin.getConfig().getInt("bossExpireKills",10))
                 {

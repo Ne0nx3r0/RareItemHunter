@@ -44,9 +44,9 @@ public class RecipeManager
         
         List<String> lore = new ArrayList<String>();
         
-        lore.add(ChatColor.DARK_GRAY+"When tapped against the ground");
-        lore.add(ChatColor.DARK_GRAY+"this compass will attune itself");
-        lore.add(ChatColor.DARK_GRAY+"to the nearest legendary boss egg.");
+        lore.add(ChatColor.DARK_GRAY+"When tapped against the ground, this compass");
+        lore.add(ChatColor.DARK_GRAY+"will attune itself to the nearest legendary");
+        lore.add(ChatColor.DARK_GRAY+"boss egg.");
         
         itemMeta.setLore(lore);
         
@@ -346,10 +346,9 @@ public class RecipeManager
         itemMeta.setDisplayName(ChatColor.DARK_GREEN+"Rare Essence");
         
         List<String> lore = new ArrayList<String>();
-        //TODO: Better way to identify essences/compasses uniquely, allowing the name to change
-        lore.add(ChatColor.DARK_GRAY+"This is the rare essence of");
-        lore.add(ChatColor.DARK_GRAY+"a legendary boss. It can be used");
-        lore.add(ChatColor.DARK_GRAY+"to craft Rare Items.");
+        
+        lore.add(ChatColor.DARK_GRAY+"This is the rare essence of a legendary boss.");
+        lore.add(ChatColor.DARK_GRAY+"It can be used to craft Rare Items.");
         
         itemMeta.setLore(lore);
         

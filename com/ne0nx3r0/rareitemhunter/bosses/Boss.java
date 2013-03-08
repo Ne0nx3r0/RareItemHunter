@@ -114,9 +114,4 @@ public class Boss
     {
         return this.kills;
     }
-
-    public int addKill()
-    {
-        return this.kills = this.kills + 1;
-    }
 }
