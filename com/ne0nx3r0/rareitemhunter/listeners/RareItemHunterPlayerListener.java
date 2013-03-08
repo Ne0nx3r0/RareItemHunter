@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -272,5 +273,18 @@ public class RareItemHunterPlayerListener implements Listener
         }
         
         return null;
+    }
+    
+    public void onPlayerJoin(PlayerJoinEvent e)
+    {
+        if(plugin.UPDATE_AVAILABLE)
+        {
+            Player p = e.getPlayer();
+
+            if(p.hasPermission("rareitemhunter.admin.notify"))
+            {
+                p.sendMessage(ChatColor.GREEN+"An update for RareItemHunter is available: "+ChatColor.RESET+plugin.UPDATE_STRING);
+            }
+        }
     }
 }

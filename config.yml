@@ -47,3 +47,9 @@ bossExpireSeconds: 1200
   
 # Number of player kills before a boss will disappear
 bossExpireKills: 20
+
+
+# Misc
+
+# Permission Node: rareitemhunter.admin.notify: true
+update-notifications: true

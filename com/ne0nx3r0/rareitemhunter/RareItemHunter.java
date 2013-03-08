@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
+import net.h31ix.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -37,6 +38,8 @@ public class RareItemHunter extends JavaPlugin
     public final String RAREITEM_HEADER_STRING = ChatColor.DARK_PURPLE+"RareItem";
     
     public Economy economy;
+    public boolean UPDATE_AVAILABLE = false;
+    public String UPDATE_STRING;
     
     @Override
     public void onEnable()
@@ -105,6 +108,14 @@ public class RareItemHunter extends JavaPlugin
         COST_MULTIPLIER = getConfig().getInt("costMultiplier");
         
         COST_LEVEL_INCREMENT = getConfig().getInt("costLevelIncrement");
+        
+        if(getConfig().getBoolean("update-notifications"))
+        {
+            Updater updater = new Updater(this, "rareitemhunter", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
+            
+            this.UPDATE_AVAILABLE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
+            this.UPDATE_STRING = updater.getLatestVersionString();
+        }
     }
 
     private void loadManagers()
