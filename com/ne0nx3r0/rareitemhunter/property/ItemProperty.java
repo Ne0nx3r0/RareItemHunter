@@ -1,5 +1,6 @@
 package com.ne0nx3r0.rareitemhunter.property;
 
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -14,6 +15,7 @@ public class ItemProperty
     private int cost;
     private final int maxLevel;
     private final ItemPropertyTypes type;
+    private List<String> recipeLines;
     
     public ItemProperty(ItemPropertyTypes type,String name,String description,int maxLevel,int cost)
     {
@@ -73,5 +75,15 @@ public class ItemProperty
     public String getDescription()
     {
         return this.description;
+    }
+    
+    public void setRecipeLines(List<String> recipeLines)
+    {
+        this.recipeLines = recipeLines;
+    }
+    
+    public List<String> getRecipeLines()
+    {
+        return this.recipeLines;
     }
 }

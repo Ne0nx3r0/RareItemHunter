@@ -3,6 +3,7 @@ package com.ne0nx3r0.rareitemhunter.command;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -456,7 +457,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(args.length < 2 || args[1].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis <property name>  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis|wi <property name>  ------");
             cs.sendMessage("Describes a rare item property to you.");
             cs.sendMessage("");
 
@@ -490,15 +491,28 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             
             cs.sendMessage(ChatColor.DARK_GREEN+"------  "+property.getName()+"  ------");
-            cs.sendMessage("");
             cs.sendMessage(property.getDescription());
             cs.sendMessage("");
             
-            cs.sendMessage("Costs");
-            cs.sendMessage("-----------");
+            cs.sendMessage(ChatColor.GRAY+"Recipe:");
+            
+            if(property.getRecipeLines() == null)
+            {
+                cs.sendMessage(ChatColor.RED+"No recipe found.");
+            }
+            else
+            {
+                for(String sLine : property.getRecipeLines())
+                {
+                    cs.sendMessage(sLine);
+                }
+            }
+            
+            cs.sendMessage("");            
+            cs.sendMessage(ChatColor.GRAY+"Cost:");
             for(int i=1;i<=property.getMaxLevel();i++)
             {
-                cs.sendMessage(ChatColor.GRAY+"Level "+i+": "
+                cs.sendMessage(ChatColor.GRAY+"lvl "+i+" - "
                         +ChatColor.RESET+((property.getCost(i) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER)
                         +" "+plugin.COST_TYPE.name().toLowerCase());
             }

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -201,7 +200,7 @@ public class RecipeManager
             plugin.copy(plugin.getResource(componentsFilename),componentsFile);
         }
         
-        FileConfiguration componentsYml = YamlConfiguration.loadConfiguration(componentsFile);
+        YamlConfiguration componentsYml = YamlConfiguration.loadConfiguration(componentsFile);
         
         for(String sProperty : componentsYml.getKeys(false))
         {
@@ -236,14 +235,20 @@ public class RecipeManager
                 int iMatrixCounter = 0;
                 
                 String sShapeKey = "";
-                
+                 
+                List<String> recipeStringLines = new ArrayList<String>();
+                    
                 for(Object oLine : propertyRecipeParts)
                 {
                     ArrayList line = (ArrayList) oLine;
                     
+                    String sRecipeStringLine = "";
+                    
                     for(Object oIngredient : line)
                     {
                         String sIngredient = oIngredient.toString();
+                        
+                        sRecipeStringLine += ", "+sIngredient;
                         
                         if(sIngredient.equalsIgnoreCase("AIR"))
                         {
@@ -279,7 +284,11 @@ public class RecipeManager
                         
                         iMatrixCounter++;
                     }
+                    
+                    recipeStringLines.add(sRecipeStringLine.substring(2));
                 }
+                
+                ip.setRecipeLines(recipeStringLines);
 
                 componentRecipe.shape(
                         sShapeKey.substring(0,3),
