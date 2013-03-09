@@ -51,7 +51,7 @@ public class RareItemHunterPlayerListener implements Listener
             {
                 Location lClicked = e.getClickedBlock().getLocation();
 
-                if(plugin.bossManager.isBossEgg(lClicked))
+                if(plugin.bossManager.isBossEgg(e.getClickedBlock()))
                 {
                     if(e.getPlayer().hasPermission("rareitemhunter.hunter.hatch"))
                     {

@@ -1,5 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.boss;
 
+import net.minecraft.server.v1_4_R1.Enchantment;
+
 class ActiveBossGarbageCleanup implements Runnable
 {
     private final BossManager bm;

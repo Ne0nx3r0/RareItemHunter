@@ -1,6 +1,17 @@
-Fisherman:
+PoisonFish:
+  type: silverfish
+  hp: 2000
+  attackPower: 16
+  skills:
+    - 30% chance Disorient level 5
+    - 30% chance PoisonDart level 5
+  events:
+    - hpLessThan 100 SpawnSilverfish level 5
+  essencesDropped: 1
+  
+  Fisherman:
   type: zombie
-  hp: 1200
+  hp: 2400
   attackPower: 20
   skills:
     - 40% chance Pull level 5 
@@ -15,13 +26,17 @@ Fisherman:
     - LEATHER_BOOTS PROTECTION_ENVIRONMENTAL:2,THORNS:1
   weapon: FISHING_ROD
   
-PoisonFish:
-  type: silverfish
+BoneDaddy:
+  type: skeleton
   hp: 1800
-  attackPower: 16
+  attackPower: 20
   skills:
-    - 30% chance Disorient level 5
-    - 30% chance PoisonDart level 5
+    - 20% chance LightningBolt level 5 
+    - 20% chance LightningStorm level 5 
   essencesDropped: 1
-  events:
-    - hpLessThan 100 SpawnSilverfish level 5
+  armor:
+    - DIAMOND_HELMET PROTECTION_ENVIRONMENTAL:3,THORNS:2
+    - DIAMOND_BOOTS PROTECTION_ENVIRONMENTAL:3
+    - DIAMOND_CHESTPLATE PROTECTION_ENVIRONMENTAL:2,THORNS:1
+    - DIAMOND_LEGGINGS PROTECTION_ENVIRONMENTAL:2
+  weapon: DIAMOND_SWORD DAMAGE_ALL:2,FIRE_ASPECT:2,KNOCKBACK:2

@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class saveFileManager
 {
@@ -70,8 +71,9 @@ public class saveFileManager
                 }
                 else
                 {
-                    bm.bossEggs.put(lEgg,tempEgg.get("boss").toString()
-                    );
+                    bm.bossEggs.put(lEgg,tempEgg.get("boss").toString());
+                    
+                    lEgg.getBlock().setMetadata("isBossEgg", new FixedMetadataValue(plugin,true));
                 }
             }
         }

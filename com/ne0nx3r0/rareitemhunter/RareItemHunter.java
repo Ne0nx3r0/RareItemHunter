@@ -1,9 +1,8 @@
 package com.ne0nx3r0.rareitemhunter;
 
-import com.ne0nx3r0.rareitemhunter.listener.RareItemHunterPlayerListener;
-import com.ne0nx3r0.rareitemhunter.listener.RareItemHunterEntityListener;
 import com.ne0nx3r0.rareitemhunter.boss.BossManager;
 import com.ne0nx3r0.rareitemhunter.command.RareItemHunterCommandExecutor;
+import com.ne0nx3r0.rareitemhunter.listener.*;
 import com.ne0nx3r0.rareitemhunter.property.ItemPropertyCostTypes;
 import com.ne0nx3r0.rareitemhunter.property.PropertyManager;
 import com.ne0nx3r0.rareitemhunter.recipe.RecipeManager;
@@ -50,6 +49,7 @@ public class RareItemHunter extends JavaPlugin
         
         getServer().getPluginManager().registerEvents(new RareItemHunterEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new RareItemHunterPlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new RareItemHunterPistonListener(this), this);
         
         getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
     }

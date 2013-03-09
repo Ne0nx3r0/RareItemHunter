@@ -40,6 +40,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -282,9 +284,28 @@ public class BossManager
         return this.activeBosses.get(entity.getEntityId());
     }
 
-    public boolean isBossEgg(Location eggLocation)
+    /*public boolean isBossEgg(Location eggLocation)
     {
         return this.bossEggs.containsKey(eggLocation);
+    }*/
+    
+    public boolean isBossEgg(Block b)
+    {
+        if(b.getType() == Material.DRAGON_EGG)
+        {
+            for(MetadataValue mdv : b.getMetadata("isBossEgg"))
+            {
+                if(mdv.getOwningPlugin().equals(plugin))
+                {
+                    if(mdv.asBoolean())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public Boss hatchBoss(Location eggLocation)
@@ -424,6 +445,8 @@ public class BossManager
 
             block.setType(Material.DRAGON_EGG);
 
+            block.setMetadata("isBossEgg", new FixedMetadataValue(plugin,true));
+            
             this.bossEggs.put(block.getLocation(), bossTemplate.name);
 
             this.saveManager.save();
