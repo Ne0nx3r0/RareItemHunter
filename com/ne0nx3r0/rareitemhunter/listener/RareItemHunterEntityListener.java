@@ -14,6 +14,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,6 +46,10 @@ public class RareItemHunterEntityListener implements Listener
         if((eAttacker instanceof Fireball))
         {
             eAttacker = ((Fireball) eAttacker).getShooter();
+        }           
+        if((eAttacker instanceof SmallFireball))
+        {
+            eAttacker = ((SmallFireball) eAttacker).getShooter();
         }      
 
         Boss bossAttacker = plugin.bossManager.getBoss(eAttacker);
@@ -129,7 +134,7 @@ public class RareItemHunterEntityListener implements Listener
                     
                     Item droppedItem = leBossAttacked.getWorld().dropItemNaturally(leBossAttacked.getLocation(), plugin.recipeManager.getEssenceItem());
                     
-                    droppedItem.setVelocity(new Vector(random.nextFloat(),random.nextFloat(),random.nextFloat()));
+                    //droppedItem.setVelocity(new Vector(random.nextFloat(),random.nextFloat(),random.nextFloat()));
                 }
                 
                 e.setCancelled(true);

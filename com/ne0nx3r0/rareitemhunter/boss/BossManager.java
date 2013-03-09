@@ -19,6 +19,7 @@ import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSilverfish;
 import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnCreeper;
 import com.ne0nx3r0.rareitemhunter.boss.skill.PoisonDart;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
+import com.ne0nx3r0.rareitemhunter.boss.skill.Disarm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class BossManager
         
         availableBossSkills.add(new Burst());
         availableBossSkills.add(new GreaterBurst());
+        availableBossSkills.add(new Disarm());
         availableBossSkills.add(new ShootArrow());
         availableBossSkills.add(new ShootFireball());
         //availableBossSkills.add(new FakeWeb());-> Seems to be sort of... crashing the server. Orefuscator conflict, possibly...
