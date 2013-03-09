@@ -218,6 +218,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             if(plugin.bossManager.isSpawnPoint(sPointName))
             {
                 plugin.bossManager.delSpawnPoint(sPointName);
+
+                cs.sendMessage(ChatColor.DARK_GREEN+sPointName+" was removed!");
                 
                 return true;
             }
