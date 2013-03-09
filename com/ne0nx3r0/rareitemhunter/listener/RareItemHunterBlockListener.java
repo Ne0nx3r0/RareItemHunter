@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPistonEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class RareItemHunterBlockListener implements Listener
@@ -18,7 +18,8 @@ public class RareItemHunterBlockListener implements Listener
         this.plugin = p;
     }
 
-    public void onPistonExtend(EntityExplodeEvent e)
+    @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+    public void onEntityExplode(EntityExplodeEvent e)
     {
         for(Block b : e.blockList())
         {
@@ -29,8 +30,8 @@ public class RareItemHunterBlockListener implements Listener
         }
     }
     
-    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
-    public void onPistonExtend(BlockPistonEvent e)
+    @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+    public void onPistonExtend(BlockPistonExtendEvent e)
     {
         BlockFace bf = e.getDirection();
 

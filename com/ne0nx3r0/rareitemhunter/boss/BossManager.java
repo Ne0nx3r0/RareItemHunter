@@ -283,11 +283,6 @@ public class BossManager
     {
         return this.activeBosses.get(entity.getEntityId());
     }
-
-    /*public boolean isBossEgg(Location eggLocation)
-    {
-        return this.bossEggs.containsKey(eggLocation);
-    }*/
     
     public boolean isBossEgg(Block b)
     {
