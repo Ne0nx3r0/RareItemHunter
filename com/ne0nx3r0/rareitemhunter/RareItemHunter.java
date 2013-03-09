@@ -49,7 +49,7 @@ public class RareItemHunter extends JavaPlugin
         
         getServer().getPluginManager().registerEvents(new RareItemHunterEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new RareItemHunterPlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(new RareItemHunterPistonListener(this), this);
+        getServer().getPluginManager().registerEvents(new RareItemHunterBlockListener(this), this);
         
         getCommand("ri").setExecutor(new RareItemHunterCommandExecutor(this));
     }

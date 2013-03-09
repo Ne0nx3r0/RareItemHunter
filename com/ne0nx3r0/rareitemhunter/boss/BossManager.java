@@ -519,7 +519,7 @@ public class BossManager
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    void removeBossEgg(Location lSpawnedEgg)
+    public void removeBossEgg(Location lSpawnedEgg)
     {
         if(this.bossEggs.containsKey(lSpawnedEgg))
         {
