@@ -44,11 +44,17 @@ import com.ne0nx3r0.rareitemhunter.property.ability.ToughLove;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import com.ne0nx3r0.util.RomanNumeral;
+import java.io.File;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -84,56 +90,90 @@ public class PropertyManager
         TYPE_PREFIXES.put(ItemPropertyTypes.VISUAL, ChatColor.GRAY+"Visual: "+ChatColor.BLACK);
         
         properties = new HashMap<String,ItemProperty>();
+
+        File propertyCostsFile = new File(plugin.getDataFolder(),"property_costs.yml");
         
-        this.addProperty(new Poison());
-        this.addProperty(new Backstab());
-        this.addProperty(new Blinding());
-        this.addProperty(new CallLightning());
-        this.addProperty(new Confuse());
-        this.addProperty(new Disarm());
-        this.addProperty(new Slow());
-        this.addProperty(new VampiricRegeneration());
-        this.addProperty(new Weaken());
+        if(!propertyCostsFile.exists())
+        {
+            plugin.copy(plugin.getResource("property_costs.yml"), propertyCostsFile);
+        }     
+        
+        FileConfiguration propertyCostsYml = YamlConfiguration.loadConfiguration(propertyCostsFile);
+        
+        this.addProperty(propertyCostsYml,new Poison());
+        this.addProperty(propertyCostsYml,new Backstab());
+        this.addProperty(propertyCostsYml,new Blinding());
+        this.addProperty(propertyCostsYml,new CallLightning());
+        this.addProperty(propertyCostsYml,new Confuse());
+        this.addProperty(propertyCostsYml,new Disarm());
+        this.addProperty(propertyCostsYml,new Slow());
+        this.addProperty(propertyCostsYml,new VampiricRegeneration());
+        this.addProperty(propertyCostsYml,new Weaken());
         
         
-        this.addProperty(new Fertilize());
-        this.addProperty(new FireHandling());
-        this.addProperty(new HalfBakedIdea());
-        this.addProperty(new MeltObsidian());
-        this.addProperty(new PaintWool());
-        this.addProperty(new Smelt());
-        this.addProperty(new Spore());
+        this.addProperty(propertyCostsYml,new Fertilize());
+        this.addProperty(propertyCostsYml,new FireHandling());
+        this.addProperty(propertyCostsYml,new HalfBakedIdea());
+        this.addProperty(propertyCostsYml,new MeltObsidian());
+        this.addProperty(propertyCostsYml,new PaintWool());
+        this.addProperty(propertyCostsYml,new Smelt());
+        this.addProperty(propertyCostsYml,new Spore());
         
-        this.addProperty(new Durability());
-        this.addProperty(new Fly(this));
-        this.addProperty(new Hardy());
-        this.addProperty(new Regeneration());
-        this.addProperty(new Strength());
-        this.addProperty(new ToughLove());
-        this.addProperty(new WaterBreathing());
+        this.addProperty(propertyCostsYml,new Durability());
+        this.addProperty(propertyCostsYml,new Fly(this));
+        this.addProperty(propertyCostsYml,new Hardy());
+        this.addProperty(propertyCostsYml,new Regeneration());
+        this.addProperty(propertyCostsYml,new Strength());
+        this.addProperty(propertyCostsYml,new ToughLove());
+        this.addProperty(propertyCostsYml,new WaterBreathing());
         
-        this.addProperty(new Burst(fireworks));
-        this.addProperty(new CatsFeet(this));
-        this.addProperty(new CraftItem());
-        this.addProperty(new FireResistance());
-        this.addProperty(new GreaterBurst(fireworks));
-        this.addProperty(new GrowTree());
-        this.addProperty(new Haste());
-        this.addProperty(new Invisibility());
-        this.addProperty(new MagicBag());
-        this.addProperty(new RepairItem());
-        this.addProperty(new SummonBat());
-        this.addProperty(new SummonChicken());
-        this.addProperty(new SummonCow());
-        this.addProperty(new SummonMooshroom());
-        this.addProperty(new SummonOcelot());
-        this.addProperty(new SummonPig());
-        this.addProperty(new SummonSheep());
-        this.addProperty(new SummonSlime());
+        this.addProperty(propertyCostsYml,new Burst(fireworks));
+        this.addProperty(propertyCostsYml,new CatsFeet(this));
+        this.addProperty(propertyCostsYml,new CraftItem());
+        this.addProperty(propertyCostsYml,new FireResistance());
+        this.addProperty(propertyCostsYml,new GreaterBurst(fireworks));
+        this.addProperty(propertyCostsYml,new GrowTree());
+        this.addProperty(propertyCostsYml,new Haste());
+        this.addProperty(propertyCostsYml,new Invisibility());
+        this.addProperty(propertyCostsYml,new MagicBag());
+        this.addProperty(propertyCostsYml,new RepairItem());
+        this.addProperty(propertyCostsYml,new SummonBat());
+        this.addProperty(propertyCostsYml,new SummonChicken());
+        this.addProperty(propertyCostsYml,new SummonCow());
+        this.addProperty(propertyCostsYml,new SummonMooshroom());
+        this.addProperty(propertyCostsYml,new SummonOcelot());
+        this.addProperty(propertyCostsYml,new SummonPig());
+        this.addProperty(propertyCostsYml,new SummonSheep());
+        this.addProperty(propertyCostsYml,new SummonSlime());
+        
+        try
+        {
+            propertyCostsYml.save(propertyCostsFile);
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(PropertyManager.class.getName()).log(Level.SEVERE, null, ex);
+            plugin.getLogger().log(Level.WARNING,"Unable to save property_costs.yml!");
+        }
     }
 
-    private void addProperty(ItemProperty icp)
+    private void addProperty(FileConfiguration yml,ItemProperty icp)
     {               
+        if(!yml.isSet(icp.getName()))
+        {
+            //TODO: wtf was going on here with getCost requiring a level?
+            yml.set(icp.getName(), icp.getCost(1));
+        }
+        
+        int iCost = yml.getInt(icp.getName());
+        
+        if(iCost == -1)
+        {
+            return;
+        }
+        
+        icp.setCost(iCost);
+
         this.properties.put(icp.getName().toLowerCase(), icp);
     } 
 

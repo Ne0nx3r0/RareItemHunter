@@ -22,8 +22,8 @@ public class Disorient extends BossSkill
         {        
             LivingEntity le = (LivingEntity) eAttacker;
 
-            le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,20*level*3,level));
-            le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,20*level*3,level));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,20*20,level));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,20*25,level));
 
             return true;
         }

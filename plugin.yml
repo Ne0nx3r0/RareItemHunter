@@ -11,12 +11,22 @@ permissions:
 # All
   rareitemhunter.*:
     description: All RareItemHunter permissions
-    default: false
+    default: op
     children:
+      rareitemhunter.hunter.compass: true
+      rareitemhunter.hunter.hatch: true
+      rareitemhunter.hunter.craft: true
+      rareitemhunter.admin.spawnpoint: true
+      rareitemhunter.admin.egg: true
+      rareitemhunter.admin.boss: true
+      rareitemhunter.admin.reload: true
+      rareitemhunter.admin.notify: true
+      rareitemhunter.admin.essence: true
+      rareitemhunter.admin.compass: true
  # Hunter
   rareitemhunter.hunter.*:
     description: Access to hunting permissions
-    default: false
+    default: true
     children:
       rareitemhunter.hunter.compass: true
       rareitemhunter.hunter.hatch: true
@@ -33,7 +43,7 @@ permissions:
 # Admin
   rareitemhunter.admin.*:
     description: All admin permissions
-    default: op
+    default: false
     children:
       rareitemhunter.admin.spawnpoint: true
       rareitemhunter.admin.egg: true

@@ -1,6 +1,5 @@
 package com.ne0nx3r0.rareitemhunter.property;
 
-import com.ne0nx3r0.rareitemhunter.property.ItemPropertyTypes;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -64,5 +63,10 @@ public class ItemProperty
     public int getCost(int level)
     {
         return this.cost;
+    }
+
+    void setCost(int cost)
+    {
+        this.cost = cost;
     }
 }

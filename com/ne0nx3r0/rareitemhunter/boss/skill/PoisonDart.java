@@ -22,7 +22,7 @@ public class PoisonDart extends BossSkill
         {        
             LivingEntity le = (LivingEntity) eAttacker;
 
-            le.addPotionEffect(new PotionEffect(PotionEffectType.POISON,20*level*3,level));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.POISON,20*10,level));
 
             return true;
         }
