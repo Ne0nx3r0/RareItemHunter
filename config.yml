@@ -13,6 +13,8 @@ timeBetweenChancesToGenerateBossEgg: 60
 # 25% full = 5% chance
 # 50% full = 10% chance
 # 100% full = 20% chance
+
+# This is set low by default, you should set it higher to make bosses spawn more often.
 maxChanceToGenerateBossEgg: 20
 
 # How many minutes before a boss that is not found will disappear
