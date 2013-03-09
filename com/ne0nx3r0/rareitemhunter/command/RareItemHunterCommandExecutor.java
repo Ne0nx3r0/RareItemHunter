@@ -458,7 +458,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     {
         if(args.length < 2 || args[1].equalsIgnoreCase("?"))
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis|wi <property name>  ------");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis | wi <property name>  ------");
             cs.sendMessage("Describes a rare item property to you.");
             cs.sendMessage("");
 
@@ -525,8 +525,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage("");            
             cs.sendMessage(ChatColor.GRAY+"Cost:");
             
-            cs.sendMessage(((property.getCost(1) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER)
-                    +" "+plugin.COST_TYPE.name().toLowerCase());
+            cs.sendMessage(""+property.getCost(1));
             
 /* TODO : figure out what's up with cost increments
             for(int i=1;i<=property.getMaxLevel();i++)

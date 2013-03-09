@@ -18,7 +18,7 @@ public class Poison extends ItemProperty
             "Poison",
             "Chance to poison an enemy onHit",
             4,
-            0);
+            4);
     }
 
     @Override
