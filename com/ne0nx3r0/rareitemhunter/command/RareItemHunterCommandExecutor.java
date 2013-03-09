@@ -459,9 +459,17 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis <property name>  ------");
             cs.sendMessage("Describes a rare item property to you.");
             cs.sendMessage("");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri whatis blinding");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi call lightning");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi summon sheep");
+
+            
+            String sProperties = "";
+            
+            for(ItemProperty ip : plugin.propertyManager.getAllProperties())
+            {
+                sProperties += ", "+ip.getName();
+            }
+            
+            cs.sendMessage(ChatColor.GRAY+"Available properties: "+ChatColor.WHITE+sProperties.substring(2));
+            cs.sendMessage(ChatColor.DARK_GREEN+"---------------------------------");
         }
         else
         {
@@ -482,6 +490,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             
             cs.sendMessage(ChatColor.DARK_GREEN+"------  "+property.getName()+"  ------");
+            cs.sendMessage("");
             cs.sendMessage(property.getDescription());
             cs.sendMessage("");
             

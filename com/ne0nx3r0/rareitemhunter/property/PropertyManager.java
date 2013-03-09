@@ -46,6 +46,7 @@ import com.ne0nx3r0.util.FireworkVisualEffect;
 import com.ne0nx3r0.util.RomanNumeral;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -524,5 +525,10 @@ public class PropertyManager
                 pm.revokePlayerEffect(sPlayer, property, level);
             }
         },duration));
+    }
+
+    public Collection<ItemProperty> getAllProperties()
+    {
+        return this.properties.values();
     }
 }
