@@ -106,3 +106,13 @@ Witch:
     - 10% chance PoisonDart level 5 
     - 10% chance Disorient level 5 
     - 10% chance Disarm level 5 
+    
+Casper:
+  type: ghast
+  hp: 4000
+  attackPower: 60
+  essencesDropped: 1
+  skills:
+    - 60% chance Pull level 5 
+    - 10% chance LightningBolt level 5 
+    - 10% chance LightningStorm level 5
