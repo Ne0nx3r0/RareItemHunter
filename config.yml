@@ -4,12 +4,12 @@ timeBetweenChancesToGenerateBossEgg: 60
 
 # Maximum chance a boss will be generate on each attempt
 # The chance is based on the number of players online and the max player count
-# For example, a value of 50 on a server with 100 max players means:
+# For example, a server with 100 max players:
 # 10 players online : 5% chance
 # 50 players online : 25% chance
 # 100 players online (full) : 50% chance
 
-#default is:
+# Default (20) means:
 # 25% full = 5% chance
 # 50% full = 10% chance
 # 100% full = 20% chance
@@ -36,10 +36,9 @@ costLevelIncrement: 2
 # Global multiplier for costs
 # For example 2 means 200% cost for all properties
 costMultiplier: 1
-  
+
 # Number of player kills before a boss will disappear
 bossExpireKills: 20
-
 
 # Misc
 
