@@ -460,16 +460,23 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage("Describes a rare item property to you.");
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri whatis blinding");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi CallLightning");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi SummonSheep");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi call lightning");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi summon sheep");
         }
         else
         {
-            ItemProperty property = plugin.propertyManager.getProperty(args[1]);
+            String sPropertyName = "";
+            for(int i=1;i<args.length;i++)
+            {
+                sPropertyName += " "+args[i];
+            }
+            sPropertyName = sPropertyName.substring(1);
+            
+            ItemProperty property = plugin.propertyManager.getProperty(sPropertyName);
             
             if(property == null)
             {
-                cs.sendMessage(ChatColor.RED+"'"+args[1]+"' is not a valid rare item property!");
+                cs.sendMessage(ChatColor.RED+"'"+sPropertyName+"' is not a valid rare item property!");
                 
                 return true;
             }
@@ -478,10 +485,17 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage(property.getDescription());
             cs.sendMessage("");
             
-            for(int i=0;i<property.getMaxLevel();i++)
+            cs.sendMessage("Costs");
+            cs.sendMessage("-----------");
+            for(int i=1;i<=property.getMaxLevel();i++)
             {
-                cs.sendMessage("Cost at level "+i+": "+((property.getCost(i) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER));
+                cs.sendMessage(ChatColor.GRAY+"Level "+i+": "
+                        +ChatColor.RESET+((property.getCost(i) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER)
+                        +" "+plugin.COST_TYPE.name().toLowerCase());
             }
+            
+            cs.sendMessage("");
+            cs.sendMessage(ChatColor.DARK_GREEN+"-------------------------");
         }
         
         return true;
