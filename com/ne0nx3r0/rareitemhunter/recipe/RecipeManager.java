@@ -534,4 +534,9 @@ public class RecipeManager
     {
         return is.equals(this.compass);
     }
+
+    public Iterable<Integer> getPropertyRecipeItemList(ItemProperty property)
+    {
+        return this.TYPE_MATERIALS.get(property.getType());
+    }
 }

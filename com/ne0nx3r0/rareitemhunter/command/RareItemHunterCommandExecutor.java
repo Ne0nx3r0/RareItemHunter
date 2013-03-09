@@ -6,6 +6,7 @@ import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage("Here are the commands you have access to:");
             cs.sendMessage("");
             
-            cs.sendMessage("- / ri whatis - Describes a rare item property");
+            cs.sendMessage("- /ri whatis - Describes a rare item property");
             
             if(cs.hasPermission("rareitemhunter.admin.spawnpoint"))
             {
@@ -508,14 +509,32 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
                 }
             }
             
+            cs.sendMessage("");
+            
+            cs.sendMessage(ChatColor.GRAY+"Can be put on:");
+            
+            String sAllowedItems = "";
+            
+            for(int iItemId : plugin.recipeManager.getPropertyRecipeItemList(property))
+            {
+                sAllowedItems += ", "+Material.getMaterial(iItemId);
+            }
+            
+            cs.sendMessage(sAllowedItems.substring(2));
+            
             cs.sendMessage("");            
             cs.sendMessage(ChatColor.GRAY+"Cost:");
+            
+            cs.sendMessage(((property.getCost(1) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER)
+                    +" "+plugin.COST_TYPE.name().toLowerCase());
+            
+/* TODO : figure out what's up with cost increments
             for(int i=1;i<=property.getMaxLevel();i++)
             {
-                cs.sendMessage(ChatColor.GRAY+"lvl "+i+" - "
+                cs.sendMessage(ChatColor.WHITE+"lv"+i+" - "
                         +ChatColor.RESET+((property.getCost(i) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER)
                         +" "+plugin.COST_TYPE.name().toLowerCase());
-            }
+            }*/
             
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"-------------------------");
