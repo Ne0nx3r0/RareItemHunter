@@ -9,7 +9,7 @@ PoisonFish:
     - hpLessThan 100 SpawnSilverfish level 5
   essencesDropped: 1
   
-  Fisherman:
+Fisherman:
   type: zombie
   hp: 2400
   attackPower: 20

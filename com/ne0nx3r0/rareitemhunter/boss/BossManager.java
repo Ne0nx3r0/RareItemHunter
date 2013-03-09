@@ -314,6 +314,8 @@ public class BossManager
         
         eggLocation.getBlock().setType(Material.AIR);
         
+        eggLocation.getBlock().removeMetadata("isBoggEgg",plugin);
+        
         eggLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
 
         Boss boss = this.spawnBoss(sBossName, eggLocation);
@@ -534,6 +536,8 @@ public class BossManager
             }
 
             this.bossEggs.remove(lSpawnedEgg);
+            
+            block.removeMetadata("isBossEgg", plugin);
             
             this.saveManager.save();
         }

@@ -1,9 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.listener;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
-import java.util.Iterator;
-import java.util.List;
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,14 +17,13 @@ public class RareItemHunterPistonListener implements Listener
     }
 
     @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
-    public void onPistonExtendd(BlockPistonExtendEvent e)
+    public void onPistonExtend(BlockPistonExtendEvent e)
     {
-        List blocks = e.getBlocks();
-        for(Iterator it = blocks.iterator(); it.hasNext();)
-        {
-            Block b = (Block) it.next();
+        BlockFace bf = e.getDirection();
 
-            if(plugin.bossManager.isBossEgg(b))
+        for(int i=1;i<=12;i++)
+        {
+            if(plugin.bossManager.isBossEgg(e.getBlock().getRelative(bf,i)))
             {
                 e.setCancelled(true);
 
