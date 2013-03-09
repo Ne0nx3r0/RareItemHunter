@@ -15,7 +15,7 @@ public class CallLightning extends ItemProperty
 {
     public CallLightning()
     {
-        super(ItemPropertyTypes.SKILL,"Call Lightning","10% chance to strike an opponent with lightning per level",5,8);
+        super(ItemPropertyTypes.SKILL,"Call Lightning","10% chance to strike an opponent with lightning per level",5,4);
     }
     
     @Override

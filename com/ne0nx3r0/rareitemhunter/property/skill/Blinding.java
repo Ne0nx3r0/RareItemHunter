@@ -13,7 +13,7 @@ public class Blinding extends ItemProperty
 {
     public Blinding()
     {
-        super(ItemPropertyTypes.SKILL,"Blinding","25% chance to blind a target onhit (3s / level)",2,8);
+        super(ItemPropertyTypes.SKILL,"Blinding","25% chance to blind a target onhit (3s / level)",2,4);
     }
     
     @Override

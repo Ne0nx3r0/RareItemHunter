@@ -17,7 +17,7 @@ public class Poison extends ItemProperty
             ItemPropertyTypes.SKILL,
             "Poison",
             "Chance to poison an enemy onHit",
-            5,
+            4,
             0);
     }
 

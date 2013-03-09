@@ -14,7 +14,7 @@ public class Weaken extends ItemProperty
 {
     public Weaken()
     {
-        super(ItemPropertyTypes.SKILL,"Weaken","25% chance to weaken an enemy for 3 seconds/level",1,8);
+        super(ItemPropertyTypes.SKILL,"Weaken","25% chance to weaken an enemy for 3 seconds/level",1,4);
     }
     
     @Override

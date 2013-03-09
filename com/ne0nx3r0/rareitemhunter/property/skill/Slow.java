@@ -13,7 +13,7 @@ public class Slow extends ItemProperty
 {
     public Slow()
     {
-        super(ItemPropertyTypes.SKILL,"Slow","25% chance to slow an attacked enemy",1,8);
+        super(ItemPropertyTypes.SKILL,"Slow","25% chance to slow an attacked enemy",1,2);
     }
     
     @Override

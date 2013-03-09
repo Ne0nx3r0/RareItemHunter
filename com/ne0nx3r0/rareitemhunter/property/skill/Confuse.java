@@ -13,7 +13,7 @@ public class Confuse extends ItemProperty
 {
     public Confuse()
     {
-        super(ItemPropertyTypes.SKILL,"Confuse","25% chance on hit to confuse a target for 3 seconds / level",1,8);
+        super(ItemPropertyTypes.SKILL,"Confuse","25% chance on hit to confuse a target for 3 seconds / level",1,4);
     }
     
     @Override

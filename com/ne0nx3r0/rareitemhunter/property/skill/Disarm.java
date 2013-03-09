@@ -16,7 +16,7 @@ public class Disarm extends ItemProperty
     
     public Disarm()
     {
-        super(ItemPropertyTypes.SKILL,"Disarm","25% chance on hit to cause a target to exchange their held weapon for a random one from their inventory",1,8);
+        super(ItemPropertyTypes.SKILL,"Disarm","25% chance on hit to cause a target to exchange their held weapon for a random one from their inventory",1,4);
         
         disarmables = new ArrayList<Material>(){};
         disarmables.add(Material.WOOD_SWORD);
