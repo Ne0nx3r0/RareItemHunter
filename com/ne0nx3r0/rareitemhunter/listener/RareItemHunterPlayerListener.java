@@ -53,6 +53,8 @@ public class RareItemHunterPlayerListener implements Listener
 
                 if(plugin.bossManager.isBossEgg(e.getClickedBlock()))
                 {
+                    e.setCancelled(true);
+                    
                     if(e.getPlayer().hasPermission("rareitemhunter.hunter.hatch"))
                     {
                         Boss boss = plugin.bossManager.hatchBoss(lClicked);
@@ -68,8 +70,6 @@ public class RareItemHunterPlayerListener implements Listener
                     {
                         e.getPlayer().sendMessage(ChatColor.RED+"You do not have permission to awaken legendary bosses!");
                     }
-
-                    e.setCancelled(true);
                 }
             }
             else if(e.hasItem()
