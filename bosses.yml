@@ -22,6 +22,6 @@ PoisonFish:
   skills:
     - 30% chance Disorient level 5
     - 30% chance PoisonDart level 5
+  essencesDropped: 1
   events:
     - hpLessThan 100 SpawnSilverfish level 5
-  essencesDropped: 1

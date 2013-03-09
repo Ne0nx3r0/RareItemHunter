@@ -129,7 +129,7 @@ public class RareItemHunterEntityListener implements Listener
                     
                     Item droppedItem = leBossAttacked.getWorld().dropItemNaturally(leBossAttacked.getLocation(), plugin.recipeManager.getEssenceItem());
                     
-                    droppedItem.setVelocity(new Vector(random.nextInt(2),random.nextInt(2),random.nextInt(2)));
+                    droppedItem.setVelocity(new Vector(random.nextFloat(),random.nextFloat(),random.nextFloat()));
                 }
                 
                 e.setCancelled(true);
