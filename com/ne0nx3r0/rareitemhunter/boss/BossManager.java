@@ -38,7 +38,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -263,6 +262,9 @@ public class BossManager
                 iTimer, 
                 iTimer);
         }
+        
+// Active boss garbage collection
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new ActiveBossGarbageCleanup(this), 20*60, 20*60);
     }
     
     public boolean isBoss(Entity entity)
@@ -336,7 +338,6 @@ public class BossManager
         activeBosses.put(ent.getEntityId(), boss);
         
         this.saveManager.save();
-        
         return boss;
     }
 
