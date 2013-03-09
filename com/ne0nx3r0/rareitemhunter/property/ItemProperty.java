@@ -69,4 +69,9 @@ public class ItemProperty
     {
         this.cost = cost;
     }
+    
+    public String getDescription()
+    {
+        return this.description;
+    }
 }

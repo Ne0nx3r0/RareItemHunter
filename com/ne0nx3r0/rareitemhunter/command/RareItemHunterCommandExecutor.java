@@ -2,6 +2,7 @@ package com.ne0nx3r0.rareitemhunter.command;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
+import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -27,6 +28,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         
             cs.sendMessage("Here are the commands you have access to:");
             cs.sendMessage("");
+            
+            cs.sendMessage("- / ri whatis - Describes a rare item property");
             
             if(cs.hasPermission("rareitemhunter.admin.spawnpoint"))
             {
@@ -60,6 +63,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn boss commands"))
         {
             return this._spawnBoss(cs,args);
+        }
+        else if((args[0].equalsIgnoreCase("whatis") || args[0].equalsIgnoreCase("wi")))
+        {
+            return this._whatIs(cs,args);
         }
         else if(args[0].equalsIgnoreCase("egg")
         && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn egg commands"))
@@ -440,6 +447,41 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         else
         {
             cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
+        }
+        
+        return true;
+    }
+
+    private boolean _whatIs(CommandSender cs, String[] args)
+    {
+        if(args.length < 2 || args[1].equalsIgnoreCase("?"))
+        {
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri whatis <property name>  ------");
+            cs.sendMessage("Describes a rare item property to you.");
+            cs.sendMessage("");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri whatis blinding");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi CallLightning");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri wi SummonSheep");
+        }
+        else
+        {
+            ItemProperty property = plugin.propertyManager.getProperty(args[1]);
+            
+            if(property == null)
+            {
+                cs.sendMessage(ChatColor.RED+"'"+args[1]+"' is not a valid rare item property!");
+                
+                return true;
+            }
+            
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  "+property.getName()+"  ------");
+            cs.sendMessage(property.getDescription());
+            cs.sendMessage("");
+            
+            for(int i=0;i<property.getMaxLevel();i++)
+            {
+                cs.sendMessage("Cost at level "+i+": "+((property.getCost(i) - plugin.COST_LEVEL_INCREMENT) * plugin.COST_MULTIPLIER));
+            }
         }
         
         return true;
