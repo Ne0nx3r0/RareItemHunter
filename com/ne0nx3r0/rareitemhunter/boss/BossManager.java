@@ -511,11 +511,6 @@ public class BossManager
         return this.bossTemplates.containsKey(sBossName);
     }
 
-    public void spawnBoss(String sBossName, String sPointName)
-    {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
     public void removeBossEgg(Location lSpawnedEgg)
     {
         if(this.bossEggs.containsKey(lSpawnedEgg))
@@ -631,5 +626,16 @@ public class BossManager
         this.activeBosses.remove(boss.entity.getEntityId());
         
         boss.entity.remove();
+    }
+
+    public Location spawnBoss(String sBossName, String sPointName)
+    {
+        BossEggSpawnPoint sp = this.spawnPoints.get(sPointName);
+
+        Location lSpawn = this.spawnBossEgg(sBossName, sPointName);
+        
+        this.hatchBoss(lSpawn);
+        
+        return lSpawn;
     }
 }

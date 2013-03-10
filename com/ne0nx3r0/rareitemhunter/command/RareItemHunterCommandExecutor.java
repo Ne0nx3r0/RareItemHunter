@@ -3,7 +3,6 @@ package com.ne0nx3r0.rareitemhunter.command;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -293,9 +292,14 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             else
             {
-                plugin.bossManager.spawnBossEgg(sBossName, sPointName);
+                Location lBoss = plugin.bossManager.spawnBossEgg(sBossName, sPointName);
                     
-                cs.sendMessage("Spawned a "+sBossName+" egg at "+sPointName);
+                cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName);
+                
+                for(Player p : lBoss.getWorld().getPlayers())
+                {
+                    p.sendMessage(ChatColor.GREEN+"A legendary boss egg has appeared!");
+                }
             }
                 
             return true;
@@ -347,9 +351,9 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             else
             {
-                plugin.bossManager.spawnBoss(sBossName, sPointName);
+                Location lBoss = plugin.bossManager.spawnBoss(sBossName, sPointName);
                     
-                cs.sendMessage("Spawned a "+sBossName+" at "+sPointName);
+                cs.sendMessage("Spawned a "+sBossName+" near "+sPointName + " ("+lBoss.getBlockX()+","+lBoss.getBlockY()+","+lBoss.getBlockZ()+")!");
             }
                 
             return true;
@@ -362,7 +366,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             if(this.sentFromConsole(cs))
             {
-                cs.sendMessage("You can use /ri compass|c <player>");
+                cs.sendMessage("You ca/ri n use /ri compass|c <player>");
                 
                 return true;
             }
