@@ -293,8 +293,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             else
             {
                 Location lBoss = plugin.bossManager.spawnBossEgg(sBossName, sPointName);
-                    
-                cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName);
+
+                cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName + " ("+lBoss.getBlockX()+","+lBoss.getBlockY()+","+lBoss.getBlockZ()+")!");
                 
                 for(Player p : lBoss.getWorld().getPlayers())
                 {

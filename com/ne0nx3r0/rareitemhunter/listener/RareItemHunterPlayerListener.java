@@ -61,7 +61,7 @@ public class RareItemHunterPlayerListener implements Listener
                         
                         for(Player p : lClicked.getWorld().getPlayers())
                         {
-                            p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+boss.getName()+ChatColor.DARK_GREEN+" has awakened!");
+                            p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+boss.getName()+ChatColor.DARK_GREEN+" has been awakened by "+ChatColor.WHITE+e.getPlayer()+ChatColor.DARK_GREEN+"!");
                         }
                         
                         lClicked.getWorld().strikeLightningEffect(lClicked);
