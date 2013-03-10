@@ -5,6 +5,7 @@ import com.ne0nx3r0.rareitemhunter.boss.Boss;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import java.util.List;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -237,12 +238,6 @@ public class RareItemHunterPlayerListener implements Listener
     {
         plugin.propertyManager.onInteractEntity(e);
     }
-    
-    @EventHandler(priority= EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent e)
-    {
-        plugin.propertyManager.revokeAllItemProperties(e.getPlayer());
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInventoryClick(InventoryClickEvent e)
@@ -275,16 +270,23 @@ public class RareItemHunterPlayerListener implements Listener
         return null;
     }
     
+    @EventHandler(priority= EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent e)
     {
+        plugin.propertyManager.onJoin(e.getPlayer());
+        
         if(plugin.UPDATE_AVAILABLE)
         {
-            Player p = e.getPlayer();
-
-            if(p.hasPermission("rareitemhunter.admin.notify"))
+            if(e.getPlayer().hasPermission("rareitemhunter.admin.notify"))
             {
-                p.sendMessage(ChatColor.GREEN+"An update for RareItemHunter is available: "+ChatColor.RESET+plugin.UPDATE_STRING);
+                e.getPlayer().sendMessage(ChatColor.GREEN+"An update for RareItemHunter is available: "+ChatColor.RESET+plugin.UPDATE_STRING);
             }
         }
+    }
+    
+    @EventHandler(priority= EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent e)
+    {
+        plugin.propertyManager.revokeAllItemProperties(e.getPlayer());
     }
 }

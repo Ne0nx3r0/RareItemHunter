@@ -1,47 +1,10 @@
 package com.ne0nx3r0.rareitemhunter.property;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
-import com.ne0nx3r0.rareitemhunter.property.ability.Durability;
-import com.ne0nx3r0.rareitemhunter.property.ability.Fly;
-import com.ne0nx3r0.rareitemhunter.property.ability.Hardy;
-import com.ne0nx3r0.rareitemhunter.property.ability.Regeneration;
-import com.ne0nx3r0.rareitemhunter.property.ability.Strength;
-import com.ne0nx3r0.rareitemhunter.property.ability.ToughLove;
-import com.ne0nx3r0.rareitemhunter.property.ability.WaterBreathing;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.Fertilize;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.FireHandling;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.HalfBakedIdea;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.MeltObsidian;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.PaintWool;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.Smelt;
-import com.ne0nx3r0.rareitemhunter.property.enchantment.Spore;
-import com.ne0nx3r0.rareitemhunter.property.skill.Backstab;
-import com.ne0nx3r0.rareitemhunter.property.skill.Blinding;
-import com.ne0nx3r0.rareitemhunter.property.skill.CallLightning;
-import com.ne0nx3r0.rareitemhunter.property.skill.Confuse;
-import com.ne0nx3r0.rareitemhunter.property.skill.Disarm;
-import com.ne0nx3r0.rareitemhunter.property.skill.Poison;
-import com.ne0nx3r0.rareitemhunter.property.skill.Slow;
-import com.ne0nx3r0.rareitemhunter.property.skill.VampiricRegeneration;
-import com.ne0nx3r0.rareitemhunter.property.skill.Weaken;
-import com.ne0nx3r0.rareitemhunter.property.spell.Burst;
-import com.ne0nx3r0.rareitemhunter.property.spell.CatsFeet;
-import com.ne0nx3r0.rareitemhunter.property.spell.CraftItem;
-import com.ne0nx3r0.rareitemhunter.property.spell.FireResistance;
-import com.ne0nx3r0.rareitemhunter.property.spell.GreaterBurst;
-import com.ne0nx3r0.rareitemhunter.property.spell.GrowTree;
-import com.ne0nx3r0.rareitemhunter.property.spell.Haste;
-import com.ne0nx3r0.rareitemhunter.property.spell.Invisibility;
-import com.ne0nx3r0.rareitemhunter.property.spell.MagicBag;
-import com.ne0nx3r0.rareitemhunter.property.spell.RepairItem;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonBat;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonChicken;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonCow;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonMooshroom;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonOcelot;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonPig;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonSheep;
-import com.ne0nx3r0.rareitemhunter.property.spell.SummonSlime;
+import com.ne0nx3r0.rareitemhunter.property.ability.*;
+import com.ne0nx3r0.rareitemhunter.property.enchantment.*;
+import com.ne0nx3r0.rareitemhunter.property.skill.*;
+import com.ne0nx3r0.rareitemhunter.property.spell.*;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import com.ne0nx3r0.util.RomanNumeral;
 import java.io.File;
@@ -62,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -225,10 +189,23 @@ public class PropertyManager
     {
         this.ActivatePlayerRareItem(e.getPlayer(), e.getPlayer().getItemInHand(), e, ItemPropertyActions.INTERACT_ENTITY);
     }
-
+    
     public void onEquip(InventoryClickEvent e)
     {
         this.ActivatePlayerRareItem((Player) e.getWhoClicked(), e.getCursor(), e, ItemPropertyActions.EQUIP);
+    }
+    
+    public void onJoin(Player p)
+    {        
+        ItemStack[] armor = p.getInventory().getArmorContents();
+        
+        if(armor.length > 0)
+        {
+            for(int i=0;i<armor.length;i++)
+            {
+                this.ActivatePlayerRareItem(p, armor[i], null, ItemPropertyActions.EQUIP);
+            }
+        }
     }
 
     public void onUnequip(InventoryClickEvent e)
@@ -456,7 +433,9 @@ public class PropertyManager
         }
         else
         {
-            playerEffects = this.activePlayerEffects.put(player.getName(),new HashMap<ItemProperty,Integer>());
+            playerEffects = new HashMap<ItemProperty,Integer>();
+            
+            this.activePlayerEffects.put(player.getName(),playerEffects);
         }
         
         playerEffects.put(property, level);
@@ -474,11 +453,11 @@ public class PropertyManager
         if(playerEffects != null)
         {
             playerEffects.remove(property);
-        }
         
-        if(playerEffects.isEmpty())
-        {
-            this.activePlayerEffects.remove(sPlayer);
+            if(playerEffects.isEmpty())
+            {
+                this.activePlayerEffects.remove(sPlayer);
+            }
         }
     }
 

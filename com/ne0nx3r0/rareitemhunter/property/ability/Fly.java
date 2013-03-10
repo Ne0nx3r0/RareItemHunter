@@ -18,9 +18,10 @@ public class Fly extends ItemPropertyRepeatingEffect
         
         this.propertyManager = propertyManager;
         
-        this.createRepeatingAppliedEffect(this,20*5);
+        this.createRepeatingAppliedEffect(this,20 * 5);
         
         final ItemPropertyRepeatingEffect ip = this;
+        
         final PropertyManager pm = propertyManager;
         
         Bukkit.getScheduler().scheduleSyncRepeatingTask(RareItemHunter.self,  new Runnable()
@@ -32,7 +33,15 @@ public class Fly extends ItemPropertyRepeatingEffect
                 {
                     Player p = Bukkit.getPlayer(sPlayer);
                     
-                    if(p.isFlying() && !pm.hasCost(p, ip.getCost(ip.getActivePlayers().get(p.getName()))))
+                    // Cheap garbage collection
+                    if(p == null)
+                    {
+                        ip.getActivePlayers().remove(sPlayer);
+                        
+                        continue;
+                    }
+
+                    if(p.isFlying() && !pm.hasCost(p, 1))
                     {
                         p.setFlying(false);
                     }
@@ -44,14 +53,16 @@ public class Fly extends ItemPropertyRepeatingEffect
     @Override
     public void onEquip(Player p,int level)
     {
-        activePlayers.remove(p.getName());
+        activePlayers.put(p.getName(), level);
+        
         p.setAllowFlight(true);
     }
 
     @Override
     public void onUnequip(Player p,int level)
     {
-        activePlayers.put(p.getName(), level);
+        activePlayers.remove(p.getName());
+        
         p.setFlying(false);
         p.setAllowFlight(false);
     }
@@ -82,5 +93,5 @@ public class Fly extends ItemPropertyRepeatingEffect
         {
             counter++;
         }
-    }
+    }    
 }
