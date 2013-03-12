@@ -109,7 +109,7 @@ Witch:
     
 Casper:
   type: ghast
-  hp: 4000
+  hp: 1400
   attackPower: 60
   essencesDropped: 1
   skills:
