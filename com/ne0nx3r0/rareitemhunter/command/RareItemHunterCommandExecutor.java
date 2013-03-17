@@ -1,6 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.command;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
+import com.ne0nx3r0.rareitemhunter.boss.Boss;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
 import org.bukkit.ChatColor;
@@ -253,6 +254,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri egg <bossName> <pointName> | here  ------");
             cs.sendMessage("Spawns a boss egg at a spawn point, or at your current location.");
             cs.sendMessage("");
+            cs.sendMessage("Available bosses: "+plugin.bossManager.getBossesString());
+            cs.sendMessage("");
+            cs.sendMessage("Available spawn points: "+plugin.bossManager.getSpawnPointsString());
+            cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri egg boss1 somePoint");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri egg boss1 here");
             
@@ -313,6 +318,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri boss|b <bossName> <pointName> | here  ------");
             cs.sendMessage("Spawns a boss at a spawn point, or at your current location.");
+            cs.sendMessage("");
+            cs.sendMessage("Available bosses: "+plugin.bossManager.getBossesString());
+            cs.sendMessage("");
+            cs.sendMessage("Available spawn points: "+plugin.bossManager.getSpawnPointsString());
             cs.sendMessage("");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri boss boss1 somePoint");
             cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri b boss1 here");

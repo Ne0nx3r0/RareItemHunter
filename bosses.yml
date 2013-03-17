@@ -1,6 +1,6 @@
 PoisonFish:
   type: silverfish
-  hp: 2000
+  hp: 1600
   attackPower: 16
   skills:
     - 30% chance Disorient level 5
@@ -11,7 +11,7 @@ PoisonFish:
   
 Fisherman:
   type: zombie
-  hp: 2400
+  hp: 1800
   attackPower: 20
   skills:
     - 40% chance Pull level 5 
@@ -28,7 +28,7 @@ Fisherman:
   
 Giant:
   type: giant
-  hp: 2400
+  hp: 2500
   attackPower: 40
   skills:
     - 40% chance JumpAttack level 5 
@@ -42,7 +42,7 @@ Giant:
   
 BoneDaddy:
   type: skeleton
-  hp: 1800
+  hp: 1600
   attackPower: 20
   skills:
     - 20% chance LightningBolt level 5 
@@ -78,7 +78,7 @@ Fireman:
   
 Slimer:
   type: lavaslime
-  hp: 4000
+  hp: 2600
   attackPower: 40
   essencesDropped: 1
   skills:
@@ -88,7 +88,7 @@ Slimer:
     
 SpiderBoy:
   type: cavespider
-  hp: 3000
+  hp: 1800
   attackPower: 18
   essencesDropped: 1
   skills:
@@ -110,7 +110,7 @@ Witch:
 Casper:
   type: ghast
   hp: 1400
-  attackPower: 60
+  attackPower: 40
   essencesDropped: 1
   skills:
     - 60% chance Pull level 5 

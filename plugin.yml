@@ -1,6 +1,6 @@
 name: RareItemHunter
 main: com.ne0nx3r0.rareitemhunter.RareItemHunter
-version: '1.4.2'
+version: '1.5'
 database: false
 softdepend: [RemoteEntities]
 description: Rare Item Hunter

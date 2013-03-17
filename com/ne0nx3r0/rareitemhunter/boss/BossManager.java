@@ -163,7 +163,7 @@ public class BossManager
             }
 
 // Create the template
-            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment,weapon);
+            BossTemplate bossTemplate = new BossTemplate(sBossName.toLowerCase(),entityType,hp,attackPower,essencesDropped,equipment,weapon);
             
 // Add any skills
             if(bossesYml.isSet(sBossName+".skills"))
@@ -637,5 +637,29 @@ public class BossManager
         this.hatchBoss(lSpawn);
         
         return lSpawn;
+    }
+
+    public String getBossesString()
+    {
+        String sBosses = "";
+        
+        for(String sBossName : this.bossTemplates.keySet())
+        {
+            sBosses += ", "+sBossName;
+        }
+        
+        return sBosses.substring(2);
+    }
+
+    public String getSpawnPointsString()
+    {
+        String sSpawnPoints = "";
+        
+        for(String sSpawnPoint : this.spawnPoints.keySet())
+        {
+            sSpawnPoints += ", "+sSpawnPoint;
+        }
+        
+        return sSpawnPoints.substring(2);
     }
 }
