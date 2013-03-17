@@ -163,7 +163,7 @@ public class BossManager
             }
 
 // Create the template
-            BossTemplate bossTemplate = new BossTemplate(sBossName.toLowerCase(),entityType,hp,attackPower,essencesDropped,equipment,weapon);
+            BossTemplate bossTemplate = new BossTemplate(sBossName,entityType,hp,attackPower,essencesDropped,equipment,weapon);
             
 // Add any skills
             if(bossesYml.isSet(sBossName+".skills"))
@@ -247,7 +247,7 @@ public class BossManager
             }
             
 // Save the template
-            this.bossTemplates.put(bossTemplate.name,bossTemplate);
+            this.bossTemplates.put(bossTemplate.name.toLowerCase(),bossTemplate);
         }
        
         this.saveManager = new saveFileManager(plugin,this);
@@ -326,7 +326,7 @@ public class BossManager
 
     public Boss spawnBoss(String sBossName, Location eggLocation)
     {
-        Boss boss = new Boss(this.bossTemplates.get(sBossName));
+        Boss boss = new Boss(this.bossTemplates.get(sBossName.toLowerCase()));
         
         Entity ent = eggLocation.getWorld().spawnEntity(eggLocation, boss.getEntityType());
       
@@ -368,19 +368,19 @@ public class BossManager
     
     public Location spawnBossEgg(String bossName,String sSpawnPointName)
     {
-        return spawnBossEgg(this.bossTemplates.get(bossName), sSpawnPointName);
+        return spawnBossEgg(this.bossTemplates.get(bossName.toLowerCase()), sSpawnPointName);
     }  
     
     public boolean spawnBossEgg(String sBossName,Block block)
     { 
-        return spawnBossEgg(this.bossTemplates.get(sBossName), block);
+        return spawnBossEgg(this.bossTemplates.get(sBossName.toLowerCase()), block);
     }
 
     public Location spawnBossEgg(BossTemplate bossTemplate,String sSpawnPointName)
     {
         Random random = new Random();
         
-        BossEggSpawnPoint spawnPoint = this.spawnPoints.get(sSpawnPointName);
+        BossEggSpawnPoint spawnPoint = this.spawnPoints.get(sSpawnPointName.toLowerCase());
         
         for(int i=0;i<10;i++)
         {
@@ -479,19 +479,19 @@ public class BossManager
 
     public void addSpawnPoint(String name, Location location, int radius)
     {
-        this.spawnPoints.put(name, new BossEggSpawnPoint(name,location,radius));
+        this.spawnPoints.put(name.toLowerCase(), new BossEggSpawnPoint(name.toLowerCase(),location,radius));
         
         this.saveManager.save();
     }
 
     public boolean isSpawnPoint(String name)
     {
-        return this.spawnPoints.containsKey(name);
+        return this.spawnPoints.containsKey(name.toLowerCase());
     }
 
     public void delSpawnPoint(String name)
     {
-        this.spawnPoints.remove(name);
+        this.spawnPoints.remove(name.toLowerCase());
         
         this.saveManager.save();
     }
@@ -503,12 +503,12 @@ public class BossManager
 
     public boolean isValidLocation(String sPointName)
     {
-        return this.spawnPoints.containsKey(sPointName);
+        return this.spawnPoints.containsKey(sPointName.toLowerCase());
     }
 
     public boolean isValidBossName(String sBossName)
     {
-        return this.bossTemplates.containsKey(sBossName);
+        return this.bossTemplates.containsKey(sBossName.toLowerCase());
     }
 
     public void removeBossEgg(Location lSpawnedEgg)
@@ -630,7 +630,7 @@ public class BossManager
 
     public Location spawnBoss(String sBossName, String sPointName)
     {
-        BossEggSpawnPoint sp = this.spawnPoints.get(sPointName);
+        BossEggSpawnPoint sp = this.spawnPoints.get(sPointName.toLowerCase());
 
         Location lSpawn = this.spawnBossEgg(sBossName, sPointName);
         
