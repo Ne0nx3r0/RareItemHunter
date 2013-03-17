@@ -1,6 +1,8 @@
 package com.ne0nx3r0.rareitemhunter.boss;
 
-import net.minecraft.server.v1_4_R1.Enchantment;
+import java.util.Iterator;
+import java.util.Map;
+import org.bukkit.entity.Entity;
 
 class ActiveBossGarbageCleanup implements Runnable
 {
@@ -14,14 +16,15 @@ class ActiveBossGarbageCleanup implements Runnable
     @Override
     public void run()
     {
-        for(Boss bTest : bm.activeBosses.values())
+        Iterator<Map.Entry<Integer,Boss>> iter = bm.activeBosses.entrySet().iterator();
+        
+        while(iter.hasNext())
         {
-            if(bTest != null)
+            Entity eTest = iter.next().getValue().entity;
+            
+            if(eTest.isDead() || !eTest.isValid())
             {
-                if(bTest.entity.isDead() || !bTest.entity.isValid())
-                {
-                    bm.activeBosses.remove(bTest.entity.getEntityId());
-                }
+                iter.remove();
             }
         }
     }
