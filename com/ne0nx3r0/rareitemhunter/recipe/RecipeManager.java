@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -16,6 +17,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -191,6 +193,19 @@ public class RecipeManager
             }
         }
         
+        //Remove any existing RI recipes
+        Iterator<Recipe> iter = plugin.getServer().recipeIterator();
+        
+        while (iter.hasNext())
+        {
+            Recipe r = iter.next();
+
+            if(r.getResult().equals(this.DEFAULT_IS))
+            {
+                iter.remove();
+            }
+        }
+        
         String componentsFilename = "component_recipes.yml";
         
         File componentsFile = new File(plugin.getDataFolder(),componentsFilename);
@@ -318,21 +333,10 @@ public class RecipeManager
                         String sPrefix = sIngredient.substring(0,sIngredient.lastIndexOf(":"));
                         String sSuffix = sIngredient.substring(sIngredient.lastIndexOf(":")+1);
                         
-                        if(sPrefix.equalsIgnoreCase("POTION"))
-                        {
-                            componentRecipe.setIngredient(
-                                    sIngredients.get(sIngredient),
-                                    Material.matchMaterial(sPrefix),
-                                    -1);
-                        }
-                        else
-                        {
-                            componentRecipe.setIngredient(
-                                    sIngredients.get(sIngredient),
-                                    Material.matchMaterial(sPrefix),
-                                    Integer.parseInt(sSuffix));
-                        }
-                        
+                        componentRecipe.setIngredient(
+                                sIngredients.get(sIngredient),
+                                Material.matchMaterial(sPrefix),
+                                Integer.parseInt(sSuffix));
                     }
                 }
                 

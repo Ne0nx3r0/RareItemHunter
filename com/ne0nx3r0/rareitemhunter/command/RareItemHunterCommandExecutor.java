@@ -55,22 +55,22 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
                 
             return true;
         }
-        else if((args[0].equalsIgnoreCase("spawnpoint") || args[0].equalsIgnoreCase("sp")) 
-        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn point commands"))
-        {
-            return this._spawnPoint(cs,args);
-        }
-        else if((args[0].equalsIgnoreCase("boss") || args[0].equalsIgnoreCase("b"))
-        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn boss commands"))
-        {
-            return this._spawnBoss(cs,args);
-        }
         else if((args[0].equalsIgnoreCase("whatis") || args[0].equalsIgnoreCase("wi")))
         {
             return this._whatIs(cs,args);
         }
+        else if((args[0].equalsIgnoreCase("spawnpoint") || args[0].equalsIgnoreCase("sp")) 
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.spawnpoint","spawn point commands"))
+        {
+            return this._spawnPoint(cs,args);
+        }
+        else if((args[0].equalsIgnoreCase("boss") || args[0].equalsIgnoreCase("b"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.boss","spawn boss commands"))
+        {
+            return this._spawnBoss(cs,args);
+        }
         else if(args[0].equalsIgnoreCase("egg")
-        && this.hasCommandPermission(cs,"rareitemhunter.spawnpoint","spawn egg commands"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.egg","spawn egg commands"))
         {
             return this._spawnEgg(cs,args);
         }
