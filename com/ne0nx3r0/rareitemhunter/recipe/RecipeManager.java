@@ -64,7 +64,19 @@ public class RecipeManager
         compassRecipe.addIngredient(Material.DIAMOND);
         
         plugin.getServer().addRecipe(compassRecipe);
+
+        //Remove any existing RI recipes
+        Iterator<Recipe> iter = plugin.getServer().recipeIterator();
         
+        while (iter.hasNext())
+        {
+            Recipe r = iter.next();
+
+            if(r.getResult().equals(this.DEFAULT_IS))
+            {
+                iter.remove();
+            }
+        }
 
         this.componentRecipes = new HashMap<ItemStack,ItemStack[]>();
         
@@ -114,7 +126,7 @@ public class RecipeManager
         
         List<Integer> SPELL_MATERIALS = new ArrayList<Integer>();
         
-        SPELL_MATERIALS.add(Material.WRITTEN_BOOK.getId());
+        SPELL_MATERIALS.add(Material.BOOK.getId());
 
         TYPE_MATERIALS.put(ItemPropertyTypes.SPELL, SPELL_MATERIALS);
 
@@ -190,19 +202,6 @@ public class RecipeManager
                 recipe.addIngredient(i, Material.MAGMA_CREAM);
                 
                 plugin.getServer().addRecipe(recipe);
-            }
-        }
-        
-        //Remove any existing RI recipes
-        Iterator<Recipe> iter = plugin.getServer().recipeIterator();
-        
-        while (iter.hasNext())
-        {
-            Recipe r = iter.next();
-
-            if(r.getResult().equals(this.DEFAULT_IS))
-            {
-                iter.remove();
             }
         }
         
@@ -473,6 +472,11 @@ public class RecipeManager
                         
                         return new ItemStack(Material.AIR);
                     }
+                }
+                
+                if(isResult.getType() == Material.BOOK)
+                {
+                    itemMeta.setDisplayName("Spellbook");
                 }
                 
                 itemMeta.setLore(lore);

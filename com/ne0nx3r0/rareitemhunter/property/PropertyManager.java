@@ -78,7 +78,7 @@ public class PropertyManager
         
         this.addProperty(propertyCostsYml,new Fertilize());
         this.addProperty(propertyCostsYml,new FireHandling());
-        this.addProperty(propertyCostsYml,new HalfBakedIdea());
+        //this.addProperty(propertyCostsYml,new HalfBakedIdea());
         this.addProperty(propertyCostsYml,new MeltObsidian());
         this.addProperty(propertyCostsYml,new PaintWool());
         this.addProperty(propertyCostsYml,new Smelt());
@@ -89,7 +89,7 @@ public class PropertyManager
         this.addProperty(propertyCostsYml,new Hardy());
         this.addProperty(propertyCostsYml,new Regeneration());
         this.addProperty(propertyCostsYml,new Strength());
-        this.addProperty(propertyCostsYml,new ToughLove());
+        //this.addProperty(propertyCostsYml,new ToughLove());
         this.addProperty(propertyCostsYml,new WaterBreathing());
         
         this.addProperty(propertyCostsYml,new Burst(fireworks));
