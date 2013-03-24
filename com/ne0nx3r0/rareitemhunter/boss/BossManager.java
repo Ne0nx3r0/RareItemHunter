@@ -641,6 +641,12 @@ public class BossManager
 
     public String getBossesString()
     {
+        //TODO: Clean this up
+        if(this.bossTemplates.isEmpty())
+        {
+            return "";
+        }
+        
         String sBosses = "";
         
         for(String sBossName : this.bossTemplates.keySet())
@@ -653,6 +659,12 @@ public class BossManager
 
     public String getSpawnPointsString()
     {
+        //TODO: Clean this up
+        if(this.bossEggs.isEmpty())
+        {
+            return "";
+        }
+        
         String sSpawnPoints = "";
         
         for(String sSpawnPoint : this.spawnPoints.keySet())
