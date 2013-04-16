@@ -181,7 +181,8 @@ public class RareItemHunterPlayerListener implements Listener
         }
     }
     
-    private final BlockFace[] bfs = new BlockFace[]{
+    private final BlockFace[] bfs = new BlockFace[]
+    {
         BlockFace.NORTH,
         BlockFace.EAST,
         BlockFace.SOUTH,

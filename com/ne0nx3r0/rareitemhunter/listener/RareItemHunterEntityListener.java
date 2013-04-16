@@ -22,7 +22,6 @@ import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTameEvent;
-import org.bukkit.util.Vector;
 
 public class RareItemHunterEntityListener implements Listener
 {
@@ -38,7 +37,7 @@ public class RareItemHunterEntityListener implements Listener
     {
         //TODO: Snowballs or eggs do extra damage to certain vulnerable bosses. each boss has a weakness
         Entity eAttacker = e.getDamager();
-
+        
         if((eAttacker instanceof Arrow))
         {
             eAttacker = ((Arrow) eAttacker).getShooter();
@@ -51,8 +50,14 @@ public class RareItemHunterEntityListener implements Listener
         {
             eAttacker = ((SmallFireball) eAttacker).getShooter();
         }      
-
-        Boss bossAttacker = plugin.bossManager.getBoss(eAttacker);
+        
+        Boss bossAttacker = null;
+        
+        if(eAttacker != null)
+        {
+            bossAttacker = plugin.bossManager.getBoss(eAttacker);
+        }
+        
         Boss bossAttacked = plugin.bossManager.getBoss(e.getEntity());
 
         //boss on boss violence... A sad social problem.
