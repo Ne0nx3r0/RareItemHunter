@@ -8,25 +8,29 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BossSkillSpawn extends BossSkill
 {
-    private final EntityType entity;
+    private final EntityType entityType;
     
     public BossSkillSpawn(String sName,EntityType e)
     {
         super(sName);
         
-        this.entity = e;
+        this.entityType = e;
     }
 
     @Override
     public boolean activateSkill(Boss boss,EntityDamageByEntityEvent e, Entity eAttacker, int level)
     {       
+        System.out.println(e.getCause());
+        
         Location l = e.getEntity().getLocation();
         
         World w = l.getWorld();
         
         for(int i=0;i<level;i++)
         {
-            w.spawnEntity(l, entity);
+            System.out.println(i+" level:"+level);
+            
+            w.spawnEntity(l, this.entityType);
         }
         
         return true;

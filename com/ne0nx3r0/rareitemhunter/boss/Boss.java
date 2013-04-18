@@ -71,7 +71,7 @@ public class Boss
             {
                 if(random.nextInt(100) < bsi.chance)
                 {
-                    if(bsi.bossSkill.activateSkill(this, e, eAttacker, hp))
+                    if(bsi.bossSkill.activateSkill(this, e, eAttacker, bsi.level))
                     {
                         if(eAttacker instanceof Player)
                         {
