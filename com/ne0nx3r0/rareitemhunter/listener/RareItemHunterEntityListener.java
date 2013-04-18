@@ -53,6 +53,7 @@ public class RareItemHunterEntityListener implements Listener
         
         Boss bossAttacker = null;
         
+        //TODO: Optimize these conditionals
         if(eAttacker != null)
         {
             bossAttacker = plugin.bossManager.getBoss(eAttacker);

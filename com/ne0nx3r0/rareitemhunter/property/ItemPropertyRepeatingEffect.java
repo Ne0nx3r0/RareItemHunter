@@ -51,7 +51,7 @@ public class ItemPropertyRepeatingEffect extends ItemProperty
                     }
                     else
                     {
-                        activePlayers.remove(p.getName());
+                        activePlayers.remove(sPlayer);
                     }
                 }
             }
