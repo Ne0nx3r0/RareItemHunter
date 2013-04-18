@@ -392,7 +392,11 @@ public class RecipeManager
                 && isIngredient.getType() != Material.AIR 
                 && this.ALL_TYPE_MATERIALS.contains(isIngredient.getTypeId()))
                 {
-                    isResult = new ItemStack(isIngredient);
+                    ItemStack isNew = isIngredient.clone();
+                    
+                    isNew.setAmount(1);
+                    
+                    isResult = new ItemStack(isNew);
                 }
             }
             
