@@ -19,17 +19,13 @@ public class BossSkillSpawn extends BossSkill
 
     @Override
     public boolean activateSkill(Boss boss,EntityDamageByEntityEvent e, Entity eAttacker, int level)
-    {       
-        System.out.println(e.getCause());
-        
+    {
         Location l = e.getEntity().getLocation();
         
         World w = l.getWorld();
         
         for(int i=0;i<level;i++)
         {
-            System.out.println(i+" level:"+level);
-            
             w.spawnEntity(l, this.entityType);
         }
         
