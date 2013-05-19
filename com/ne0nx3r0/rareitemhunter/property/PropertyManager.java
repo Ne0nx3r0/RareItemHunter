@@ -368,7 +368,7 @@ public class PropertyManager
         }        
         else if(plugin.COST_TYPE == ItemPropertyCostTypes.XP)
         {
-            if(pShooter.getExp() >= cost)
+            if(pShooter.getTotalExperience() >= cost)
             {
                 return true;
             }
@@ -394,9 +394,9 @@ public class PropertyManager
         }        
         else if(plugin.COST_TYPE == ItemPropertyCostTypes.XP)
         {
-            if(player.getExp() >= cost)
+            if(player.getTotalExperience() >= cost)
             {
-                player.setExp(player.getExp() - cost);
+                player.setTotalExperience(player.getTotalExperience() - cost);
             }
         }        
         else if(plugin.COST_TYPE == ItemPropertyCostTypes.MONEY)
