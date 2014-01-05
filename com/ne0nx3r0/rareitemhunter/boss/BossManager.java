@@ -1,25 +1,25 @@
 package com.ne0nx3r0.rareitemhunter.boss;
 
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSkeleton;
-import com.ne0nx3r0.rareitemhunter.boss.skill.Disorient;
+import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.skill.Blink;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSpider;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnCaveSpider;
-import com.ne0nx3r0.rareitemhunter.boss.skill.Pull;
+import com.ne0nx3r0.rareitemhunter.boss.skill.Burst;
+import com.ne0nx3r0.rareitemhunter.boss.skill.Disarm;
+import com.ne0nx3r0.rareitemhunter.boss.skill.Disorient;
+import com.ne0nx3r0.rareitemhunter.boss.skill.GreaterBurst;
+import com.ne0nx3r0.rareitemhunter.boss.skill.JumpAttack;
 import com.ne0nx3r0.rareitemhunter.boss.skill.LightningBolt;
 import com.ne0nx3r0.rareitemhunter.boss.skill.LightningStorm;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnZombiePig;
-import com.ne0nx3r0.rareitemhunter.boss.skill.ShootArrow;
-import com.ne0nx3r0.rareitemhunter.boss.skill.JumpAttack;
-import com.ne0nx3r0.rareitemhunter.boss.skill.Burst;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnZombie;
-import com.ne0nx3r0.rareitemhunter.boss.skill.GreaterBurst;
-import com.ne0nx3r0.rareitemhunter.boss.skill.ShootFireball;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSilverfish;
-import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnCreeper;
 import com.ne0nx3r0.rareitemhunter.boss.skill.PoisonDart;
-import com.ne0nx3r0.rareitemhunter.RareItemHunter;
-import com.ne0nx3r0.rareitemhunter.boss.skill.Disarm;
+import com.ne0nx3r0.rareitemhunter.boss.skill.Pull;
+import com.ne0nx3r0.rareitemhunter.boss.skill.ShootArrow;
+import com.ne0nx3r0.rareitemhunter.boss.skill.ShootFireball;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnCaveSpider;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnCreeper;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSilverfish;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSkeleton;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnSpider;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnZombie;
+import com.ne0nx3r0.rareitemhunter.boss.skill.SpawnZombiePig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -660,7 +660,7 @@ public class BossManager
     public String getSpawnPointsString()
     {
         //TODO: Clean this up
-        if(this.bossEggs.isEmpty())
+        if(this.spawnPoints.isEmpty())
         {
             return "";
         }

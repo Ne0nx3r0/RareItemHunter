@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Boss
 {
-    private int hp;
+    private double hp;
     private int kills = 0;
     BossTemplate template;
     Entity entity;
@@ -19,7 +19,7 @@ public class Boss
         this.hp = bossTemplate.maxHP;
     }
     
-    public int takeDamage(int damage)
+    public double takeDamage(double damage)
     {
         return this.hp = this.hp - damage; 
     }

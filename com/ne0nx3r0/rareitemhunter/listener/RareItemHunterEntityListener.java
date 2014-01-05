@@ -80,7 +80,7 @@ public class RareItemHunterEntityListener implements Listener
         {     
             LivingEntity leBossAttacked = (LivingEntity) e.getEntity();
 
-            int iRemainingHP = bossAttacked.takeDamage(e.getDamage());
+            double iRemainingHP = bossAttacked.takeDamage(e.getDamage());
             
             if(iRemainingHP > 0)
             {

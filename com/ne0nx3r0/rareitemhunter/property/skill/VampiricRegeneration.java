@@ -26,14 +26,14 @@ public class VampiricRegeneration extends ItemProperty
                     
             int iStolenHP = new Random().nextInt(3 * level)+1;
 
-            int iNewAttackerHP = attacked.getHealth() - iStolenHP;
+            double iNewAttackerHP = attacked.getHealth() - iStolenHP;
             
             if(iNewAttackerHP > 20)
             {
                 iNewAttackerHP = 20;
             }
             
-            int iNewAttackedHP = attacker.getHealth() + iStolenHP;
+            double iNewAttackedHP = attacker.getHealth() + iStolenHP;
             
             if(iNewAttackedHP < 1)
             {

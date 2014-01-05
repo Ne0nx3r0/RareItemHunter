@@ -18,7 +18,7 @@ public class Regeneration extends ItemPropertyRepeatingEffect
     {
         if(p.getHealth() < 20)
         {
-            int iNewHP = p.getHealth() + level * 1;
+            double iNewHP = p.getHealth() + level * 1;
             
             if(iNewHP > 20)
             {
