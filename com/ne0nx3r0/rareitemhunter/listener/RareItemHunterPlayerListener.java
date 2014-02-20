@@ -60,6 +60,9 @@ public class RareItemHunterPlayerListener implements Listener
                     {
                         Boss boss = plugin.bossManager.hatchBoss(lClicked);
                         
+                        plugin.getLogger().log(Level.INFO, "A legendary monster egg has been awakened at X:{0} Y:{1} Z:{2}]", 
+                            new Object[]{lClicked.getBlockX(), lClicked.getBlockX(), lClicked.getBlockX()});
+                
                         for(Player p : lClicked.getWorld().getPlayers())
                         {
                             p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+boss.getName()+ChatColor.DARK_GREEN+" has been awakened by "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.DARK_GREEN+"!");

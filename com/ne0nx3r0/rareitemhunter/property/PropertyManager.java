@@ -5,6 +5,7 @@ import com.ne0nx3r0.rareitemhunter.property.ability.*;
 import com.ne0nx3r0.rareitemhunter.property.enchantment.*;
 import com.ne0nx3r0.rareitemhunter.property.skill.*;
 import com.ne0nx3r0.rareitemhunter.property.spell.*;
+import com.ne0nx3r0.rareitemhunter.property.vfx.Flame;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import com.ne0nx3r0.util.RomanNumeral;
 import java.io.File;
@@ -25,17 +26,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 public class PropertyManager
 {
-    private RareItemHunter plugin;
-    private EnumMap<ItemPropertyTypes, String> TYPE_PREFIXES;
-    private Map<String,ItemProperty> properties;
-    private Map<String,Map<ItemProperty,Integer>> activePlayerEffects;
-    private Map<String,Map<ItemProperty,BukkitTask>> playerTemporaryEffectTaskIds;
+    private final RareItemHunter plugin;
+    private final EnumMap<ItemPropertyTypes, String> TYPE_PREFIXES;
+    private final Map<String,ItemProperty> properties;
+    private final Map<String,Map<ItemProperty,Integer>> activePlayerEffects;
+    private final Map<String,Map<ItemProperty,BukkitTask>> playerTemporaryEffectTaskIds;
     private final FireworkVisualEffect fireworks;
     
     public PropertyManager(RareItemHunter plugin)
@@ -44,17 +44,17 @@ public class PropertyManager
         
         this.fireworks = new FireworkVisualEffect();
         
-        this.activePlayerEffects = new HashMap<String,Map<ItemProperty,Integer>>();
-        this.playerTemporaryEffectTaskIds = new HashMap<String,Map<ItemProperty,BukkitTask>>();
+        this.activePlayerEffects = new HashMap<>();
+        this.playerTemporaryEffectTaskIds = new HashMap<>();
 
-        TYPE_PREFIXES = new EnumMap<ItemPropertyTypes,String>(ItemPropertyTypes.class);
+        TYPE_PREFIXES = new EnumMap<>(ItemPropertyTypes.class);
         TYPE_PREFIXES.put(ItemPropertyTypes.SKILL, ChatColor.GRAY+"Skill: "+ChatColor.RED);
         TYPE_PREFIXES.put(ItemPropertyTypes.ENCHANTMENT, ChatColor.GRAY+"Enchantment: "+ChatColor.GREEN);
         TYPE_PREFIXES.put(ItemPropertyTypes.SPELL, ChatColor.GRAY+"Spell: "+ChatColor.LIGHT_PURPLE);
         TYPE_PREFIXES.put(ItemPropertyTypes.ABILITY, ChatColor.GRAY+"Ability: "+ChatColor.GOLD);
-        TYPE_PREFIXES.put(ItemPropertyTypes.VISUAL, ChatColor.GRAY+"Visual: "+ChatColor.BLACK);
+        TYPE_PREFIXES.put(ItemPropertyTypes.VISUAL, ChatColor.GRAY+"Visual: "+ChatColor.DARK_PURPLE);
         
-        properties = new HashMap<String,ItemProperty>();
+        properties = new HashMap<>();
 
         File propertyCostsFile = new File(plugin.getDataFolder(),"property_costs.yml");
         
@@ -110,6 +110,8 @@ public class PropertyManager
         this.addProperty(propertyCostsYml,new SummonPig());
         this.addProperty(propertyCostsYml,new SummonSheep());
         this.addProperty(propertyCostsYml,new SummonSlime());
+        
+        this.addProperty(propertyCostsYml,new Flame());
         
         try
         {
@@ -201,9 +203,8 @@ public class PropertyManager
         
         if(armor.length > 0)
         {
-            for(int i=0;i<armor.length;i++)
-            {
-                this.ActivatePlayerRareItem(p, armor[i], null, ItemPropertyActions.EQUIP);
+            for (ItemStack a : armor) {
+                this.ActivatePlayerRareItem(p, a, null, ItemPropertyActions.EQUIP);
             }
         }
     }
@@ -341,13 +342,22 @@ public class PropertyManager
         
                                 property.onEquip(player,level);
                             }
+                            else if(property.getType() == ItemPropertyTypes.VISUAL)
+                            {
+                                property.onEquip(player,level);
+                            }
                         }
                         else if(action == ItemPropertyActions.UNEQUIP)
                         {
-                            if(property.getType() == ItemPropertyTypes.ABILITY)
+                            if(property.getType() == ItemPropertyTypes.ABILITY
+                            || property.getType() == ItemPropertyTypes.VISUAL)
                             {
                                 this.revokePlayerEffect(player,property,level);
         
+                                property.onUnequip(player,level);
+                            }
+                            else if(property.getType() == ItemPropertyTypes.VISUAL)
+                            {
                                 property.onUnequip(player,level);
                             }
                         }
@@ -433,7 +443,7 @@ public class PropertyManager
         }
         else
         {
-            playerEffects = new HashMap<ItemProperty,Integer>();
+            playerEffects = new HashMap<>();
             
             this.activePlayerEffects.put(player.getName(),playerEffects);
         }

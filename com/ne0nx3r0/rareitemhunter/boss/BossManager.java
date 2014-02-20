@@ -91,7 +91,7 @@ public class BossManager
         availableBossSkills.add(new LightningStorm());
         availableBossSkills.add(new LightningBolt());
 
-        bossTemplates = new HashMap<String,BossTemplate>();
+        bossTemplates = new HashMap<>();
 
         File bossesFile = new File(plugin.getDataFolder(),"bosses.yml");
 
@@ -128,7 +128,7 @@ public class BossManager
             int essencesDropped = bossesYml.getInt(sBossName+".essencesDropped");
 
 // Add equipment if it has any
-            List<ItemStack> equipment = new ArrayList<ItemStack>();
+            List<ItemStack> equipment = new ArrayList<>();
             
             if(bossesYml.isSet(sBossName+".armor"))
             {
@@ -358,6 +358,7 @@ public class BossManager
         activeBosses.put(ent.getEntityId(), boss);
         
         this.saveManager.save();
+        
         return boss;
     }
 

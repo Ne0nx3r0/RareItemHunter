@@ -1,6 +1,6 @@
 name: RareItemHunter
 main: com.ne0nx3r0.rareitemhunter.RareItemHunter
-version: '1.4.8'
+version: '1.5.1'
 database: false
 softdepend: [RemoteEntities]
 description: Rare Item Hunter
@@ -23,6 +23,7 @@ permissions:
       rareitemhunter.admin.notify: true
       rareitemhunter.admin.essence: true
       rareitemhunter.admin.compass: true
+      rareitemhunter.admin.crafter: true
  # Hunter
   rareitemhunter.hunter.*:
     description: Access to hunting permissions
@@ -52,6 +53,7 @@ permissions:
       rareitemhunter.admin.notify: true
       rareitemhunter.admin.essence: true
       rareitemhunter.admin.compass: true
+      rareitemhunter.admin.crafter: true
   rareitemhunter.admin.spawnpoint:
     description: Manage boss egg spawn points
     default: false
@@ -72,4 +74,7 @@ permissions:
     default: false
   rareitemhunter.admin.compass:
     description: Give out legendary compasses
+    default: false
+  rareitemhunter.admin.crafter:
+    description: Can create essences via commands
     default: false

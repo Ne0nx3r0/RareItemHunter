@@ -2,6 +2,7 @@ package com.ne0nx3r0.rareitemhunter.boss;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import java.util.Random;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -45,6 +46,9 @@ public class RandomlyGenerateBossTask implements Runnable
                 {                
                     player.sendMessage(ChatColor.DARK_GREEN+"A legendary monster egg has appeared!");
                 }
+                
+                plugin.getLogger().log(Level.INFO, "A legendary monster egg has been spawned at X:{0} Y:{1} Z:{2}]", 
+                        new Object[]{lSpawnedEgg.getBlockX(), lSpawnedEgg.getBlockX(), lSpawnedEgg.getBlockX()});
                 
                 plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable(){
                     @Override

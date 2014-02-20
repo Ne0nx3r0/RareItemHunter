@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -81,6 +82,26 @@ public class saveFileManager
 
     public void save()
     {
+        Iterator<Map.Entry<Location,String>> iter = bm.bossEggs.entrySet().iterator();
+        
+        while (iter.hasNext()) {
+            Map.Entry<Location,String> lEgg = iter.next();
+
+            if(!lEgg.getKey().getBlock().getType().equals(Material.DRAGON_EGG))
+            {
+                if(lEgg.getKey().add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
+                {
+                    lEgg.getKey().add(0, -1, 0).getBlock().setType(Material.AIR);
+                }
+
+                iter.remove();
+                
+                plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
+                        new Object[]{lEgg.getKey().getBlockX(), lEgg.getKey().getBlockY(), lEgg.getKey().getBlockZ()});
+
+            }
+        }
+        
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new SaveFileTask(plugin,bm));
     }
 
@@ -119,31 +140,15 @@ public class saveFileManager
 
             for(Location lEgg : bm.bossEggs.keySet())
             {
-                //Verify there's still an egg there
-                if(!lEgg.getBlock().getType().equals(Material.DRAGON_EGG))
-                {
-                    if(lEgg.add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
-                    {
-                        lEgg.add(0, -1, 0).getBlock().setType(Material.AIR);
-                    }
+                Map<String,Object> tempEgg = new HashMap<String,Object>();
 
-                    plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
-                            new Object[]{lEgg.getBlockX(), lEgg.getBlockY(), lEgg.getBlockZ()});
+                tempEgg.put("boss", bm.bossEggs.get(lEgg));
+                tempEgg.put("world", lEgg.getWorld().getName());
+                tempEgg.put("x", lEgg.getBlockX());
+                tempEgg.put("y", lEgg.getBlockY());
+                tempEgg.put("z", lEgg.getBlockZ());
 
-                    bm.bossEggs.remove(lEgg);
-                }
-                else
-                {
-                    Map<String,Object> tempEgg = new HashMap<String,Object>();
-
-                    tempEgg.put("boss", bm.bossEggs.get(lEgg));
-                    tempEgg.put("world", lEgg.getWorld().getName());
-                    tempEgg.put("x", lEgg.getBlockX());
-                    tempEgg.put("y", lEgg.getBlockY());
-                    tempEgg.put("z", lEgg.getBlockZ());
-
-                    eggsMap.add(tempEgg);
-                }
+                eggsMap.add(tempEgg);
             }
 
             YamlConfiguration saveYml = new YamlConfiguration();

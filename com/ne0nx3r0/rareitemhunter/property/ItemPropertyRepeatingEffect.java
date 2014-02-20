@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class ItemPropertyRepeatingEffect extends ItemProperty
 {
-    protected final Map<String,Integer> activePlayers = new HashMap<String,Integer>();
+    protected final Map<String,Integer> activePlayers = new HashMap<>();
     
     public ItemPropertyRepeatingEffect(ItemPropertyTypes type,String name,String description,int maxLevel)
     {

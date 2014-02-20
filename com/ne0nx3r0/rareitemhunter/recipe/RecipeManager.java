@@ -78,16 +78,16 @@ public class RecipeManager
             }
         }
 
-        this.componentRecipes = new HashMap<ItemStack,ItemStack[]>();
+        this.componentRecipes = new HashMap<>();
         
-        TYPE_MATERIALS = new EnumMap<ItemPropertyTypes, List<Integer>>(ItemPropertyTypes.class);
+        TYPE_MATERIALS = new EnumMap<>(ItemPropertyTypes.class);
 
-        List<Integer> BOW_MATERIALS = new ArrayList<Integer>();
+        List<Integer> BOW_MATERIALS = new ArrayList<>();
         BOW_MATERIALS.add(Material.BOW.getId());
         
         TYPE_MATERIALS.put(ItemPropertyTypes.BOW, BOW_MATERIALS);
         
-        List<Integer> SKILL_MATERIALS = new ArrayList<Integer>();
+        List<Integer> SKILL_MATERIALS = new ArrayList<>();
         SKILL_MATERIALS.add(Material.BOW.getId());
         
         SKILL_MATERIALS.add(Material.WOOD_AXE.getId());
@@ -105,7 +105,7 @@ public class RecipeManager
         TYPE_MATERIALS.put(ItemPropertyTypes.SKILL, SKILL_MATERIALS);
         
         
-        List<Integer> ENCHANTMENT_MATERIALS = new ArrayList<Integer>();
+        List<Integer> ENCHANTMENT_MATERIALS = new ArrayList<>();
         ENCHANTMENT_MATERIALS.add(Material.DIAMOND_PICKAXE.getId());
         ENCHANTMENT_MATERIALS.add(Material.WOOD_PICKAXE.getId());
         ENCHANTMENT_MATERIALS.add(Material.STONE_PICKAXE.getId());
@@ -124,14 +124,14 @@ public class RecipeManager
         TYPE_MATERIALS.put(ItemPropertyTypes.ENCHANTMENT, ENCHANTMENT_MATERIALS);
         
         
-        List<Integer> SPELL_MATERIALS = new ArrayList<Integer>();
+        List<Integer> SPELL_MATERIALS = new ArrayList<>();
         
         SPELL_MATERIALS.add(Material.BOOK.getId());
 
         TYPE_MATERIALS.put(ItemPropertyTypes.SPELL, SPELL_MATERIALS);
 
         
-        List<Integer> ABILITY_MATERIALS = new ArrayList<Integer>();
+        List<Integer> ABILITY_MATERIALS = new ArrayList<>();
         
         ABILITY_MATERIALS.add(Material.SKULL_ITEM.getId());
         
@@ -162,7 +162,7 @@ public class RecipeManager
         TYPE_MATERIALS.put(ItemPropertyTypes.ABILITY, ABILITY_MATERIALS);
         
         
-        List<Integer> VISUAL_MATERIALS = new ArrayList<Integer>();
+        List<Integer> VISUAL_MATERIALS = new ArrayList<>();
         
         VISUAL_MATERIALS.add(Material.SKULL_ITEM.getId());
         VISUAL_MATERIALS.add(Material.DIAMOND_HELMET.getId());
@@ -174,7 +174,7 @@ public class RecipeManager
         TYPE_MATERIALS.put(ItemPropertyTypes.VISUAL, VISUAL_MATERIALS);
         
         
-        ALL_TYPE_MATERIALS = new ArrayList<Integer>();
+        ALL_TYPE_MATERIALS = new ArrayList<>();
         
         for(List<Integer> materials : this.TYPE_MATERIALS.values())
         {
@@ -550,5 +550,13 @@ public class RecipeManager
     public Iterable<Integer> getPropertyRecipeItemList(ItemProperty property)
     {
         return this.TYPE_MATERIALS.get(property.getType());
+    }
+
+    // Checks to see if the itemstack in question is the right type of material
+    // to be used with the given item property by checking the item properties type
+    // against the itemstack's material ID
+    public boolean canPropertyGoOnItemStack(ItemProperty ip, ItemStack is)
+    {
+        return this.TYPE_MATERIALS.get(ip.getType()).contains(is.getType().getId());
     }
 }

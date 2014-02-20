@@ -3,6 +3,8 @@ package com.ne0nx3r0.rareitemhunter.command;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,6 +12,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class RareItemHunterCommandExecutor implements CommandExecutor
 {
@@ -52,6 +56,10 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             {
                 cs.sendMessage("- /ri essence - Give you or another a "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName());
             }
+            if(cs.hasPermission("rareitemhunter.admin.crafter"))
+            {
+                cs.sendMessage("- /ri craft - Give you a specific "+plugin.recipeManager.getEssenceItem().getItemMeta().getDisplayName());
+            }
                 
             return true;
         }
@@ -83,6 +91,11 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         && this.hasCommandPermission(cs,"rareitemhunter.admin.essence","essence command"))
         {
             return this._essence(cs,args);
+        }
+        else if((args[0].equalsIgnoreCase("craft") || args[0].equalsIgnoreCase("cr"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.essence","craft command"))
+        {
+            return this._craft(cs,args);
         }
         else if(args[0].equalsIgnoreCase("reload") 
         && this.hasCommandPermission(cs,"rareitemhunter.admin.reload","reload command"))
@@ -464,6 +477,102 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
         }
+        
+        return true;
+    }
+    
+    private boolean _craft(CommandSender cs, String[] args)
+    {     
+        if(args.length < 4 || args[1].equalsIgnoreCase("?"))
+        {
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri craft <player> <essence name> <level> ------");
+            cs.sendMessage("Gives you or a specified player a specific essence");
+            cs.sendMessage("Adds the essence property to the item in your hand.");
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri craft <player> Durability 1");
+        }
+        
+        if(!cs.getName().equalsIgnoreCase("Ne0nx3r0"))
+        {
+            cs.sendMessage(ChatColor.RED+"This command is in beta. Sorry!");
+
+            return true;
+        }
+        
+        // last arg is the level
+        if(plugin.getServer().getPlayer(args[1]) == null)
+        {
+            cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
+            
+            return true;
+        }
+        
+        Player player = plugin.getServer().getPlayer(args[1]);
+
+        String sPropertyName = "";
+
+        for(int i=2;i<args.length-1;i++)
+        {
+            sPropertyName += " "+args[i];
+        }
+
+        sPropertyName = sPropertyName.substring(1);
+        
+        ItemProperty ip = plugin.propertyManager.getProperty(sPropertyName);
+
+        if(ip == null)
+        {
+            cs.sendMessage(ChatColor.RED+"Invalid essence type!");
+
+            return true;
+        }
+
+        int ipLevel = 1;
+
+        try
+        {
+            ipLevel = Integer.parseInt(args[args.length-1]);
+        }
+        catch(Exception e)
+        {
+            cs.sendMessage(ChatColor.RED+"Invalid item property level!");
+
+            return true;
+        }
+
+        if(ip.getMaxLevel() < ipLevel)
+        {
+            cs.sendMessage(ChatColor.RED+"The max level for this item property is "+ip.getMaxLevel()+"!");
+
+            return true;
+        }
+
+        ItemStack playerItemInHand = player.getItemInHand();
+
+        if(!plugin.recipeManager.canPropertyGoOnItemStack(ip,playerItemInHand))
+        {
+            cs.sendMessage(ChatColor.RED+"this item cannot have that property!");
+
+            return true;
+        }
+
+        ItemMeta itemMeta = playerItemInHand.getItemMeta();
+        
+        List<String> lore = itemMeta.getLore();
+
+        if(lore == null)
+        {
+            lore = new ArrayList<>();
+            
+            lore.add(plugin.RAREITEM_HEADER_STRING);
+        }
+
+        lore.add(plugin.propertyManager.getPropertyString(ip,ipLevel));
+        
+        itemMeta.setLore(lore);
+
+        playerItemInHand.setItemMeta(itemMeta);
+
+        player.sendMessage("Added "+ip.getName()+" to the item in your hand!");
         
         return true;
     }
