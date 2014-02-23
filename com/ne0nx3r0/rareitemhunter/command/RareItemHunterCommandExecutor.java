@@ -298,7 +298,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             {
                 if(cs instanceof Player)
                 {
-                    plugin.bossManager.spawnBossEgg(sBossName,((Player) cs).getLocation().getBlock());
+                    plugin.bossManager.spawnBossEgg(sBossName,((Player) cs).getLocation().getBlock(), false);
                             
                     cs.sendMessage("Spawned a "+sBossName+" egg at your location!");
                 }
@@ -309,7 +309,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             else
             {
-                Location lBoss = plugin.bossManager.spawnBossEgg(sBossName, sPointName);
+                Location lBoss = plugin.bossManager.spawnBossEgg(sBossName, sPointName, false);
 
                 cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName + " ("+lBoss.getBlockX()+","+lBoss.getBlockY()+","+lBoss.getBlockZ()+")!");
                 
@@ -645,10 +645,8 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             
             cs.sendMessage(sAllowedItems.substring(2));
             
-            cs.sendMessage("");            
-            cs.sendMessage(ChatColor.GRAY+"Cost:");
-            
-            cs.sendMessage(""+property.getCost(1));
+            cs.sendMessage(ChatColor.GRAY+"Max level: "+ChatColor.WHITE+property.getMaxLevel());          
+            cs.sendMessage(ChatColor.GRAY+"Cost: "+ChatColor.WHITE+property.getCost(1));
             
 /* TODO : figure out what's up with cost increments
             for(int i=1;i<=property.getMaxLevel();i++)

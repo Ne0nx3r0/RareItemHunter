@@ -67,12 +67,14 @@ public class saveFileManager
                     
                     plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
                             new Object[]{lEgg.getBlockX(), lEgg.getBlockY(), lEgg.getBlockZ()});
-                    
-                    continue;
                 }
                 else
                 {
-                    bm.bossEggs.put(lEgg,tempEgg.get("boss").toString());
+                    bm.bossEggs.put(lEgg,new BossEgg(
+                        tempEgg.get("boss").toString(),
+                        lEgg,
+                        tempEgg.get("autospawn").toString().equalsIgnoreCase("true")
+                    ));
                     
                     lEgg.getBlock().setMetadata("isBossEgg", new FixedMetadataValue(plugin,true));
                 }
@@ -82,10 +84,10 @@ public class saveFileManager
 
     public void save()
     {
-        Iterator<Map.Entry<Location,String>> iter = bm.bossEggs.entrySet().iterator();
+        Iterator<Map.Entry<Location,BossEgg>> iter = bm.bossEggs.entrySet().iterator();
         
         while (iter.hasNext()) {
-            Map.Entry<Location,String> lEgg = iter.next();
+            Map.Entry<Location,BossEgg> lEgg = iter.next();
 
             if(!lEgg.getKey().getBlock().getType().equals(Material.DRAGON_EGG))
             {
@@ -119,11 +121,11 @@ public class saveFileManager
         @Override
         public void run()
         {
-            Map<String,Object> spawnPointsMap = new HashMap<String,Object>(); 
+            Map<String,Object> spawnPointsMap = new HashMap<>(); 
 
             for(BossEggSpawnPoint besp : bm.spawnPoints.values())
             {
-                Map<String,Object> tempSP = new HashMap<String,Object>();
+                Map<String,Object> tempSP = new HashMap<>();
 
                 Location l = besp.location;
 
@@ -136,19 +138,24 @@ public class saveFileManager
                 spawnPointsMap.put(besp.name, tempSP);
             }
 
-            List<Object> eggsMap = new ArrayList<Object>(); 
+            List<Object> eggsMap = new ArrayList<>(); 
 
             for(Location lEgg : bm.bossEggs.keySet())
             {
-                Map<String,Object> tempEgg = new HashMap<String,Object>();
+                Map<String,Object> tempEgg = new HashMap<>();
 
-                tempEgg.put("boss", bm.bossEggs.get(lEgg));
-                tempEgg.put("world", lEgg.getWorld().getName());
-                tempEgg.put("x", lEgg.getBlockX());
-                tempEgg.put("y", lEgg.getBlockY());
-                tempEgg.put("z", lEgg.getBlockZ());
+                BossEgg egg = bm.bossEggs.get(lEgg);
+                
+                if(egg.getName() != null) {
+                    tempEgg.put("boss", egg.getName());                    
+                    tempEgg.put("world", lEgg.getWorld().getName());
+                    tempEgg.put("x", lEgg.getBlockX());
+                    tempEgg.put("y", lEgg.getBlockY());
+                    tempEgg.put("z", lEgg.getBlockZ());
+                    tempEgg.put("autospawn",egg.getAutoSpawn());
 
-                eggsMap.add(tempEgg);
+                    eggsMap.add(tempEgg);
+                }
             }
 
             YamlConfiguration saveYml = new YamlConfiguration();

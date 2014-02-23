@@ -1,3 +1,9 @@
+# Distance to autospawn bosses from when approached by a player
+autospawnDistance: 10
+
+# Number of ticks between boss autospawn checks
+autospawnTicks: 40
+
 # Time between chances to generate a monster in minutes
 # -1 to disable random boss spawning
 timeBetweenChancesToGenerateBossEgg: 60
