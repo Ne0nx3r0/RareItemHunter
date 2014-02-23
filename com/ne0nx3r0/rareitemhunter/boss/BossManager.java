@@ -351,6 +351,9 @@ public class BossManager
         
         LivingEntity lent = (LivingEntity) ent;
         
+        lent.setCustomNameVisible(true);
+        lent.setRemoveWhenFarAway(false);
+        
         lent.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999999,5));
 
         EntityEquipment lequips = lent.getEquipment();

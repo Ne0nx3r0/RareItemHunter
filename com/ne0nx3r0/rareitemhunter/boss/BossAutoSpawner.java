@@ -30,6 +30,7 @@ public class BossAutoSpawner implements Runnable{
                         if(p.hasPermission("rareitemhunter.hunter.hatch"))
                         {
                             final BossEgg eggToHatch = egg;
+                            final String awakener = p.getName();
 
                             // Jump back into sync
                             plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
@@ -43,7 +44,7 @@ public class BossAutoSpawner implements Runnable{
 
                                     for(Player p : eggToHatch.getLocation().getWorld().getPlayers())
                                     {
-                                        p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+eggToHatch.getName()+ChatColor.DARK_GREEN+" has been awakened by "+ChatColor.WHITE+p.getName()+ChatColor.DARK_GREEN+"!");
+                                        p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+eggToHatch.getName()+ChatColor.DARK_GREEN+" has been awakened by "+ChatColor.WHITE+awakener+ChatColor.DARK_GREEN+"!");
                                     }
 
                                     bm.hatchBoss(eggToHatch);
