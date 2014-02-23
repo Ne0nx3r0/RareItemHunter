@@ -49,7 +49,7 @@ public class BossSpawnEffectTask implements Runnable
                 //Gracefully downgrade
             }
             
-            plugin.bossManager.hatchBoss(l);
+            plugin.bossManager.hatchBossAtLocation(l);
             
             this.cancel();
             

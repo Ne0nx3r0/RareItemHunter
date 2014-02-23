@@ -1,6 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.command;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
+import com.ne0nx3r0.rareitemhunter.boss.BossEgg;
 import com.ne0nx3r0.rareitemhunter.boss.BossEggSpawnPoint;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
 import java.util.ArrayList;
@@ -309,11 +310,11 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             else
             {
-                Location lBoss = plugin.bossManager.spawnBossEgg(sBossName, sPointName, false);
+                BossEgg bossEgg = plugin.bossManager.spawnBossEgg(sBossName, sPointName, false);
 
-                cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName + " ("+lBoss.getBlockX()+","+lBoss.getBlockY()+","+lBoss.getBlockZ()+")!");
+                cs.sendMessage("Spawned a "+sBossName+" egg near "+sPointName + " ("+bossEgg.getLocation().getBlockX()+","+bossEgg.getLocation().getBlockY()+","+bossEgg.getLocation().getBlockZ()+")!");
                 
-                for(Player p : lBoss.getWorld().getPlayers())
+                for(Player p : bossEgg.getLocation().getWorld().getPlayers())
                 {
                     p.sendMessage(ChatColor.GREEN+"A legendary boss egg has appeared!");
                 }
@@ -372,9 +373,9 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             }
             else
             {
-                Location lBoss = plugin.bossManager.spawnBoss(sBossName, sPointName);
+                BossEgg bossEgg = plugin.bossManager.spawnBoss(sBossName, sPointName);
                     
-                cs.sendMessage("Spawned a "+sBossName+" near "+sPointName + " ("+lBoss.getBlockX()+","+lBoss.getBlockY()+","+lBoss.getBlockZ()+")!");
+                cs.sendMessage("Spawned a "+sBossName+" near "+sPointName + " ("+bossEgg.getLocation().getBlockX()+","+bossEgg.getLocation().getBlockY()+","+bossEgg.getLocation().getBlockZ()+")!");
             }
                 
             return true;

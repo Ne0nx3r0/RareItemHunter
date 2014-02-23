@@ -70,7 +70,7 @@ public class saveFileManager
                 }
                 else
                 {
-                    bm.bossEggs.put(lEgg,new BossEgg(
+                    bm.bossEggs.add(new BossEgg(
                         tempEgg.get("boss").toString(),
                         lEgg,
                         tempEgg.get("autospawn").toString().equalsIgnoreCase("true")
@@ -84,38 +84,37 @@ public class saveFileManager
 
     public void save()
     {
-        Iterator<Map.Entry<Location,BossEgg>> iter = bm.bossEggs.entrySet().iterator();
+        final List<BossEgg> bossEggsToSave = new ArrayList<BossEgg>();
         
-        while (iter.hasNext()) {
-            Map.Entry<Location,BossEgg> lEgg = iter.next();
-
-            if(!lEgg.getKey().getBlock().getType().equals(Material.DRAGON_EGG))
+        for(BossEgg egg : this.bm.bossEggs) {
+            if(!egg.getLocation().getBlock().getType().equals(Material.DRAGON_EGG))
             {
-                if(lEgg.getKey().add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
+                if(egg.getLocation().add(0, -1, 0).getBlock().getType().equals(Material.BEDROCK))
                 {
-                    lEgg.getKey().add(0, -1, 0).getBlock().setType(Material.AIR);
+                    egg.getLocation().add(0, -1, 0).getBlock().setType(Material.AIR);
                 }
-
-                iter.remove();
                 
                 plugin.getLogger().log(Level.INFO, "Removing invalid egg at {0},{1},{2}", 
-                        new Object[]{lEgg.getKey().getBlockX(), lEgg.getKey().getBlockY(), lEgg.getKey().getBlockZ()});
+                        new Object[]{egg.getLocation().getBlockX(), egg.getLocation().getBlockY(), egg.getLocation().getBlockZ()});
 
             }
+            else {
+                bossEggsToSave.add(egg);
+            }
         }
-        
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new SaveFileTask(plugin,bm));
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new SaveFileTask(plugin,bm,bossEggsToSave));
     }
 
     private static class SaveFileTask implements Runnable
     {
         private final RareItemHunter plugin;
         private final BossManager bm;
+        private final List<BossEgg> bossEggsToSave;
         
-        public SaveFileTask(RareItemHunter plugin,BossManager bm)
-        {
+        private SaveFileTask(RareItemHunter plugin, BossManager bm, List<BossEgg> bossEggsToSave) {
             this.plugin = plugin;
             this.bm = bm;
+            this.bossEggsToSave = bossEggsToSave;
         }
 
         @Override
@@ -140,18 +139,16 @@ public class saveFileManager
 
             List<Object> eggsMap = new ArrayList<>(); 
 
-            for(Location lEgg : bm.bossEggs.keySet())
+            for(BossEgg egg : bossEggsToSave)
             {
                 Map<String,Object> tempEgg = new HashMap<>();
-
-                BossEgg egg = bm.bossEggs.get(lEgg);
                 
-                if(egg.getName() != null) {
+                if(egg != null) {
                     tempEgg.put("boss", egg.getName());                    
-                    tempEgg.put("world", lEgg.getWorld().getName());
-                    tempEgg.put("x", lEgg.getBlockX());
-                    tempEgg.put("y", lEgg.getBlockY());
-                    tempEgg.put("z", lEgg.getBlockZ());
+                    tempEgg.put("world", egg.getLocation().getWorld().getName());
+                    tempEgg.put("x", egg.getLocation().getBlockX());
+                    tempEgg.put("y", egg.getLocation().getBlockY());
+                    tempEgg.put("z", egg.getLocation().getBlockZ());
                     tempEgg.put("autospawn",egg.getAutoSpawn());
 
                     eggsMap.add(tempEgg);

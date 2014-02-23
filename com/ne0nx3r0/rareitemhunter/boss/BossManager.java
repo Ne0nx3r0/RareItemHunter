@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,8 +55,8 @@ public class BossManager
     Map<String,BossTemplate> bossTemplates;
     
     Map<String,BossEggSpawnPoint> spawnPoints;
-    Map<Location,BossEgg> bossEggs;
-    Map<Integer,Boss> activeBosses;
+    public CopyOnWriteArrayList<BossEgg> bossEggs;
+    List<Boss> activeBosses;
     
     private saveFileManager saveManager;
     
@@ -62,9 +64,9 @@ public class BossManager
     {
         this.plugin = plugin;
         
-        bossEggs = new HashMap<>();
+        bossEggs = new CopyOnWriteArrayList<>();
         
-        activeBosses = new HashMap<>();
+        activeBosses = new ArrayList<>();
         
         spawnPoints = new HashMap<>();
         
@@ -272,20 +274,21 @@ public class BossManager
         
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
             plugin,
-            new BossAutoSpawner(plugin,this,plugin.getConfig().getDouble("autospawnDistance")), 
+            new BossAutoSpawner(
+                    plugin,
+                    this,
+                    plugin.getConfig().getDouble("autospawnDistance")
+            ), 
             autospawnTicks, 
             autospawnTicks);
-        
-        
-// Active boss garbage collection
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new ActiveBossGarbageCleanup(this), 20*60, 20*60);
     }
     
-    public boolean isBoss(Entity entity)
+    public boolean isBoss(UUID id)
     {        
-        if(this.activeBosses.containsKey(entity.getEntityId()))
-        {
-            return true;
+        for(Boss boss : this.activeBosses) {
+            if(boss.getEntityId().equals(id)) {
+                return true;
+            }
         }
         
         return false;
@@ -315,23 +318,22 @@ public class BossManager
         return false;
     }
 
-    public Boss hatchBoss(Location eggLocation)
-    {
-        BossEgg egg = bossEggs.get(eggLocation);
+    public Boss hatchBoss(BossEgg egg)
+    {        
+        this.removeBossEgg(egg);
         
-        eggLocation.getBlock().setType(Material.AIR);
-        
-        eggLocation.getBlock().removeMetadata("isBoggEgg",plugin);
-        
-        eggLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
-
-        Boss boss = this.spawnBoss(egg.getName(), eggLocation);
-        
-        bossEggs.remove(eggLocation);
-        
-        this.saveManager.save();
+        Boss boss = this.spawnBoss(egg.getName(), egg.getLocation());
         
         return boss;
+    }
+
+    public Boss hatchBossAtLocation(Location lClicked) {
+        for(BossEgg egg : this.bossEggs) {
+            if(egg.getLocation().equals(lClicked)) {
+                return  this.hatchBoss(egg);
+            }
+        }
+        return null;
     }
 
     public Boss spawnBoss(String sBossName, Location eggLocation)
@@ -365,7 +367,7 @@ public class BossManager
             lequips.setItemInHandDropChance(0f);
         }
         
-        activeBosses.put(ent.getEntityId(), boss);
+        activeBosses.add(boss);
         
         this.saveManager.save();
         
@@ -377,23 +379,23 @@ public class BossManager
         return !this.spawnPoints.isEmpty();
     }
     
-    public Location spawnBossEgg(String bossName,String sSpawnPointName, boolean autoSpawn)
+    public BossEgg spawnBossEgg(String bossName,String sSpawnPointName, boolean autoSpawn)
     {
         return spawnBossEgg(this.bossTemplates.get(bossName.toLowerCase()), sSpawnPointName, autoSpawn);
     }  
     
-    public boolean spawnBossEgg(String sBossName,Block block, boolean autoSpawn)
+    public BossEgg spawnBossEgg(String sBossName,Block block, boolean autoSpawn)
     { 
         return spawnBossEgg(this.bossTemplates.get(sBossName.toLowerCase()), block, autoSpawn);
     }
 
-    public Location spawnBossEgg(BossTemplate bossTemplate,String sSpawnPointName, boolean autoSpawn)
+    public BossEgg spawnBossEgg(BossTemplate bossTemplate,String sSpawnPointName, boolean autoSpawn)
     {
         Random random = new Random();
         
         BossEggSpawnPoint spawnPoint = this.spawnPoints.get(sSpawnPointName.toLowerCase());
         
-        for(int i=0;i<10;i++)
+        for(int i=0;i<15;i++)
         {
             Location lSpawnPoint = spawnPoint.location.clone().add(
                 random.nextInt(spawnPoint.radius*2)-spawnPoint.radius,
@@ -416,12 +418,24 @@ public class BossManager
                     Block up2 = world.getBlockAt(x,y+j+1,z);
                     
                     if(up1 != null && up1.getType() != Material.AIR
-                    && up2 != null && up2.getType() == Material.AIR
-                    && !this.bossEggs.containsKey(up2.getLocation()))
+                    && up2 != null && up2.getType() == Material.AIR)
                     {
-                        if(this.spawnBossEgg(bossTemplate, up2, autoSpawn))
+                        boolean eggExistsThereAlready = false;
+                        for(BossEgg egg : this.bossEggs)
                         {
-                            return up2.getLocation();
+                            if(egg.getLocation().equals(up2.getLocation())) {
+                                eggExistsThereAlready = true;
+                                break;
+                            }
+                        }
+                        
+                        if(!eggExistsThereAlready)
+                        {
+                            BossEgg egg = this.spawnBossEgg(bossTemplate, up2, autoSpawn);
+                            
+                            if(egg != null) {
+                                return egg;
+                            }
                         }
                     }
                 }
@@ -430,14 +444,26 @@ public class BossManager
                 {
                     Block down1 = world.getBlockAt(x,y-j,z);
                     Block down2 = world.getBlockAt(x,y-j-1,z);
-
-                    if(down1 != null && down1.getType() != Material.AIR
-                    && down2 != null && down2.getType() == Material.AIR
-                    && !this.bossEggs.containsKey(down1.getLocation()))
+                    if(down1 != null && down1.getType() == Material.AIR
+                    && down2 != null && down2.getType() != Material.AIR)
                     {
-                        if(this.spawnBossEgg(bossTemplate, down1, autoSpawn))
+                        boolean eggExistsThereAlready = false;
+                        
+                        for(BossEgg egg : this.bossEggs)
                         {
-                            return down1.getLocation();
+                            if(egg.getLocation().equals(down1.getLocation())) {
+                                eggExistsThereAlready = true;
+                                break;
+                            }
+                        }
+                        
+                        if(!eggExistsThereAlready)
+                        {
+                            BossEgg egg = this.spawnBossEgg(bossTemplate, down1, autoSpawn);
+                            
+                            if(egg != null) {
+                                return egg;
+                            }
                         }
                     }
                 }
@@ -447,31 +473,35 @@ public class BossManager
         return null;
     }
     
-    public boolean spawnBossEgg(BossTemplate bossTemplate,Block block,boolean autoHatch)
+    public BossEgg spawnBossEgg(BossTemplate bossTemplate,Block block,boolean autoHatch)
     { 
-        if(!this.bossEggs.containsKey(block.getLocation()))
-        {
-            block.getRelative(BlockFace.DOWN).setType(Material.BEDROCK);
-
-            block.setType(Material.DRAGON_EGG);
-
-            block.setMetadata("isBossEgg", new FixedMetadataValue(plugin,true));
-            
-            this.bossEggs.put(block.getLocation(), new BossEgg(
-                bossTemplate.name,
-                block.getLocation(),
-                autoHatch)
-            );
-
-            this.saveManager.save();
-            
-            return true;
+        for(BossEgg egg : this.bossEggs) {
+            if(egg.getLocation().equals(block.getLocation()))
+            {
+                return null;
+            }
         }
         
-        return false;
+        block.getRelative(BlockFace.DOWN).setType(Material.BEDROCK);
+
+        block.setType(Material.DRAGON_EGG);
+
+        block.setMetadata("isBossEgg", new FixedMetadataValue(plugin,true));
+
+        BossEgg newEgg = new BossEgg(
+            bossTemplate.name,
+            block.getLocation(),
+            autoHatch
+        );
+
+        this.bossEggs.add(newEgg);
+
+        this.saveManager.save();
+
+        return newEgg;
     }
     
-    public Location spawnRandomBossEgg()
+    public BossEgg spawnRandomBossEgg()
     {
         Random r = new Random();
 
@@ -481,15 +511,15 @@ public class BossManager
         Object[] bosses = this.bossTemplates.values().toArray();
         BossTemplate bossTemplate = (BossTemplate) bosses[r.nextInt(bosses.length)];
 
-        Location lSpawned = spawnBossEgg(bossTemplate, sRandomSpawnPointName, true);
+        BossEgg egg = spawnBossEgg(bossTemplate, sRandomSpawnPointName, true);
 
-        if(lSpawned == null)
+        if(egg.getLocation() == null)
         {
             plugin.getServer().broadcast("-------------- RareItemHunter ----------------","rareitemhunter.admin");
             plugin.getServer().broadcast("Was unable to find a place to spawn a "+bossTemplate.name+" boss egg at spawn point "+sRandomSpawnPointName,"rareitemhunter.admin");
         }
         
-        return lSpawned;
+        return egg;
     }
 
     public void addSpawnPoint(String name, Location location, int radius)
@@ -526,11 +556,11 @@ public class BossManager
         return this.bossTemplates.containsKey(sBossName.toLowerCase());
     }
 
-    public void removeBossEgg(Location lSpawnedEgg)
+    public void removeBossEgg(BossEgg egg)
     {
-        if(this.bossEggs.containsKey(lSpawnedEgg))
+        if(this.bossEggs.contains(egg))
         {
-            Block block = lSpawnedEgg.getBlock();
+            Block block = egg.getLocation().getBlock();
             Block blockNeneath = block.getRelative(BlockFace.DOWN);
 
             if(block.getType() == Material.DRAGON_EGG)
@@ -542,11 +572,20 @@ public class BossManager
                 blockNeneath.setType(Material.AIR);
             }
 
-            this.bossEggs.remove(lSpawnedEgg);
+            this.bossEggs.remove(egg);
             
             block.removeMetadata("isBossEgg", plugin);
             
             this.saveManager.save();
+        }
+    }
+
+    // Used primarily by entityexplode event
+    public void removeBossEggAtLocation(Location lEgg) {
+        for(BossEgg egg : this.bossEggs) {
+            if(egg.getLocation().equals(lEgg)) {
+                this.removeBossEgg(egg);
+            }
         }
     }
 
@@ -560,8 +599,10 @@ public class BossManager
         
         double dCurrent;
         
-        for(Location lEgg : bossEggs.keySet())
+        for(BossEgg egg : bossEggs)
         {
+            Location lEgg = egg.getLocation();
+            
             if(lEgg.getWorld().equals(lWorld))
             {
                 dCurrent = l.distanceSquared(lEgg);
@@ -636,22 +677,20 @@ public class BossManager
         return null;
     }
 
-    public void destroyBoss(Boss boss)
+    public void destroyBoss(Entity eBoss,Boss boss)
     {
-        this.activeBosses.remove(boss.entity.getEntityId());
-        
-        boss.entity.remove();
+        this.activeBosses.remove(boss.getEntityId());
     }
 
-    public Location spawnBoss(String sBossName, String sPointName)
+    public BossEgg spawnBoss(String sBossName, String sPointName)
     {
         BossEggSpawnPoint sp = this.spawnPoints.get(sPointName.toLowerCase());
 
-        Location lSpawn = this.spawnBossEgg(sBossName, sPointName, false);
+        BossEgg egg = this.spawnBossEgg(sBossName, sPointName, false);
         
-        this.hatchBoss(lSpawn);
+        this.hatchBoss(egg);
         
-        return lSpawn;
+        return egg;
     }
 
     public String getBossesString()

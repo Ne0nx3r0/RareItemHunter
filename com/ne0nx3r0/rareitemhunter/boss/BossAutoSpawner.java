@@ -1,8 +1,8 @@
 package com.ne0nx3r0.rareitemhunter.boss;
 
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import java.util.logging.Level;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class BossAutoSpawner implements Runnable{
@@ -21,24 +21,38 @@ public class BossAutoSpawner implements Runnable{
 
     @Override
     public void run()
-    {
-        for(BossEgg egg : this.bm.bossEggs.values()) {
+    {        
+        for (BossEgg egg : this.bm.bossEggs) {
             if(egg.getAutoSpawn()) {                
-                for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+                for(Player p : egg.getLocation().getWorld().getPlayers()) {
                     if(p.getLocation().distanceSquared(egg.getLocation()) < this.AUTOSPAWN_DISTANCE)
-                    {
-                        final Location lEgg = egg.getLocation();
-                        
-                        // Jump back into sync
-                        plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
-                            @Override
-                            public void run() {
-                                bm.hatchBoss(lEgg);
-                            }
-                        });
-                        
-                        // only spawn one egg per attempt, could help with lag if a mass of eggs occurs
-                        return;
+                    {                    
+                        if(p.hasPermission("rareitemhunter.hunter.hatch"))
+                        {
+                            final BossEgg eggToHatch = egg;
+
+                            // Jump back into sync
+                            plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+                                @Override
+                                public void run() {
+                                    plugin.getLogger().log(Level.INFO, "A legendary monster egg has been awakened at X:{0} Y:{1} Z:{2}]", new Object[]{
+                                        eggToHatch.getLocation().getBlockX(), 
+                                        eggToHatch.getLocation().getBlockX(), 
+                                        eggToHatch.getLocation().getBlockX()}
+                                    );
+
+                                    for(Player p : eggToHatch.getLocation().getWorld().getPlayers())
+                                    {
+                                        p.sendMessage(ChatColor.DARK_GREEN+"Legendary boss "+ChatColor.WHITE+eggToHatch.getName()+ChatColor.DARK_GREEN+" has been awakened by "+ChatColor.WHITE+p.getName()+ChatColor.DARK_GREEN+"!");
+                                    }
+
+                                    bm.hatchBoss(eggToHatch);
+                                }
+                            },1);
+
+                            // only spawn one egg per attempt, could help with lag if a mass of eggs occurs
+                            return;
+                        }
                     }
                 }
             }

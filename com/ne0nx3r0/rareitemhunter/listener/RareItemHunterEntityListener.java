@@ -145,7 +145,7 @@ public class RareItemHunterEntityListener implements Listener
                 
                 e.setCancelled(true);
                 
-                plugin.bossManager.destroyBoss(bossAttacked);
+                plugin.bossManager.destroyBoss(eAttacker,bossAttacked);
             }
         }
     }
@@ -153,7 +153,7 @@ public class RareItemHunterEntityListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent e)
     {
-        if (e.getEntity() != null && plugin.bossManager.isBoss(e.getEntity()))
+        if (e.getEntity() != null && plugin.bossManager.isBoss(e.getEntity().getUniqueId()))
         {
             if(e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK 
             && e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE 
@@ -168,7 +168,7 @@ public class RareItemHunterEntityListener implements Listener
     public void onEntityCombust(EntityCombustEvent e)
     {
         //TODO: fire immunity, rather than every boss being immune
-        if(plugin.bossManager.isBoss(e.getEntity()))
+        if(plugin.bossManager.isBoss(e.getEntity().getUniqueId()))
         {
             e.setCancelled(true);
         }
@@ -177,7 +177,7 @@ public class RareItemHunterEntityListener implements Listener
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled = true)
     public void onEntityTame(EntityTameEvent e)
     {
-        if(plugin.bossManager.isBoss(e.getEntity()))
+        if(plugin.bossManager.isBoss(e.getEntity().getUniqueId()))
         {
             e.setCancelled(true);
         }

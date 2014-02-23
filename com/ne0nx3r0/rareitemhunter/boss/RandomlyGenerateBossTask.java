@@ -4,7 +4,6 @@ import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import java.util.Random;
 import java.util.logging.Level;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class RandomlyGenerateBossTask implements Runnable 
@@ -34,33 +33,36 @@ public class RandomlyGenerateBossTask implements Runnable
         {
             if(plugin.bossManager.hasSpawnPoints())
             {
-                final Location lSpawnedEgg = plugin.bossManager.spawnRandomBossEgg();
+                final BossEgg spawnedEgg = plugin.bossManager.spawnRandomBossEgg();
                 
-                if(lSpawnedEgg == null)
+                if(spawnedEgg == null)
                 {
                     //alerts on this issue are handled in plugin.bossManager.spawnRandomBossEgg
                     return;
                 }
 
-                for(Player player : lSpawnedEgg.getWorld().getPlayers())
+                for(Player player : spawnedEgg.getLocation().getWorld().getPlayers())
                 {                
                     player.sendMessage(ChatColor.DARK_GREEN+"A legendary monster egg has appeared!");
                 }
                 
-                plugin.getLogger().log(Level.INFO, "A legendary monster egg has been spawned at X:{0} Y:{1} Z:{2}]", 
-                        new Object[]{lSpawnedEgg.getBlockX(), lSpawnedEgg.getBlockX(), lSpawnedEgg.getBlockX()});
+                plugin.getLogger().log(Level.INFO, "A legendary monster egg has been spawned at X:{0} Y:{1} Z:{2}]", new Object[]{
+                    spawnedEgg.getLocation().getBlockX(), 
+                    spawnedEgg.getLocation().getBlockX(), 
+                    spawnedEgg.getLocation().getBlockX()}
+                );
                 
                 plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable(){
                     @Override
                     public void run()
                     {
-                        plugin.bossManager.removeBossEgg(lSpawnedEgg);
+                        plugin.bossManager.removeBossEgg(spawnedEgg);
 
                         for(Player player : plugin.getServer().getOnlinePlayers())
                         {
-                            if(player.getCompassTarget().equals(lSpawnedEgg))
+                            if(player.getCompassTarget().equals(spawnedEgg.getLocation()))
                             {
-                                plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN+"The egg you were tracking has hatched!");
+                                plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN+"The egg you were tracking has mysteriously disappeared!");
 
                                 player.setCompassTarget(player.getWorld().getSpawnLocation());
                             }

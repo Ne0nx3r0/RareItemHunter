@@ -25,7 +25,7 @@ public class RareItemHunterBlockListener implements Listener
         {
             if(plugin.bossManager.isBossEgg(b))
             {
-                plugin.bossManager.removeBossEgg(b.getLocation());
+                plugin.bossManager.removeBossEggAtLocation(b.getLocation());
             }
         }
     }

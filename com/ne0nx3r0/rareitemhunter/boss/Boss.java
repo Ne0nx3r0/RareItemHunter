@@ -1,6 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.boss;
 
 import java.util.Random;
+import java.util.UUID;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ public class Boss
     private double hp;
     private int kills = 0;
     BossTemplate template;
-    Entity entity;
+    UUID entityId;
     
     Boss(BossTemplate bossTemplate)
     {
@@ -100,14 +101,14 @@ public class Boss
         return this.template.essencesDropped;
     }
 
-    Entity getEntity()
+    UUID getEntityId()
     {
-        return this.entity;
+        return this.entityId;
     }
 
     void setEntity(Entity entity)
     {
-        this.entity = entity;
+        this.entityId = entity.getUniqueId();
     }
 
     public int getKills()

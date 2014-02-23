@@ -58,7 +58,7 @@ public class RareItemHunterPlayerListener implements Listener
                     
                     if(e.getPlayer().hasPermission("rareitemhunter.hunter.hatch"))
                     {
-                        Boss boss = plugin.bossManager.hatchBoss(lClicked);
+                        Boss boss = plugin.bossManager.hatchBossAtLocation(lClicked);
                         
                         plugin.getLogger().log(Level.INFO, "A legendary monster egg has been awakened at X:{0} Y:{1} Z:{2}]", 
                             new Object[]{lClicked.getBlockX(), lClicked.getBlockX(), lClicked.getBlockX()});
@@ -156,7 +156,7 @@ public class RareItemHunterPlayerListener implements Listener
                         plugin.getLogger().log(Level.SEVERE, null, ex);
                     }
                     
-                    plugin.bossManager.destroyBoss(bossAttacker);
+                    plugin.bossManager.destroyBoss(eAttacker,bossAttacker);
                 }
                 
             }
