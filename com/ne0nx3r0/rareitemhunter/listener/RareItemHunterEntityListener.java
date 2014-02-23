@@ -56,7 +56,7 @@ public class RareItemHunterEntityListener implements Listener
         //TODO: Optimize these conditionals
         if(eAttacker != null)
         {
-            bossAttacker = plugin.bossManager.getBoss(eAttacker);
+            bossAttacker = plugin.bossManager.getBoss(e.getDamager());
         }
         
         Boss bossAttacked = plugin.bossManager.getBoss(e.getEntity());
@@ -75,7 +75,7 @@ public class RareItemHunterEntityListener implements Listener
             
             return;
         }
-
+        
         if(bossAttacked != null)
         {     
             LivingEntity leBossAttacked = (LivingEntity) e.getEntity();
@@ -100,8 +100,8 @@ public class RareItemHunterEntityListener implements Listener
 
                     pAttacker.sendMessage(bossAttacked.getName()+" HP: "+iRemainingHP+"/"+bossAttacked.getMaxHP());
                 }
-                
-                e.setDamage(1);
+
+                e.setDamage(1d);
             }
             else //Dead
             {
@@ -145,7 +145,7 @@ public class RareItemHunterEntityListener implements Listener
                 
                 e.setCancelled(true);
                 
-                plugin.bossManager.destroyBoss(eAttacker,bossAttacked);
+                plugin.bossManager.destroyBoss(e.getEntity(),bossAttacked);
             }
         }
     }

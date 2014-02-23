@@ -91,7 +91,7 @@ public class Boss
         return this.template.entityType;
     }
 
-    public int getAttackPower()
+    public double getAttackPower()
     {
         return this.template.attackPower;
     }
@@ -101,7 +101,7 @@ public class Boss
         return this.template.essencesDropped;
     }
 
-    UUID getEntityId()
+    UUID getUniqueId()
     {
         return this.entityId;
     }

@@ -286,7 +286,7 @@ public class BossManager
     public boolean isBoss(UUID id)
     {        
         for(Boss boss : this.activeBosses) {
-            if(boss.getEntityId().equals(id)) {
+            if(boss.getUniqueId().equals(id)) {
                 return true;
             }
         }
@@ -296,7 +296,12 @@ public class BossManager
 
     public Boss getBoss(Entity entity)
     {
-        return this.activeBosses.get(entity.getEntityId());
+        for(Boss boss : this.activeBosses) {
+            if(boss.getUniqueId().equals(entity.getUniqueId())) {
+                return boss;
+            }
+        }
+        return null;
     }
     
     public boolean isBossEgg(Block b)
@@ -679,7 +684,8 @@ public class BossManager
 
     public void destroyBoss(Entity eBoss,Boss boss)
     {
-        this.activeBosses.remove(boss.getEntityId());
+        this.activeBosses.remove(boss);
+        eBoss.remove();
     }
 
     public BossEgg spawnBoss(String sBossName, String sPointName)
