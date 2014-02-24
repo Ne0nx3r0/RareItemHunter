@@ -1,13 +1,17 @@
 package com.ne0nx3r0.rareitemhunter.listener;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.boss.Boss;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import java.util.Random;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
@@ -26,10 +30,13 @@ import org.bukkit.event.entity.EntityTameEvent;
 public class RareItemHunterEntityListener implements Listener
 {
     private final RareItemHunter plugin;
+    private final Essentials essentials;
 
     public RareItemHunterEntityListener(RareItemHunter plugin)
     {
         this.plugin = plugin;
+        
+        this.essentials = plugin.essentials;
     }
     
     @EventHandler(priority=EventPriority.NORMAL)
@@ -78,6 +85,23 @@ public class RareItemHunterEntityListener implements Listener
         
         if(bossAttacked != null)
         {     
+            // Disable god mode if they have turned it on. Suckers. :D
+            if(eAttacker instanceof Player) {
+                Player pAttacker = (Player) eAttacker;
+                
+                if(pAttacker.getGameMode().equals(GameMode.CREATIVE)) {
+                    pAttacker.setGameMode(GameMode.SURVIVAL);
+                }
+                
+                if(this.essentials != null) {
+                    User user = essentials.getUser(pAttacker);
+                    
+                    if(user.isGodModeEnabled()) {
+                        user.setGodModeEnabled(false);
+                    }
+                }
+            }
+            
             LivingEntity leBossAttacked = (LivingEntity) e.getEntity();
 
             double iRemainingHP = bossAttacked.takeDamage(e.getDamage());
@@ -100,6 +124,12 @@ public class RareItemHunterEntityListener implements Listener
 
                     pAttacker.sendMessage(bossAttacked.getName()+" HP: "+iRemainingHP+"/"+bossAttacked.getMaxHP());
                 }
+                
+                leBossAttacked.setCustomName(String.format("%s %sHP / %sHP",new Object[]{
+                    bossAttacked.getName(),
+                    iRemainingHP,
+                    bossAttacked.getMaxHP()
+                }));
 
                 e.setDamage(1d);
             }

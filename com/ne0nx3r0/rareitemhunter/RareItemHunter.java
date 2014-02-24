@@ -1,5 +1,6 @@
 package com.ne0nx3r0.rareitemhunter;
 
+import com.earth2me.essentials.Essentials;
 import com.ne0nx3r0.rareitemhunter.boss.BossManager;
 import com.ne0nx3r0.rareitemhunter.command.RareItemHunterCommandExecutor;
 import com.ne0nx3r0.rareitemhunter.listener.*;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import net.h31ix.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +23,7 @@ public class RareItemHunter extends JavaPlugin
 {
     public BossManager bossManager;
     public RecipeManager recipeManager;
+    public Essentials essentials;
     
     public boolean NIGHT_CRAFTING_ONLY = true;
     
@@ -44,6 +47,8 @@ public class RareItemHunter extends JavaPlugin
         RareItemHunter.self = this;
         
         loadConfig(false);
+        
+        this.essentials = ((Essentials) Bukkit.getPluginManager().getPlugin("Essentials"));
         
         loadManagers();
         
