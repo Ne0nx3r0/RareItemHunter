@@ -484,34 +484,27 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
     
     private boolean _craft(CommandSender cs, String[] args)
     {     
-        if(args.length < 4 || args[1].equalsIgnoreCase("?"))
+        if(args.length < 3)
         {
-            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri craft <player> <essence name> <level> ------");
-            cs.sendMessage("Gives you or a specified player a specific essence");
+            cs.sendMessage(ChatColor.DARK_GREEN+"------  /ri craft <essence name> <level> ------");
+            cs.sendMessage("Gives you a specific essence");
             cs.sendMessage("Adds the essence property to the item in your hand.");
-            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri craft <player> Durability 1");
-        }
-        
-        if(!cs.getName().equalsIgnoreCase("Ne0nx3r0"))
-        {
-            cs.sendMessage(ChatColor.RED+"This command is in beta. Sorry!");
-
+            cs.sendMessage(ChatColor.DARK_GREEN+"Example:"+ChatColor.WHITE+" /ri craft Durability 1");
+            
             return true;
         }
-        
-        // last arg is the level
-        if(plugin.getServer().getPlayer(args[1]) == null)
-        {
-            cs.sendMessage(ChatColor.RED+args[1]+" is not a valid player!");
+
+        if(!(cs instanceof Player)) {
+            cs.sendMessage("Not from console, sorry!");
             
             return true;
         }
         
-        Player player = plugin.getServer().getPlayer(args[1]);
-
+        Player player = (Player) cs;
+        
         String sPropertyName = "";
 
-        for(int i=2;i<args.length-1;i++)
+        for(int i=1;i<args.length-1;i++)
         {
             sPropertyName += " "+args[i];
         }
