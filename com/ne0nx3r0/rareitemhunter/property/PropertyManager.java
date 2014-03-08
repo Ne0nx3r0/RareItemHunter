@@ -5,7 +5,7 @@ import com.ne0nx3r0.rareitemhunter.property.ability.*;
 import com.ne0nx3r0.rareitemhunter.property.enchantment.*;
 import com.ne0nx3r0.rareitemhunter.property.skill.*;
 import com.ne0nx3r0.rareitemhunter.property.spell.*;
-import com.ne0nx3r0.rareitemhunter.property.vfx.Flame;
+import com.ne0nx3r0.rareitemhunter.property.vfx.*;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import com.ne0nx3r0.util.RomanNumeral;
 import java.io.File;
@@ -53,6 +53,7 @@ public class PropertyManager
         TYPE_PREFIXES.put(ItemPropertyTypes.SPELL, ChatColor.GRAY+"Spell: "+ChatColor.LIGHT_PURPLE);
         TYPE_PREFIXES.put(ItemPropertyTypes.ABILITY, ChatColor.GRAY+"Ability: "+ChatColor.GOLD);
         TYPE_PREFIXES.put(ItemPropertyTypes.VISUAL, ChatColor.GRAY+"Visual: "+ChatColor.DARK_PURPLE);
+        TYPE_PREFIXES.put(ItemPropertyTypes.ANY, ChatColor.DARK_PURPLE.toString());
         
         properties = new HashMap<>();
 

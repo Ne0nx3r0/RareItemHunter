@@ -508,7 +508,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
         {
             sPropertyName += " "+args[i];
         }
-
+        
         sPropertyName = sPropertyName.substring(1);
         
         ItemProperty ip = plugin.propertyManager.getProperty(sPropertyName);

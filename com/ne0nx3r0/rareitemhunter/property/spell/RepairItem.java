@@ -11,19 +11,17 @@ public class RepairItem extends ItemProperty
 {
     public RepairItem()
     {
-        super(ItemPropertyTypes.SPELL,"Repair Item","Repairs the first item in your inventory bar by 12 durability points per level",5,15);
+        super(ItemPropertyTypes.SPELL,"Repair Item","Repairs the first item in your inventory bar.",5,12);
     }
     
     @Override
     public boolean onInteract(PlayerInteractEvent e,int level)
     {
         ItemStack isSlotOne = e.getPlayer().getInventory().getItem(0);
-     
-        System.out.println(isSlotOne);
         
         if(isSlotOne != null && isSlotOne.getType().getMaxDurability() > 20 && isSlotOne.getDurability() > 0)
         {
-            int iRepairAmount = 30 * level;
+            int iRepairAmount = (int) (30 * level * (level * (1 + level * 0.2)));
             
             short sDurability = (short) (isSlotOne.getDurability() - iRepairAmount);
             

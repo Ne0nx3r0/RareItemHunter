@@ -27,11 +27,11 @@ public class RecipeManager
 {
     private final RareItemHunter plugin;
 
-    private ItemStack compass;
+    private final ItemStack compass;
 
-    private HashMap<ItemStack,ItemStack[]> componentRecipes;
+    private final HashMap<ItemStack,ItemStack[]> componentRecipes;
     
-    private EnumMap<ItemPropertyTypes, List<Integer>> TYPE_MATERIALS;
+    private final EnumMap<ItemPropertyTypes, List<Integer>> TYPE_MATERIALS;
     private final ArrayList<Integer> ALL_TYPE_MATERIALS;
     private final ItemStack DEFAULT_IS;
     
@@ -43,7 +43,7 @@ public class RecipeManager
         ItemMeta itemMeta = compass.getItemMeta();
         itemMeta.setDisplayName(ChatColor.DARK_GREEN+"Legendary Compass");
         
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         
         lore.add(ChatColor.DARK_GRAY+"When tapped against the ground");
         lore.add(ChatColor.DARK_GRAY+"this compass will attune itself");
@@ -130,7 +130,6 @@ public class RecipeManager
 
         TYPE_MATERIALS.put(ItemPropertyTypes.SPELL, SPELL_MATERIALS);
 
-        
         List<Integer> ABILITY_MATERIALS = new ArrayList<>();
         
         ABILITY_MATERIALS.add(Material.SKULL_ITEM.getId());
@@ -262,7 +261,19 @@ public class RecipeManager
                     {
                         String sIngredient = oIngredient.toString();
                         
-                        sRecipeStringLine += ", "+sIngredient;
+                        
+                        if(sIngredient.startsWith("POTION:"))
+                        {
+                            String sPotionID = sIngredient.substring(sIngredient.lastIndexOf(":")+1);
+                            
+                            int potionID = Integer.parseInt(sPotionID);
+                            
+                            sRecipeStringLine += ", "+this.getPotionName(potionID);
+                        }
+                        else
+                        {
+                            sRecipeStringLine += ", "+sIngredient;
+                        }
                         
                         if(sIngredient.equalsIgnoreCase("AIR"))
                         {
@@ -455,7 +466,7 @@ public class RecipeManager
             {
                 ItemMeta itemMeta = isResult.getItemMeta();
                 
-                List<String> lore = new ArrayList<String>();
+                List<String> lore = new ArrayList<>();
                 
                 lore.add(plugin.RAREITEM_HEADER_STRING);
                 
@@ -535,6 +546,7 @@ public class RecipeManager
             catch(Exception ex)
             {
                 ex.printStackTrace();
+                
                 return new ItemStack(Material.AIR);
             }
         }
@@ -542,6 +554,7 @@ public class RecipeManager
         return null;
     }
 
+    
     public boolean isCompassItem(ItemStack is)
     {
         return is.equals(this.compass);
@@ -557,6 +570,148 @@ public class RecipeManager
     // against the itemstack's material ID
     public boolean canPropertyGoOnItemStack(ItemProperty ip, ItemStack is)
     {
-        return this.TYPE_MATERIALS.get(ip.getType()).contains(is.getType().getId());
+        return ip.getType() == ItemPropertyTypes.ANY || this.TYPE_MATERIALS.get(ip.getType()).contains(is.getType().getId());
+    }
+
+    private String getPotionName(int potionID) {
+        switch(potionID) {
+            case 0: 
+                    return "Water Bottle";
+            case 16: 
+                    return "Awkward Potion";
+            case 32: 
+                    return "Thick Potion";
+            case 64: 
+                    return "Mundane Potion";
+            case 8193: 
+                    return "Regeneration Potion (0:45)";
+            case 8194: 
+                    return "Swiftness Potion (3:00)";
+            case 8195: 
+                    return "Fire Resistance Potion (3:00)";
+            case 8196: 
+                    return "Poison Potion (0:45)";
+            case 8197: 
+                    return "Healing Potion";
+            case 8198: 
+                    return "Night Vision Potion (3:00)";
+            case 8200: 
+                    return "Weakness Potion (1:30)";
+            case 8201: 
+                    return "Strength Potion (3:00)";
+            case 8202: 
+                    return "Slowness Potion (1:30)";
+            case 8204: 
+                    return "Harming Potion";
+            case 8205: 
+                    return "Water Breathing Potion (3:00)";
+            case 8206: 
+                    return "Invisibility Potion (3:00)";
+            case 8225: 
+                    return "Regeneration Potion II (0:22)";
+            case 8226: 
+                    return "Swiftness Potion II (1:30)";
+            case 8228: 
+                    return "Poison Potion II (0:22)";
+            case 8229: 
+                    return "Healing Potion II";
+            case 8233: 
+                    return "Strength Potion II (1:30)";
+            case 8236: 
+                    return "Harming Potion II";
+            case 8257: 
+                    return "Regeneration Potion (2:00)";
+            case 8258: 
+                    return "Swiftness Potion (8:00)";
+            case 8259: 
+                    return "Fire Resistance Potion (8:00)";
+            case 8260: 
+                    return "Poison Potion (2:00)";
+            case 8262: 
+                    return "Night Vision Potion (8:00)";
+            case 8264: 
+                    return "Weakness Potion (4:00)";
+            case 8265: 
+                    return "Strength Potion (8:00)";
+            case 8266: 
+                    return "Slowness Potion (4:00)";
+            case 8269: 
+                    return "Water Breathing Potion (8:00)";
+            case 8270: 
+                    return "Invisibility Potion (8:00)";
+            case 8289: 
+                    return "Regeneration Potion II (1:00)";
+            case 8290: 
+                    return "Swiftness Potion II (4:00)";
+            case 8292: 
+                    return "Poison Potion II (1:00)";
+            case 8297: 
+                    return "Strength Potion II (4:00)";
+            case 16385: 
+                    return "Regeneration Splash (0:33)";
+            case 16386: 
+                    return "Swiftness Splash (2:15)";
+            case 16387: 
+                    return "Fire Resistance Splash (2:15)";
+            case 16388: 
+                    return "Poison Splash (0:33)";
+            case 16389: 
+                    return "Healing Splash";
+            case 16390: 
+                    return "Night Vision Splash (2:15)";
+            case 16392: 
+                    return "Weakness Splash (1:07)";
+            case 16393: 
+                    return "Strength Splash (2:15)";
+            case 16394: 
+                    return "Slowness Splash (1:07)";
+            case 16396: 
+                    return "Harming Splash";
+            case 16397: 
+                    return "Breathing Splash (2:15)";
+            case 16398: 
+                    return "Invisibility Splash (2:15)";
+            case 16417: 
+                    return "Regeneration Splash II (0:16)";
+            case 16418: 
+                    return "Swiftness Splash II (1:07)";
+            case 16420: 
+                    return "Poison Splash II (0:16)";
+            case 16421: 
+                    return "Healing Splash II";
+            case 16425: 
+                    return "Strength Splash II (1:07)";
+            case 16428: 
+                    return "Harming Splash II";
+            case 16449: 
+                    return "Regeneration Splash (1:30)";
+            case 16450: 
+                    return "Swiftness Splash (6:00)";
+            case 16451: 
+                    return "Fire Resistance Splash (6:00)";
+            case 16452: 
+                    return "Poison Splash (1:30)";
+            case 16454: 
+                    return "Night Vision Splash (6:00)";
+            case 16456: 
+                    return "Weakness Splash (3:00)";
+            case 16457: 
+                    return "Strength Splash (6:00)";
+            case 16458: 
+                    return "Slowness Splash (3:00)";
+            case 16461: 
+                    return "Breathing Splash (6:00)";
+            case 16462: 
+                    return "Invisibility Splash (6:00)";
+            case 16481: 
+                    return "Regeneration Splash II (0:45)";
+            case 16482: 
+                    return "Swiftness Splash II (3:00)";
+            case 16484: 
+                    return "Poison Splash II (0:45)";
+            case 16489: 
+                    return "Strength Splash II (3:00)";
+        }
+        return "POTION:"+potionID;
     }
 }

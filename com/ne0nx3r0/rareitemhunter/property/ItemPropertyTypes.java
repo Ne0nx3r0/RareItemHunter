@@ -7,7 +7,8 @@ public enum ItemPropertyTypes
     SKILL(2),
     SPELL(3),
     VISUAL(4),
-    BOW(5);
+    BOW(5),
+    ANY(6);
 
     public int id;
     public String name;
