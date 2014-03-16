@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -83,6 +84,11 @@ public class RareItemHunterPlayerListener implements Listener
                 {
                     e.getPlayer().sendMessage(ChatColor.RED+"You do not have permission to use a legendary compass!");
                 }
+                else if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                        e.getPlayer().setCompassTarget(e.getPlayer().getWorld().getSpawnLocation());
+                        
+                        e.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Your compass was reset!");
+                }
                 else
                 {
                     Location lBossEgg = plugin.bossManager.getNearestBossEggLocation(e.getPlayer().getLocation());
@@ -93,8 +99,9 @@ public class RareItemHunterPlayerListener implements Listener
 
                         e.getPlayer().sendMessage(ChatColor.DARK_GREEN+"The compass glows, then points sharply");
                     }
-                    else
-                    {
+                    else {
+                        e.getPlayer().setCompassTarget(e.getPlayer().getWorld().getSpawnLocation());
+                        
                         e.getPlayer().sendMessage(ChatColor.DARK_GRAY+"The compass glows for a moment, then fades...");
                     }
                 }
