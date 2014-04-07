@@ -94,7 +94,7 @@ public class RareItemHunterCommandExecutor implements CommandExecutor
             return this._essence(cs,args);
         }
         else if((args[0].equalsIgnoreCase("craft") || args[0].equalsIgnoreCase("cr"))
-        && this.hasCommandPermission(cs,"rareitemhunter.admin.essence","craft command"))
+        && this.hasCommandPermission(cs,"rareitemhunter.admin.craft","craft command"))
         {
             return this._craft(cs,args);
         }
