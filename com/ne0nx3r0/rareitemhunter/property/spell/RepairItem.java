@@ -11,7 +11,7 @@ public class RepairItem extends ItemProperty
 {
     public RepairItem()
     {
-        super(ItemPropertyTypes.SPELL,"Repair Item","Repairs the first item in your inventory bar.",5,12);
+        super(ItemPropertyTypes.SPELL,"Repair Item","Repairs the first item in your inventory bar by 20% / level - 10%.",5,20);
     }
     
     @Override
@@ -21,7 +21,7 @@ public class RepairItem extends ItemProperty
         
         if(isSlotOne != null && isSlotOne.getType().getMaxDurability() > 20 && isSlotOne.getDurability() > 0)
         {
-            int iRepairAmount = (int) (30 * level * (level * (1 + level * 0.2)));
+            int iRepairAmount = isSlotOne.getType().getMaxDurability() / 5 * level - (isSlotOne.getType().getMaxDurability()/10);
             
             short sDurability = (short) (isSlotOne.getDurability() - iRepairAmount);
             
@@ -32,7 +32,7 @@ public class RepairItem extends ItemProperty
             
             isSlotOne.setDurability(sDurability);
             
-            e.getPlayer().sendMessage("Item repaired by "+iRepairAmount+" points!");
+            e.getPlayer().sendMessage("Item repaired by "+(level*20-10)+"%!");
             
             return true;
         }
