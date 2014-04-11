@@ -84,6 +84,7 @@ public class PropertyManager
         this.addProperty(propertyCostsYml,new PaintWool());
         this.addProperty(propertyCostsYml,new Smelt());
         this.addProperty(propertyCostsYml,new Spore());
+        this.addProperty(propertyCostsYml,new BuildersWand());
         
         this.addProperty(propertyCostsYml,new Durability());
         this.addProperty(propertyCostsYml,new Fly(this));
@@ -269,7 +270,7 @@ public class PropertyManager
 
                         if(action == ItemPropertyActions.INTERACT)
                         {
-                            if(property.getType() == ItemPropertyTypes.ENCHANTMENT || property.getType() == ItemPropertyTypes.SPELL)
+                            if((property.getType() == ItemPropertyTypes.ENCHANTMENT && ((PlayerInteractEvent) event).isCancelled()) || property.getType() == ItemPropertyTypes.SPELL)
                             {
                                 if(hasCost)
                                 {

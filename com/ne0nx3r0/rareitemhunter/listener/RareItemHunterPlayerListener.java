@@ -5,7 +5,6 @@ import com.ne0nx3r0.rareitemhunter.boss.Boss;
 import com.ne0nx3r0.util.FireworkVisualEffect;
 import java.util.List;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
