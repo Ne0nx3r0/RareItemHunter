@@ -1,5 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.property.enchantment;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import com.ne0nx3r0.rareitemhunter.property.ItemProperty;
 import com.ne0nx3r0.rareitemhunter.property.ItemPropertyTypes;
 import java.util.ArrayList;
@@ -25,35 +27,45 @@ public class BuildersWand extends ItemProperty
         
         if(e.getClickedBlock() != null)
         {
+            String sPlayerName = e.getPlayer().getName();
+            String sWorldName = e.getPlayer().getLocation().getWorld().getName();
+            
             Block clickedBlock = e.getClickedBlock();
             BlockFace baseFace = e.getBlockFace();
             Material type = clickedBlock.getType();
             
             ArrayList<Block> blocksToBuildOn = this.addBlocksToBuildOn(new ArrayList<Block>(), clickedBlock, baseFace,maxCopied);
             
+            if(!blocksToBuildOn.contains(clickedBlock) && clickedBlock.getRelative(baseFace).getType().equals(Material.AIR)) {
+                blocksToBuildOn.add(clickedBlock);
+            }
+            
             PlayerInventory inventory = e.getPlayer().getInventory();
             
             int changedBlocks = 0;
-            
+
             for(Block b : blocksToBuildOn) {
                 ItemStack is = new ItemStack(type,1,(short) 0,b.getData());
-                
-                HashMap<Integer, ItemStack> leftovers = inventory.removeItem(is);
-                
-                System.out.println(leftovers);
-                    
-                if(leftovers.isEmpty()) {
-                    Block bFace = b.getRelative(baseFace);
-                    
-                    bFace.setType(is.getType());
-                    bFace.setData(is.getData().getData());
-                    
-                    changedBlocks++;
-                }        
-                else {
-                    break;
+                FlagPermissions perms = Residence.getPermsByLocForPlayer(b.getLocation(), e.getPlayer());
+
+                if(perms.playerHas(sPlayerName, sWorldName, "build", false)) {
+                    HashMap<Integer, ItemStack> leftovers = inventory.removeItem(is);
+
+                    if(leftovers.isEmpty()) {
+                        Block bFace = b.getRelative(baseFace);
+
+                        bFace.setType(is.getType());
+                        bFace.setData(is.getData().getData());
+
+                        changedBlocks++;
+                    }        
+                    else {
+                        break;
+                    }
                 }
             }
+            
+            e.getPlayer().updateInventory();
             
             return changedBlocks > 0;
         }
