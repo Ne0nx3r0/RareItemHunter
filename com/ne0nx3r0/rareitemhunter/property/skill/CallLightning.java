@@ -22,6 +22,9 @@ public class CallLightning extends ItemProperty
         if(new Random().nextInt(100) > level * 10
         && e.getEntity() instanceof LivingEntity)
         {
+            int maxTargets = level * 2;
+            int hitTargets = 0;
+            
             Location l = e.getEntity().getLocation();
 
             l.getWorld().strikeLightningEffect(l);
@@ -33,8 +36,14 @@ public class CallLightning extends ItemProperty
                     continue;
                 }
                 
+                if(hitTargets >= maxTargets) {
+                    break;
+                }
+                
                 if(ent instanceof LivingEntity)
                 {
+                    hitTargets++;
+                    
                     LivingEntity lent = (LivingEntity) ent;
                     
                     //Emulate damaged by lightning
