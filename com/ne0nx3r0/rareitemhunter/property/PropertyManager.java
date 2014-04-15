@@ -1,5 +1,7 @@
 package com.ne0nx3r0.rareitemhunter.property;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import com.ne0nx3r0.rareitemhunter.RareItemHunter;
 import com.ne0nx3r0.rareitemhunter.property.ability.*;
 import com.ne0nx3r0.rareitemhunter.property.enchantment.*;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -270,8 +273,18 @@ public class PropertyManager
 
                         if(action == ItemPropertyActions.INTERACT)
                         {
-                            if((property.getType() == ItemPropertyTypes.ENCHANTMENT && ((PlayerInteractEvent) event).isCancelled()) || property.getType() == ItemPropertyTypes.SPELL)
+                            if(property.getType() == ItemPropertyTypes.ENCHANTMENT || property.getType() == ItemPropertyTypes.SPELL)
                             {
+                                if(property.getType().equals(ItemPropertyTypes.ENCHANTMENT)) {
+                                    PlayerInteractEvent pie = (PlayerInteractEvent) event;
+                                    FlagPermissions perms = Residence.getPermsByLocForPlayer(pie.getClickedBlock().getLocation(), pie.getPlayer());
+                                    
+                                    if(!perms.playerHas(pie.getPlayer().getName(), pie.getClickedBlock().getLocation().getWorld().getName(), "build", false)) {
+                                        pie.getPlayer().sendMessage(ChatColor.RED+"You don't have permission to use that here.");
+                                        return;
+                                    }
+                                }
+                                
                                 if(hasCost)
                                 {
                                     if(property.onInteract((PlayerInteractEvent) event, level))
@@ -494,7 +507,9 @@ public class PropertyManager
         
         if(!this.playerTemporaryEffectTaskIds.containsKey(sPlayer))
         {
-            taskIds = playerTemporaryEffectTaskIds.put(sPlayer, new HashMap<ItemProperty,BukkitTask>());
+            taskIds = new HashMap<>();
+            
+            playerTemporaryEffectTaskIds.put(sPlayer, taskIds);
         }
         else
         {
@@ -512,7 +527,7 @@ public class PropertyManager
         {
             @Override
             public void run()
-            {
+            {        
                 pm.revokePlayerEffect(sPlayer, property, level);
             }
         },duration));
